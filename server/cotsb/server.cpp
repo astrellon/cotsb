@@ -10,10 +10,81 @@
 #include <sys/socket.h>
 #include <arpa/inet.h> //inet_addr
 #include <unistd.h>    //write
-#include <pthread.h> //for threading , link with lpthread
 
 namespace cotsb
 {
+    Stream::Stream()
+    {
+
+    }
+
+    bool Stream::write(const uint8_t *data, size_t size)
+    {
+        if (data == nullptr || size == 0u)
+        {
+            return false;
+        }
+
+        std::lock_guard<std::mutex> lock_guard(_lock);
+        for (auto i = 0u; i < size; i++)
+        {
+            _data.push_back(data[i]);
+        }
+
+        _cv.notify_one();
+        return true;
+    }
+    bool Stream::write(const std::string &str)
+    {
+        return write((const uint8_t *)str.c_str(), str.size());
+    }
+
+    size_t Stream::read(std::vector<uint8_t> &output, size_t count)
+    {
+        std::unique_lock<std::mutex> lock_guard(_lock);
+        _cv.wait(lock_guard, [this]()
+        {
+            return _data.size() > 0u;
+        });
+
+        auto max = count;
+        if (max > _data.size())
+        {
+            max = _data.size();
+        }
+
+        auto read_count = 0u;
+        for (auto i = 0u; i < max; i++, read_count++)
+        {
+            //buffer[i] = _data[read_count];
+            output.push_back(_data[read_count]);
+        }
+
+        _data.erase(_data.begin(), _data.begin() + read_count);
+
+        return read_count;
+    }
+    size_t Stream::read(std::ostream &output, size_t count)
+    {
+        std::unique_lock<std::mutex> lock_guard(_lock);
+        _cv.wait(lock_guard, [this]()
+        {
+            return _data.size() > 0u;
+        });
+
+        auto max = count;
+        if (max > _data.size())
+        {
+            max = _data.size();
+        }
+
+        output.write((const char *)_data.data(), max);
+
+        _data.erase(_data.begin(), _data.begin() + max);
+
+        return max;
+    }
+
     Connection::Connection(int socket) :
         _socket(socket)
     {
@@ -23,7 +94,7 @@ namespace cotsb
         }, this);
         _write_thread = std::thread([] (Connection *connection)
         {
-
+            connection->write_handler();
         }, this);
     }
 
@@ -39,7 +110,7 @@ namespace cotsb
         write_str("Now type something and i shall repeat what you type \n");
 
         //Receive a message from client
-        while( (read_size = recv(_socket , client_message , 2000 , 0)) > 0 )
+        while ( (read_size = recv(_socket , client_message , 2000 , 0)) > 0 )
         {
             //Send the message back to client
             client_message[read_size] = '\0';
@@ -47,15 +118,19 @@ namespace cotsb
             write(_socket , client_message , strlen(client_message));
         }
 
-        if(read_size == 0)
+        if (read_size == 0)
         {
             puts("Client disconnected");
             fflush(stdout);
         }
-        else if(read_size == -1)
+        else if (read_size == -1)
         {
             perror("recv failed");
         }
+    }
+    void Connection::write_handler()
+    {
+        
     }
 
     void Connection::write_str(const std::string &str)
@@ -105,7 +180,6 @@ namespace cotsb
         {
             puts("Connection accepted");
 
-            pthread_t sniffer_thread;
             new_sock = client_sock;
 
             auto connection = new Connection(new_sock);
