@@ -127,4 +127,6 @@ cotsb/server.o: cotsb/server.cpp cotsb/server.h \
   /usr/include/netinet/in.h /usr/include/x86_64-linux-gnu/bits/in.h \
   /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
   /usr/include/x86_64-linux-gnu/bits/environments.h \
-  /usr/include/x86_64-linux-gnu/bits/confname.h /usr/include/getopt.h
+  /usr/include/x86_64-linux-gnu/bits/confname.h /usr/include/getopt.h \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9/../../../../include/c++/4.9/sstream \
+  /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9/../../../../include/c++/4.9/bits/sstream.tcc

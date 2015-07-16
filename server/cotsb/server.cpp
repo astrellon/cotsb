@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h> //inet_addr
 #include <unistd.h>    //write
+#include <sstream>
 
 namespace cotsb
 {
@@ -36,10 +37,34 @@ namespace cotsb
     }
     bool Stream::write(const std::string &str)
     {
+        std::cout << "Write: " << str << " to stream\n";
         return write((const uint8_t *)str.c_str(), str.size());
     }
 
-    size_t Stream::read(std::vector<uint8_t> &output, size_t count)
+    size_t Stream::read(std::ostream &output, size_t count)
+    {
+        std::unique_lock<std::mutex> lock_guard(_lock);
+        _cv.wait(lock_guard, [this]()
+        {
+            return _data.size() > 0u;
+        });
+
+        auto max = count;
+        if (max == 0u || max > _data.size())
+        {
+            max = _data.size();
+        }
+
+        std::cout << "Read: " << max << " bytes from stream\n";
+        for (auto i = 0u; i < max; i++)
+        {
+            output << (char)_data[i];
+        }
+        _data.erase(_data.begin(), _data.begin() + max);
+
+        return max;
+    }
+    size_t Stream::read(uint8_t *output, size_t count)
     {
         std::unique_lock<std::mutex> lock_guard(_lock);
         _cv.wait(lock_guard, [this]()
@@ -56,37 +81,23 @@ namespace cotsb
         auto read_count = 0u;
         for (auto i = 0u; i < max; i++, read_count++)
         {
-            //buffer[i] = _data[read_count];
-            output.push_back(_data[read_count]);
+            output[i] = _data[read_count];
         }
-
-        _data.erase(_data.begin(), _data.begin() + read_count);
-
-        return read_count;
-    }
-    size_t Stream::read(std::ostream &output, size_t count)
-    {
-        std::unique_lock<std::mutex> lock_guard(_lock);
-        _cv.wait(lock_guard, [this]()
-        {
-            return _data.size() > 0u;
-        });
-
-        auto max = count;
-        if (max > _data.size())
-        {
-            max = _data.size();
-        }
-
-        output.write((const char *)_data.data(), max);
+        std::cout << "Read: " << max << " bytes from uint8\n";
 
         _data.erase(_data.begin(), _data.begin() + max);
 
         return max;
     }
 
+    bool Stream::has_data() const
+    {
+        return _data.size() > 0u;
+    }
+
     Connection::Connection(int socket) :
-        _socket(socket)
+        _socket(socket),
+        _connection_open(true)
     {
         _listen_thread = std::thread([] (Connection *connection)
         {
@@ -98,26 +109,33 @@ namespace cotsb
         }, this);
     }
 
+    Stream &Connection::incoming_data()
+    {
+        return _incoming_data;
+    }
+    Stream &Connection::outbound_data()
+    {
+        return _outgoing_data;
+    }
+
     void Connection::init_handler()
     {
         //Get the socket descriptor
         int read_size;
-        char client_message[2000];
-        client_message[0] = '\0';
+        //char client_message[2000];
+        std::array<uint8_t, 2048> buffer;
 
         //Send some messages to the client
-        write_str("Greetings! I am your connection handler\n");
-        write_str("Now type something and i shall repeat what you type \n");
+        _outgoing_data.write("Greetings! I am your connection handler\n");
+        _outgoing_data.write("Now type something and i shall repeat what you type \n");
 
         //Receive a message from client
-        while ( (read_size = recv(_socket , client_message , 2000 , 0)) > 0 )
+        while ( (read_size = recv(_socket, buffer.data(), 2048 , 0)) > 0 )
         {
-            //Send the message back to client
-            client_message[read_size] = '\0';
-            printf("Received >%s<\n", client_message);
-            write(_socket , client_message , strlen(client_message));
+            _incoming_data.write(buffer.data(), read_size);
         }
 
+        _connection_open = false;
         if (read_size == 0)
         {
             puts("Client disconnected");
@@ -130,84 +148,113 @@ namespace cotsb
     }
     void Connection::write_handler()
     {
-        
+        std::array<uint8_t, 2048> buffer;
+        while (_connection_open)
+        {
+            auto read_bytes = _outgoing_data.read(buffer.data(), 2048);
+            std::cout << "Read: " << read_bytes << " to write to socket\n";
+            write(_socket, buffer.data(), read_bytes);
+        }
     }
 
-    void Connection::write_str(const std::string &str)
+    Server::Server() :
+        _port(8888)
     {
-        write(_socket , str.c_str(), str.size());
     }
 
-    Server::Server()
+    void Server::port(int value)
     {
+        _port = value;
+    }
+    int Server::port() const
+    {
+        return _port;
     }
 
     int Server::start_server()
     {
-        int socket_desc , client_sock , c , new_sock;
-        struct sockaddr_in server , client;
-
-        //Create socket
-        socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-        if (socket_desc == -1)
+        _accept_connections = std::thread([] (Server *self)
         {
-            printf("Could not create socket");
-        }
-        puts("Socket created");
+            int socket_desc , client_sock , c;
+            struct sockaddr_in server , client;
 
-        //Prepare the sockaddr_in structure
-        server.sin_family = AF_INET;
-        server.sin_addr.s_addr = INADDR_ANY;
-        server.sin_port = htons( 8888 );
-
-        //Bind
-        if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
-        {
-            //print the error message
-            perror("bind failed. Error");
-            return 1;
-        }
-        puts("bind done");
-
-        //Listen
-        listen(socket_desc , 3);
-
-        //Accept and incoming connection
-        puts("Waiting for incoming connections...");
-        c = sizeof(struct sockaddr_in);
-
-        while( (client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
-        {
-            puts("Connection accepted");
-
-            new_sock = client_sock;
-
-            auto connection = new Connection(new_sock);
-            _connections.push_back(std::unique_ptr<Connection>(connection));
-            /*
-            if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) &new_sock) < 0)
+            //Create socket
+            socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+            if (socket_desc == -1)
             {
-                perror("could not create thread");
+                printf("Could not create socket");
+            }
+            puts("Socket created");
+
+            //Prepare the sockaddr_in structure
+            server.sin_family = AF_INET;
+            server.sin_addr.s_addr = INADDR_ANY;
+            server.sin_port = htons( self->port() );
+
+            //Bind
+            if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+            {
+                //print the error message
+                perror("bind failed. Error");
                 return 1;
             }
-            */
+            puts("bind done");
 
-            //Now join the thread , so that we dont terminate before the thread
-            //pthread_join( sniffer_thread , NULL);
-            puts("Handler assigned");
-        }
+            //Listen
+            listen(socket_desc , 3);
 
-        if (client_sock < 0)
+            //Accept and incoming connection
+            puts("Waiting for incoming connections...");
+            c = sizeof(struct sockaddr_in);
+
+            while( (client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
+            {
+                puts("Connection accepted");
+
+                auto connection = new Connection(client_sock);
+                self->_connections.push_back(std::unique_ptr<Connection>(connection));
+                puts("Handler assigned");
+            }
+
+            if (client_sock < 0)
+            {
+                perror("accept failed");
+                return 1;
+            }
+
+            return 0;
+        }, this);
+
+        while (true)
         {
-            perror("accept failed");
-            return 1;
+            for (auto i = 0u; i < _connections.size(); i++)
+            {
+                auto connection = _connections[i].get();
+                if (connection->incoming_data().has_data())
+                {
+                    std::stringstream input;
+                    connection->incoming_data().read(input, 0u);
+                    std::string result = input.str();
+
+                    broadcast(result);
+                }
+            }
+
+            // Sleep for 10ms for now.
+            usleep(10000);
         }
+
+        _accept_connections.join();
 
         return 0;
+    }
 
+    void Server::broadcast(const std::string &str)
+    {
+        std::cout << "Broadcasting: " << str << "\n";
+        for (auto i = 0u; i < _connections.size(); i++)
+        {
+            _connections[i]->outbound_data().write(str);
+        }
     }
 }
-
-/*
- * This will handle connection for each client
- * */

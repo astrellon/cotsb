@@ -61,7 +61,7 @@ int main(int argc , char *argv[])
          
         //Receive a reply from the server
         int read_size = 0;
-        if( (read_size = recv(sock , server_reply , 2000 , 0)) < 0)
+        if( (read_size = recv(sock , server_reply , 1999 , 0)) < 0)
         {
             puts("recv failed");
             break;

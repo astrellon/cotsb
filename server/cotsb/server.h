@@ -16,9 +16,11 @@ namespace cotsb
 
             bool write(const uint8_t *data, size_t size);
             bool write(const std::string &data);
+            
+            size_t read(std::ostream &output, size_t count);
+            size_t read(uint8_t *output, size_t count);
 
-            size_t read(std::ostream &output, size_t);
-            size_t read(std::vector<uint8_t> &output, size_t count);
+            bool has_data() const;
 
         private:
             std::vector<uint8_t> _data;
@@ -32,7 +34,7 @@ namespace cotsb
             Connection(int socket);
 
             Stream &incoming_data();
-            Stream &outboind_data();
+            Stream &outbound_data();
 
         private:
             std::thread _listen_thread;
@@ -41,10 +43,10 @@ namespace cotsb
             Stream _outgoing_data;
 
             int _socket;
+            bool _connection_open;
 
             void init_handler();
             void write_handler();
-            void write_str(const std::string &str);
     };
 
     class Server
@@ -52,9 +54,16 @@ namespace cotsb
         public:
             Server();
 
+            void port(int value);
+            int port() const;
+
             int start_server();
 
+            void broadcast(const std::string &str);
+
         private:
+            int _port;
             std::vector<std::unique_ptr<Connection> > _connections;
+            std::thread _accept_connections;
     };
 }
