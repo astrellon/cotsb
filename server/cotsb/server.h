@@ -4,7 +4,7 @@
 #include <vector>
 #include <stdint.h>
 
-#include "connection.h"
+#include <cotsb/connection.h>
 
 namespace cotsb
 {

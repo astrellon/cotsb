@@ -27,7 +27,7 @@ namespace cotsb
     }
     bool Stream::write(const std::string &str)
     {
-        std::cout << "Write: " << str << " to stream\n";
+        //std::cout << "Write: " << str << " to stream\n";
         return write((const uint8_t *)str.c_str(), str.size());
     }
 
@@ -45,7 +45,7 @@ namespace cotsb
             max = _data.size();
         }
 
-        std::cout << "Read: " << max << " bytes from stream\n";
+        //std::cout << "Read: " << max << " bytes from stream\n";
         for (auto i = 0u; i < max; i++)
         {
             output << (char)_data[i];
@@ -73,7 +73,7 @@ namespace cotsb
         {
             output[i] = _data[read_count];
         }
-        std::cout << "Read: " << max << " bytes from uint8\n";
+        //std::cout << "Read: " << max << " bytes from uint8\n";
 
         _data.erase(_data.begin(), _data.begin() + max);
 

@@ -6,10 +6,23 @@
 
 namespace cotsb
 {
-    Connection::Connection(int socket) :
-        _socket(socket),
-        _connection_open(true)
+    Connection::Connection() :
+        _socket(0),
+        _connection_open(false)
     {
+
+    }
+    Connection::Connection(int socket) :
+        _socket(0),
+        _connection_open(false)
+    {
+        start(socket);
+    }
+    
+    void Connection::start(int socket)
+    {
+        _socket = socket;
+        _connection_open = true;
         _listen_thread = std::thread([] (Connection *connection)
         {
             connection->init_handler();
@@ -18,6 +31,15 @@ namespace cotsb
         {
             connection->write_handler();
         }, this);
+    }
+    void Connection::close()
+    {
+        _connection_open = false;
+        // Todo, kill threads.
+    }
+    bool Connection::is_open() const
+    {
+        return _connection_open;
     }
 
     Stream &Connection::incoming_data()
@@ -37,8 +59,8 @@ namespace cotsb
         std::array<uint8_t, 2048> buffer;
 
         //Send some messages to the client
-        _outgoing_data.write("Greetings! I am your connection handler\n");
-        _outgoing_data.write("Now type something and i shall repeat what you type \n");
+        //_outgoing_data.write("Greetings! I am your connection handler\n");
+        //_outgoing_data.write("Now type something and i shall repeat what you type \n");
 
         //Receive a message from client
         while ( (read_size = recv(_socket, buffer.data(), 2048 , 0)) > 0 )
@@ -63,8 +85,9 @@ namespace cotsb
         while (_connection_open)
         {
             auto read_bytes = _outgoing_data.read(buffer.data(), 2048);
-            std::cout << "Read: " << read_bytes << " to write to socket\n";
+            //std::cout << "Read: " << read_bytes << " to write to socket\n";
             write(_socket, buffer.data(), read_bytes);
         }
     }
+
 }

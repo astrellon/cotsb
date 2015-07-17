@@ -42,7 +42,7 @@ cotsb/server.o: cotsb/server.cpp cotsb/server.h \
   /usr/lib/llvm-3.5/bin/../lib/clang/3.5.0/include/stdint.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9/include/stdint.h \
   /usr/include/stdint.h /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  cotsb/connection.h cotsb/stream.h \
+  ../common/cotsb/connection.h ../common/cotsb/stream.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9/../../../../include/c++/4.9/string \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9/../../../../include/c++/4.9/bits/stringfwd.h \
   /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9/../../../../include/c++/4.9/bits/char_traits.h \

@@ -9,7 +9,12 @@ namespace cotsb
     class Connection
     {
         public:
+            Connection();
             Connection(int socket);
+
+            void start(int socket);
+            void close();
+            bool is_open() const;
 
             Stream &incoming_data();
             Stream &outbound_data();
