@@ -3,6 +3,7 @@
 #include <thread>
 #include <functional>
 #include <sstream>
+#include <unistd.h>
 
 int main(int argc , char *argv[])
 {
@@ -14,13 +15,14 @@ int main(int argc , char *argv[])
     while (true)
     {
         server.check_network();
-        std::cout << "Aasd\n";
 
         for (const auto &iter : server.new_data())
         {
             std::cout << "New data!\n";
         }
         server.clear_new_data();
+
+        usleep(1000);
 
     }
     std::cout << "Done\n";

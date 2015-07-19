@@ -27,7 +27,6 @@ namespace cotsb
 
         private:
             uint16_t _port;
-            bool _running;
 
             std::vector<std::unique_ptr<sf::TcpSocket> > _clients;
             sf::SocketSelector _client_selector;
