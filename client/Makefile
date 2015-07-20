@@ -60,7 +60,7 @@
 MY_CFLAGS = 
 
 # The linker options.
-MY_LIBS   = -lsfml-system -lsfml-network
+MY_LIBS   = -lsfml-system -lsfml-network -lpthread
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = -I./

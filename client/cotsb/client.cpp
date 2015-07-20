@@ -26,4 +26,8 @@ namespace cotsb
     {
         return _new_data;
     }
+    sf::TcpSocket &Client::socket()
+    {
+        return _socket;
+    }
 }

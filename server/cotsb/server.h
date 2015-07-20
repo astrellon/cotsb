@@ -6,6 +6,8 @@
 #include <string>
 #include <stdint.h>
 #include <memory>
+#include <thread>
+#include <mutex>
 
 namespace cotsb
 {
@@ -32,5 +34,8 @@ namespace cotsb
             sf::SocketSelector _client_selector;
             sf::TcpListener _listener;
             ClientDataList _new_data;
+
+            std::unique_ptr<sf::TcpSocket> _pending_socket;
+            std::unique_ptr<sf::Packet> _pending_packet;
     };
 }

@@ -18,7 +18,7 @@ int main(int argc , char *argv[])
 
         for (const auto &iter : server.new_data())
         {
-            std::cout << "New data!\n";
+            server.broadcast(*iter.second.get());
         }
         server.clear_new_data();
 

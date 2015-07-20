@@ -17,6 +17,7 @@ namespace cotsb
             void check_network();
 
             sf::Packet &new_data();
+            sf::TcpSocket &socket();
 
         private:
             uint16_t _port;

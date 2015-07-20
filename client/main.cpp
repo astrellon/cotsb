@@ -3,6 +3,9 @@
 #include <iostream>
 #include <unistd.h>
 
+#include <thread>
+#include <mutex>
+
 int main(int argc , char *argv[])
 {
     cotsb::Client client(8888);
@@ -25,6 +28,25 @@ int main(int argc , char *argv[])
 
     std::cout << "Connected!\n";
 
+    auto has_message = false;
+    std::string message;
+    std::mutex lock;
+
+    std::thread input_thread([] (std::mutex &lock, std::string &message, bool &has_message)
+    {
+        while (true)
+        {
+            std::string temp;
+            std::cout << "Enter message: ";
+            std::cin >> temp;
+
+            std::lock_guard<std::mutex> guard(lock);
+            has_message = true;
+            message = temp;
+        }
+
+    }, std::ref(lock), std::ref(message), std::ref(has_message));
+
     while (true)
     {
         client.check_network();
@@ -34,6 +56,19 @@ int main(int argc , char *argv[])
             std::string message;
             client.new_data() >> message;
             std::cout << "Message: " << message << "\n";
+        }
+
+        {
+            if (has_message)
+            {
+                sf::Packet to_send;
+                {
+                    std::lock_guard<std::mutex> guard(lock);
+                    to_send << message;
+                    has_message = false;
+                }
+                client.socket().send(to_send);
+            }
         }
         usleep(10000);
     }
