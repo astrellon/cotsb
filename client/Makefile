@@ -60,17 +60,17 @@
 MY_CFLAGS = 
 
 # The linker options.
-MY_LIBS   = -lsfml-system -lsfml-network -lpthread
+MY_LIBS   = -lsfml-system -lsfml-network -lsfml-graphics -lsfml-window -lsfml-audio -lpthread -lboost_filesystem -lboost_system
 
 # The pre-processor options used by the cpp (man cpp for more).
-CPPFLAGS  = -I./
+CPPFLAGS  = -I./ -I../common/
 
 # The options used in linking as well as in any direct use of ld.
 LDFLAGS   =
 
 # The directories in which source files reside.
 # If not specified, only the current directory will be serached.
-SRCDIRS   = cotsb
+SRCDIRS   = cotsb ../common ../common/utils
 
 # The executable file name.
 # If not specified, current directory name or `a.out' will be used.

@@ -41,7 +41,6 @@ namespace cotsb
         }
         
         // The listener socket is not ready, test all other sockets (the clients)
-        //for (auto &iter : _clients)
         for (auto i = 0u; i < _clients.size(); i++)
         {
             // The client has sent some data, we can receive it

@@ -11,19 +11,40 @@ namespace cotsb
     class Client
     {
         public:
-            Client(uint16_t port);
+            Client();
 
-            sf::Socket::Status start_client();
-            void check_network();
+            void port(uint16_t value);
+            uint16_t port() const;
+
+            void hostname(const std::string &name);
+            std::string hostname() const;
+
+            void start_client();
 
             sf::Packet &new_data();
             sf::TcpSocket &socket();
 
+            void game_tick();
+
+            enum State
+            {
+                Idle,
+                Connecting,
+                Connected,
+                Error
+            };
+
+            State state() const;
+
         private:
             uint16_t _port;
+            std::string _hostname;
+            State _state;
 
             sf::Packet _new_data;
             sf::TcpSocket _socket;
             sf::SocketSelector _selector;
+
+            void check_network();
     };
 }

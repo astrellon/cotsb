@@ -1,4 +1,5 @@
 #include <cotsb/client.h>
+#include <cotsb/client_engine.h>
 
 #include <iostream>
 #include <unistd.h>
@@ -8,6 +9,20 @@
 
 int main(int argc , char *argv[])
 {
+    // Create the main window
+    sf::RenderWindow window(sf::VideoMode(800, 600), "cotsb", sf::Style::Default);
+
+    cotsb::ClientEngine engine(&window);
+    if (!engine.init())
+    {
+        return 0;
+    }
+    engine.game_loop();
+    engine.deinit();
+
+    return EXIT_SUCCESS;
+
+    /*
     cotsb::Client client(8888);
     
     auto connect_result = sf::Socket::NotReady;
@@ -73,4 +88,5 @@ int main(int argc , char *argv[])
         usleep(10000);
     }
     return 0;
+    */
 }

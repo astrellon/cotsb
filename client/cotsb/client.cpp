@@ -4,22 +4,45 @@
 
 namespace cotsb
 {
-    Client::Client(uint16_t port) :
-        _port(port)
+    Client::Client() :
+        _port(8888),
+        _hostname("127.0.0.1"),
+        _state(Client::Idle)
     {
         _socket.setBlocking(false);
         _selector.add(_socket);
     }
 
-    sf::Socket::Status Client::start_client()
+    void Client::port(uint16_t value)
     {
-        return _socket.connect("127.0.0.1", _port);
+        _port = value;
+    }
+    uint16_t Client::port() const
+    {
+        return _port;
+    }
+
+    void Client::hostname(const std::string &value)
+    {
+        _hostname = value;
+    }
+    std::string Client::hostname() const
+    {
+        return _hostname;
+    }
+
+    void Client::start_client()
+    {
+        if (_state == Idle)
+        {
+            _state = Connecting;
+        }
     }
 
     void Client::check_network()
     {
         _new_data.clear();
-        auto receive_result = _socket.receive(_new_data);
+        _socket.receive(_new_data);
     }
 
     sf::Packet &Client::new_data()
@@ -29,5 +52,30 @@ namespace cotsb
     sf::TcpSocket &Client::socket()
     {
         return _socket;
+    }
+
+    void Client::game_tick()
+    {
+        if (_state == Connecting)
+        {
+            auto connect_result = _socket.connect(_hostname, _port);
+            if (connect_result == sf::Socket::Done)
+            {
+                _state = Connected;
+            }
+            else if (connect_result == sf::Socket::Error)
+            {
+                _state = Error;
+            }
+        }
+        else if (_state == Connected)
+        {
+            check_network();
+        }
+    }
+
+    Client::State Client::state() const
+    {
+        return _state;
     }
 }
