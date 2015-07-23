@@ -1,6 +1,7 @@
 #include "client.h"
 
 #include <iostream>
+#include "logging.h"
 
 namespace cotsb
 {
@@ -35,7 +36,7 @@ namespace cotsb
     {
         if (_state == Idle)
         {
-            _state = Connecting;
+            _state = PreConnecting;
         }
     }
 
@@ -56,6 +57,12 @@ namespace cotsb
 
     void Client::game_tick()
     {
+        if (_state == PreConnecting)
+        {
+            cotsb::logger % "Info" << "Connecting to server " << _hostname << ":" << _port << cotsb::endl;
+            _state = Connecting;
+        }
+
         if (_state == Connecting)
         {
             auto connect_result = _socket.connect(_hostname, _port);

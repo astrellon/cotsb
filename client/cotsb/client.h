@@ -29,6 +29,7 @@ namespace cotsb
             enum State
             {
                 Idle,
+                PreConnecting,
                 Connecting,
                 Connected,
                 Error

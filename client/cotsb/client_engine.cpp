@@ -65,7 +65,6 @@ namespace cotsb
             return -1;
         }
 
-
         s_client.start_client();
 
         return true;
