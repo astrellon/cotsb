@@ -67,9 +67,6 @@ namespace cotsb
 
             void update(float dt);
 
-            static SoundManager *main();
-            static void main(SoundManager *manager);
-
         private:
 
             SoundBufferMap _sound_buffers;
@@ -77,8 +74,6 @@ namespace cotsb
 
             bool load_sound_log(const std::string &name, const std::string &filename);
             void try_load(const std::string &name, const std::string &from_sound);
-
-            static SoundManager *s_main;
     };
     // }}}
 }

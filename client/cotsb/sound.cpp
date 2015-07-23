@@ -45,8 +45,6 @@ namespace cotsb
     // }}}
 
     // SoundManager {{{
-    SoundManager *SoundManager::s_main = nullptr;
-
     void SoundManager::clear()
     {
         for (auto i = 0u; i < _objects.size(); i++)
@@ -145,17 +143,7 @@ namespace cotsb
     {
         try
         {
-            try_load("laser1", "laser1.wav");
-            try_load("laser2", "laser2.wav");
-            try_load("laser3", "laser3.wav");
-            try_load("laser4", "laser4.wav");
-            try_load("explosion1", "explosion1.wav");
-            try_load("explosion2", "explosion2.wav");
-            try_load("explosion3", "explosion3.wav");
-            try_load("hit1", "hit1.wav");
-            try_load("chargeup", "chargeup.wav");
             try_load("select", "select.wav");
-            try_load("pickup1", "pickup1.wav");
         }
         catch (...)
         {

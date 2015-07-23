@@ -12,13 +12,14 @@ int main(int argc , char *argv[])
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(800, 600), "cotsb", sf::Style::Default);
 
-    cotsb::ClientEngine engine(&window);
-    if (!engine.init())
+    //cotsb::ClientEngine engine(&window);
+    if (!cotsb::ClientEngine::init(&window))
     {
         return 0;
     }
-    engine.game_loop();
-    engine.deinit();
+    //engine.game_loop();
+    cotsb::ClientEngine::game_loop();
+    cotsb::ClientEngine::deinit();
 
     return EXIT_SUCCESS;
 

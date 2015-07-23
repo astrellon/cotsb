@@ -104,12 +104,12 @@ namespace cotsb
             try_load("beam_turret", "beam_turret.png");
             try_load("bullet_turret", "bullet_turret.png");
             try_load("thrust", "fire15.png");
+            */
             
             try_load("button_idle", "button_idle.png");
             try_load("button_over", "button_over.png");
             try_load("button_down", "button_down.png");
             try_load("text_input_back", "text_input_back.png");
-            */
         }
         catch (...)
         {
