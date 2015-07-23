@@ -1,5 +1,6 @@
 #include <cotsb/client.h>
 #include <cotsb/client_engine.h>
+#include <cotsb/logging.h>
 
 #include <iostream>
 #include <unistd.h>
@@ -10,15 +11,19 @@
 int main(int argc , char *argv[])
 {
     // Create the main window
+    cotsb::LoggerManager::init();
+
+    cotsb::logger << cotsb::LogType("Info") << "Starting client";
     sf::RenderWindow window(sf::VideoMode(800, 600), "cotsb", sf::Style::Default);
 
-    //cotsb::ClientEngine engine(&window);
     if (!cotsb::ClientEngine::init(&window))
     {
+        cotsb::logger << cotsb::LogType("Error") << "Failed to init client engine!" << cotsb::endl;
         return 0;
     }
-    //engine.game_loop();
     cotsb::ClientEngine::game_loop();
+
+    cotsb::logger << cotsb::LogType("Info") << "Shutting game down" << cotsb::endl;
     cotsb::ClientEngine::deinit();
 
     return EXIT_SUCCESS;
