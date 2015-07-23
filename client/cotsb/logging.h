@@ -13,55 +13,32 @@ namespace cotsb
             virtual void log(const std::string &type, const std::string &message) = 0;
     };
 
-    class LogType
-    {
-        public:
-            inline LogType() {}
-            inline LogType(const std::string &type) :
-                _type(type)
-            {
-            }
-            inline LogType(const char *type) :
-                _type(type)
-            {
-            }
-
-            inline const std::string &type() const
-            {
-                return _type;
-            }
-
-        private:
-            std::string _type;
-    };
-
-    class EndLog
-    {
-
-    };
+    class EndLog { };
 
     class Logger
     {
         public:
-            Logger& operator <<(bool                data);
-            Logger& operator <<(int8_t              data);
-            Logger& operator <<(uint8_t             data);
-            Logger& operator <<(int16_t             data);
-            Logger& operator <<(uint16_t            data);
-            Logger& operator <<(int32_t             data);
-            Logger& operator <<(uint32_t            data);
-            Logger& operator <<(float               data);
-            Logger& operator <<(double              data);
-            Logger& operator <<(const char*         data);
-            Logger& operator <<(const std::string&  data);
-            Logger& operator <<(const LogType&      type);
+            Logger& operator <<(bool               data);
+            Logger& operator <<(int8_t             data);
+            Logger& operator <<(uint8_t            data);
+            Logger& operator <<(int16_t            data);
+            Logger& operator <<(uint16_t           data);
+            Logger& operator <<(int32_t            data);
+            Logger& operator <<(uint32_t           data);
+            Logger& operator <<(float              data);
+            Logger& operator <<(double             data);
+            Logger& operator <<(const char*        data);
+            Logger& operator <<(const std::string& data);
             Logger& operator <<(const EndLog&      type);
+
+            Logger& operator %(const char          *type);
+            Logger& operator %(const std::string   &type);
 
             void flush();
 
         private:
             std::stringstream _buffer;
-            LogType _type;
+            std::string _type;
 
     };
 
