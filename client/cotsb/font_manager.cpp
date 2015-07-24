@@ -1,6 +1,6 @@
 #include "font_manager.h"
 
-#include <iostream>
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -52,12 +52,12 @@ namespace cotsb
     {
         if (!load_font("mono", "data/fonts/LiberationMono-Regular.ttf"))
         {
-            std::cout << "Failed to load mono font\n";
+            logger % "Error" << "Failed to load mono font" << endl;
             return false;
         }
         if (!load_font("sans", "data/fonts/LiberationSans-Regular.ttf"))
         {
-            std::cout << "Failed to load sans font\n";
+            logger % "Error" << "Failed to load sans font" << endl;
             return false;
         }
         return true;

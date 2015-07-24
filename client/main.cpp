@@ -2,7 +2,6 @@
 #include <cotsb/client_engine.h>
 #include <cotsb/logging.h>
 
-#include <iostream>
 #include <unistd.h>
 
 #include <thread>

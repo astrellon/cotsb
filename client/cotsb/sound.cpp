@@ -1,9 +1,9 @@
 #include "sound.h"
 
 #include <sstream>
-#include <iostream>
 
 #include <utils/utils.h>
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -169,7 +169,7 @@ namespace cotsb
         auto result = load_sound_buffer(name, filename);
         if (!result)
         {
-            std::cout << "Failed to load " << name << " sound\n";
+            logger % "Error" << "Failed to load " << name << " sound" << endl;
         }
         return result;
     }

@@ -1,7 +1,5 @@
 #include "component.h"
 
-#include <iostream>
-
 #include "manager.h"
 
 #include <cotsb/client_engine.h>

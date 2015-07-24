@@ -1,16 +1,16 @@
-#include <iostream>
 #include <cotsb/server.h>
 #include <thread>
 #include <functional>
 #include <sstream>
 #include <unistd.h>
+#include <cotsb/logging.h>
 
 int main(int argc , char *argv[])
 {
     cotsb::Server server(8888);
     server.start_server();
 
-    std::cout << "Started server\n";
+    cotsb::logger % "Info" << "Started server" << cotsb::endl;
 
     while (true)
     {
@@ -25,6 +25,6 @@ int main(int argc , char *argv[])
         usleep(1000);
 
     }
-    std::cout << "Done\n";
+    cotsb::logger % "Info" << "Done" << cotsb::endl;
 }
  

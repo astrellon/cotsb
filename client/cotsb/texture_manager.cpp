@@ -1,7 +1,8 @@
 #include "texture_manager.h"
 
 #include <sstream>
-#include <iostream>
+
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -132,7 +133,7 @@ namespace cotsb
 
     void TextureManager::display(const std::string &message)
     {
-        std::cout << message << " texture counts: " << num_textures() << ", " << count_textures() << ", " << texture_load_attempt() << "\n";
+        logger % "Info" << message << " texture counts: " << num_textures() << ", " << count_textures() << ", " << texture_load_attempt() << endl;
     }
 
     bool TextureManager::load_texture_log(const std::string &name, const std::string &filename)
@@ -140,7 +141,7 @@ namespace cotsb
         auto result = load_texture(name, filename); 
         if (!result)
         {
-            std::cout << "Failed to load " << name << " texture\n";
+            logger % "Error" << "Failed to load " << name << " texture" << endl;
         }
         return result;
     }

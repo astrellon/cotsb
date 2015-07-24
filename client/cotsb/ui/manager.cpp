@@ -3,8 +3,6 @@
 #include <cotsb/client_engine.h>
 #include "main_menu.h"
 
-#include <iostream>
-
 namespace cotsb
 {
     namespace ui

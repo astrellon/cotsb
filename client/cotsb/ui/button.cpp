@@ -1,7 +1,5 @@
 #include "button.h"
 
-#include <iostream>
-
 #include <cotsb/font_manager.h>
 #include <cotsb/texture_manager.h>
 #include <utils/utils.h>

@@ -7,8 +7,7 @@
 #include "ui/ui_state.h"
 
 #include <utils/utils.h>
-
-#include <iostream>
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -37,31 +36,31 @@ namespace cotsb
 
         if (!cotsb::FontManager::init())
         {
-            std::cout << "Failed to load fonts on startup\n";
+            logger % "Error" << "Failed to load fonts on startup" << endl;
             return false;
         }
 
         if (!cotsb::TextureManager::init())
         {
-            std::cout << "Failed to load textures on startup\n";
+            logger % "Error" << "Failed to load textures on startup" << endl;
             return false;
         }
 
         if (!ui::Manager::init())
         {
-            std::cout << "Failed to initialise UI\n";
+            logger % "Error" << "Failed to initialise UI" << endl;
             return -1;
         }
 
         if (!ui::State::init())
         {
-            std::cout << "Failed to initialise main UI\n";
+            logger % "Error" << "Failed to initialise main UI" << endl;
             return -1;
         }
         
         if (!s_sound_manager.init())
         {
-            std::cout << "Failed to initialise sound engine.\n";
+            logger % "Error" << "Failed to initialise sound engine." << endl;
             return -1;
         }
 
@@ -93,10 +92,10 @@ namespace cotsb
             s_client.game_tick();
             if (s_client.new_data().getDataSize() > 0)
             {
-                std::cout << "Has " << s_client.new_data().getDataSize() << " bytes\n";
+                logger % "Info" << "Has " << s_client.new_data().getDataSize() << " bytes" << endl;
                 std::string message;
                 s_client.new_data() >> message;
-                std::cout << "Message: " << message << "\n";
+                logger % "Info" << "Message: " << message << endl;
             }
 
             utils::Utils::update(dt);

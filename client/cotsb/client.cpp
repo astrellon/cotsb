@@ -1,7 +1,6 @@
 #include "client.h"
 
-#include <iostream>
-#include "logging.h"
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -59,7 +58,7 @@ namespace cotsb
     {
         if (_state == PreConnecting)
         {
-            cotsb::logger % "Info" << "Connecting to server " << _hostname << ":" << _port << cotsb::endl;
+            logger % "Info" << "Connecting to server " << _hostname << ":" << _port << endl;
             _state = Connecting;
         }
 

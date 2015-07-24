@@ -1,6 +1,6 @@
 #include "server.h"
 
-#include <iostream>
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -26,7 +26,7 @@ namespace cotsb
         if (_listener.accept(*_pending_socket) == sf::Socket::Done)
         {
             auto client = _pending_socket.get();
-            std::cout << "New client: " << client->getRemoteAddress() << ":" << client->getRemotePort() << "\n";
+            logger % "Info" << "New client: " << client->getRemoteAddress().toString() << ":" << client->getRemotePort() << endl; 
             client->setBlocking(false);
             // Add the new client to the clients list
             // Add the new client to the selector so that we will
@@ -48,13 +48,13 @@ namespace cotsb
             auto result = client->receive(*_pending_packet); 
             if (result == sf::Socket::Done)
             {
-                std::cout << "Received data\n";
+                logger % "Info" << "Received data" << endl; 
                 _new_data.push_back(ClientDataPair(client, std::move(_pending_packet)));
                 _pending_packet = std::unique_ptr<sf::Packet>(new sf::Packet());
             }
             else if (result == sf::Socket::Disconnected)
             {
-                std::cout << "Client disconnected\n";
+                logger % "Info" << "Client disconnected" << endl; 
                 _clients.erase(_clients.begin() + i);
                 i--;
                 continue;
