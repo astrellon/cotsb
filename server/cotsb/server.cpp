@@ -1,13 +1,15 @@
 #include "server.h"
 
 #include <cotsb/logging.h>
+#include "map_tcp_serialiser.h"
 
 namespace cotsb
 {
     Server::Server(uint16_t port) :
-        _port(port)
+        _port(port),
+        _map1(6, 7)
     {
-
+        
     }
 
     void Server::start_server()
@@ -34,7 +36,9 @@ namespace cotsb
             _clients.push_back(std::move(_pending_socket));
 
             sf::Packet message;
-            message << "Hi there";
+            //message << "Hi there";
+            
+            MapTcpSerialiser::serialise(_map1, message);
             client->send(message);
 
             _pending_socket = std::unique_ptr<sf::TcpSocket>(new sf::TcpSocket());

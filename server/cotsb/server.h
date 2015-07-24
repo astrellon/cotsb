@@ -9,6 +9,8 @@
 #include <thread>
 #include <mutex>
 
+#include "map.h"
+
 namespace cotsb
 {
     class Server
@@ -37,5 +39,7 @@ namespace cotsb
 
             std::unique_ptr<sf::TcpSocket> _pending_socket;
             std::unique_ptr<sf::Packet> _pending_packet;
+
+            Map _map1;
     };
 }
