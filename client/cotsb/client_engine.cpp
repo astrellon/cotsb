@@ -9,6 +9,10 @@
 #include <utils/utils.h>
 #include <cotsb/logging.h>
 
+#include "map.h"
+#include "map_tcp_deserialiser.h"
+#include <cotsb/commands.h>
+
 namespace cotsb
 {
     sf::RenderWindow *ClientEngine::s_window = nullptr;
@@ -90,13 +94,7 @@ namespace cotsb
             auto dt = elapsed.asSeconds();
 
             s_client.game_tick();
-            if (s_client.new_data().getDataSize() > 0)
-            {
-                logger % "Info" << "Has " << s_client.new_data().getDataSize() << " bytes" << endl;
-                std::string message;
-                s_client.new_data() >> message;
-                logger % "Info" << "Message: " << message << endl;
-            }
+            process_networking();
 
             utils::Utils::update(dt);
             ui::Manager::update(dt);
@@ -214,4 +212,25 @@ namespace cotsb
         return &s_sound_manager;
     }
 
+    void ClientEngine::process_networking()
+    {
+        if (s_client.new_data().getDataSize() > 0)
+        {
+            logger % "Info" << "Has " << s_client.new_data().getDataSize() << " bytes" << endl;
+            uint16_t command_temp;
+            s_client.new_data() >> command_temp;
+            Commands::Type command = static_cast<Commands::Type>(command_temp);
+
+            if (command == Commands::NEW_MAP)
+            {
+                logger % "Info" << "New map" << endl;
+                auto map = MapTcpDeserialiser::deserialise(s_client.new_data());
+                delete map;
+            }
+            else
+            {
+                logger % "Error" << "Unknown command " << command_temp << endl;
+            }
+        }
+    }
 }

@@ -3,11 +3,13 @@
 #include <cotsb/logging.h>
 #include "map_tcp_serialiser.h"
 
+#include <cotsb/commands.h>
+
 namespace cotsb
 {
     Server::Server(uint16_t port) :
         _port(port),
-        _map1(6, 7)
+        _map1("TestMap", 6, 7)
     {
         
     }
@@ -38,6 +40,7 @@ namespace cotsb
             sf::Packet message;
             //message << "Hi there";
             
+            message << static_cast<uint16_t>(Commands::NEW_MAP);
             MapTcpSerialiser::serialise(_map1, message);
             client->send(message);
 

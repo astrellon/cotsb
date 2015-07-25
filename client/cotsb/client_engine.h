@@ -61,5 +61,7 @@ namespace cotsb
             static void on_resize(uint32_t width, uint32_t height);
             static void key_pressed(sf::Keyboard::Key key);
             static void key_released(sf::Keyboard::Key key);
+
+            static void process_networking();
     };
 }
