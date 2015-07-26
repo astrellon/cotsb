@@ -66,6 +66,8 @@ namespace cotsb
             static std::vector<std::unique_ptr<ILogger> > s_loggers;
             static std::mutex s_log_lock;
 
+            static std::map<std::string, std::string> s_type_to_colours;
+
     };
     // }}}
 

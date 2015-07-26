@@ -1,17 +1,18 @@
+#include <SFML/System.hpp>
+
 #include <cotsb/server.h>
-#include <thread>
-#include <functional>
-#include <sstream>
-#include <unistd.h>
 #include <cotsb/logging.h>
 
 int main(int argc , char *argv[])
 {
+    cotsb::LoggerManager::init();
+
     cotsb::Server server(8888);
     server.start_server();
 
     cotsb::logger % "Info" << "Started server" << cotsb::endl;
 
+    sf::Time sleep_time = sf::milliseconds(1);
     while (true)
     {
         server.check_network();
@@ -22,7 +23,7 @@ int main(int argc , char *argv[])
         }
         server.clear_new_data();
 
-        usleep(1000);
+        sf::sleep(sleep_time);
 
     }
     cotsb::logger % "Info" << "Done" << cotsb::endl;
