@@ -7,8 +7,6 @@ int main(int argc , char *argv[])
     // Create the main window
     cotsb::LoggerManager::init();
 
-    cotsb::logger % "Error" << "Because error!" << cotsb::endl;
-    cotsb::logger % "Warning" << "Wrarnngin!" << cotsb::endl;
     cotsb::logger % "Info" << "Starting client" << cotsb::endl;
     sf::RenderWindow window(sf::VideoMode(800, 600), "cotsb", sf::Style::Default);
 

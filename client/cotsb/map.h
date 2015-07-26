@@ -2,10 +2,15 @@
 
 #include <stdint.h>
 #include <vector>
+#include <map>
 #include <string>
+#include <memory>
+
+#include "object_manager.h"
 
 namespace cotsb
 {
+    // Map {{{
     class Map
     {
         public:
@@ -28,4 +33,40 @@ namespace cotsb
 
             TileList _data;
     };
+    // }}}
+
+    // MapManager {{{
+    class MapManager
+    {
+        public:
+            static void init();
+
+            typedef std::map<std::string, std::unique_ptr<Map> > Maps;
+            static const Maps &maps();
+            
+            static Map *map(const std::string &name);
+
+            enum Status
+            {
+                NotLoading,
+                Loading,
+                Error,
+                Loaded
+            };
+            static Status status(const std::string &name);
+
+            typedef std::map<std::string, Status> Statuses;
+            static Statuses &statusus();
+
+            typedef std::vector<std::string> MapNameList;
+            const MapNameList &maps_to_load();
+            void clear_maps_to_load();
+
+        private:
+            static Maps s_maps;
+            static Statuses s_statuses;
+            static MapNameList s_maps_to_load;
+
+    };
+    // }}}
 }
