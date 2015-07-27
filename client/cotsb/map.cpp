@@ -68,6 +68,7 @@ namespace cotsb
         {
             
         }
+        return nullptr;
     }
     // }}}
 }

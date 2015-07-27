@@ -21,7 +21,11 @@ namespace cotsb
 
             void start_client();
 
-            sf::Packet &new_data();
+            typedef std::vector<std::unique_ptr<sf::Packet> > PacketList;
+            PacketList &new_data();
+
+            sf::Packet &send(uint16_t command);
+
             sf::TcpSocket &socket();
 
             void game_tick();
@@ -42,9 +46,11 @@ namespace cotsb
             std::string _hostname;
             State _state;
 
-            sf::Packet _new_data;
+            PacketList _new_data;
+            std::unique_ptr<sf::Packet> _pending_new_data;
             sf::TcpSocket _socket;
             sf::SocketSelector _selector;
+            std::vector<std::unique_ptr<sf::Packet> > _to_send;
 
             void check_network();
     };

@@ -11,6 +11,7 @@ namespace cotsb
     {
         _socket.setBlocking(false);
         _selector.add(_socket);
+        _pending_new_data = std::unique_ptr<sf::Packet>(new sf::Packet());
     }
 
     void Client::port(uint16_t value)
@@ -42,10 +43,28 @@ namespace cotsb
     void Client::check_network()
     {
         _new_data.clear();
-        _socket.receive(_new_data);
+        while (_socket.receive(*_pending_new_data) == sf::Socket::Done)
+        {
+            _new_data.push_back(std::move(_pending_new_data));
+            _pending_new_data = std::unique_ptr<sf::Packet>(new sf::Packet());
+        }
+
+        for (auto &iter : _to_send)
+        {
+            _socket.send(*iter.get());
+        }
+        _to_send.clear();
     }
 
-    sf::Packet &Client::new_data()
+    sf::Packet &Client::send(uint16_t command)
+    {
+        auto new_packet = new sf::Packet();
+        *new_packet << command;
+        _to_send.push_back(std::unique_ptr<sf::Packet>(new_packet));
+        return *new_packet;
+    }
+
+    Client::PacketList &Client::new_data()
     {
         return _new_data;
     }

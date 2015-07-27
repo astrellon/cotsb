@@ -211,21 +211,32 @@ namespace cotsb
     {
         return &s_sound_manager;
     }
+    Client &ClientEngine::client()
+    {
+        return s_client;
+    }
 
     void ClientEngine::process_networking()
     {
-        if (s_client.new_data().getDataSize() > 0)
+        for (auto &iter : s_client.new_data())
         {
-            logger % "Info" << "Has " << s_client.new_data().getDataSize() << " bytes" << endl;
+            auto data = *iter;
+            logger % "Info" << "Has " << data.getDataSize() << " bytes" << endl;
             uint16_t command_temp;
-            s_client.new_data() >> command_temp;
+            data >> command_temp;
             Commands::Type command = static_cast<Commands::Type>(command_temp);
 
             if (command == Commands::NEW_MAP)
             {
                 logger % "Info" << "New map" << endl;
-                auto map = MapTcpDeserialiser::deserialise(s_client.new_data());
+                auto map = MapTcpDeserialiser::deserialise(data);
                 delete map;
+            }
+            else if (command == Commands::MESSAGE)
+            {
+                std::string message;
+                data >> message;
+                logger % "Info" << "Message " << message << endl; 
             }
             else
             {

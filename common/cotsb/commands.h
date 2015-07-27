@@ -10,6 +10,7 @@ namespace cotsb
             enum Type : uint16_t
             {
                 UNKNOWN,
+                MESSAGE,
                 NEW_MAP
             };
     };

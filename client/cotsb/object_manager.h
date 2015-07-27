@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <memory>
 #include <array>
+#include <limits>
 
 namespace cotsb
 {

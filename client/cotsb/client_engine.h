@@ -46,11 +46,12 @@ namespace cotsb
             static bool is_key_released(sf::Keyboard::Key key);
             
             static SoundManager *sound_manager();
+            static Client &client();
 
         private:
 
             static sf::RenderWindow *s_window;
-            static cotsb::Client s_client;
+            static Client s_client;
             static sf::View s_hud_camera;
             static SoundManager s_sound_manager;
             
