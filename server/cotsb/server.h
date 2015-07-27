@@ -16,7 +16,10 @@ namespace cotsb
     class Server
     {
         public:
-            Server(uint16_t port);
+            Server(uint16_t port = 8888);
+
+            void port(uint16_t value);
+            uint16_t port() const;
 
             void start_server();
             void check_network();

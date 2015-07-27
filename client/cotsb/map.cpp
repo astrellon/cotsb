@@ -1,5 +1,8 @@
 #include "map.h"
 
+#include "client_engine.h"
+#include <cotsb/commands.h>
+
 namespace cotsb
 {
     // Map {{{
@@ -60,15 +63,35 @@ namespace cotsb
     {
         return s_maps;
     }
-
     Map *MapManager::map(const std::string &name)
     {
         auto find = s_maps.find(name);
         if (find == s_maps.end())
         {
-            
+            auto map_status = status(name);
+            if (map_status == NotLoading)
+            {
+                s_statuses[name] = Loading;
+                auto &data = ClientEngine::client().send(Commands::LOAD_MAP);
+                data << name;
+            }
+            return nullptr;
         }
-        return nullptr;
+        return find->second.get();
+    }
+
+    MapManager::Status MapManager::status(const std::string &name)
+    {
+        auto find = s_statuses.find(name);
+        if (find == s_statuses.end())
+        {
+            return NotLoading;
+        }
+        return find->second;
+    }
+    const MapManager::Statuses &MapManager::statusus()
+    {
+        return s_statuses;
     }
     // }}}
 }

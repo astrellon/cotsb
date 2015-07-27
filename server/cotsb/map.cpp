@@ -2,6 +2,7 @@
 
 namespace cotsb
 {
+    // Map {{{
     Map::Map(const std::string &name, uint32_t width, uint32_t height) :
         _name(name),
         _width(width),
@@ -44,4 +45,32 @@ namespace cotsb
     {
         return _data;
     }
+    // }}}
+    
+    // MapManager {{{
+    MapManager::Maps MapManager::s_maps;
+
+    void MapManager::init()
+    {
+
+    }
+
+    const MapManager::Maps &MapManager::maps()
+    {
+        return s_maps;
+    }
+    Map *MapManager::map(const std::string &name)
+    {
+        auto find = s_maps.find(name);
+        if (find == s_maps.end())
+        {
+            return nullptr;
+        }
+        return find->second.get();
+    }
+    void MapManager::map(const std::string &name, Map *map)
+    {
+        s_maps[name] = std::unique_ptr<Map>(map);
+    }
+    // }}}
 }

@@ -35,7 +35,7 @@ namespace cotsb
 
                 if (focus)
                 {
-                    auto sound = ClientEngine::sound_manager()->spawn_sound("select", Sound::UserInterface);
+                    auto sound = ClientEngine::sound_manager().spawn_sound("select", Sound::UserInterface);
                     sound->play();
                 }
             }

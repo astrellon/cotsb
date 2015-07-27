@@ -207,9 +207,9 @@ namespace cotsb
         s_hud_camera.setCenter(fwidth * 0.5f, fheight * 0.5f);
     }
     
-    SoundManager *ClientEngine::sound_manager()
+    SoundManager &ClientEngine::sound_manager()
     {
-        return &s_sound_manager;
+        return s_sound_manager;
     }
     Client &ClientEngine::client()
     {

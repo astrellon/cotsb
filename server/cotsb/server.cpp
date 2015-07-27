@@ -14,6 +14,15 @@ namespace cotsb
         
     }
 
+    void Server::port(uint16_t value)
+    {
+        _port = value;
+    }
+    uint16_t Server::port() const
+    {
+        return _port;
+    }
+
     void Server::start_server()
     {
         _listener.listen(_port);

@@ -11,7 +11,8 @@ namespace cotsb
             {
                 UNKNOWN,
                 MESSAGE,
-                NEW_MAP
+                NEW_MAP,
+                LOAD_MAP
             };
     };
 }

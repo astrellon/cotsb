@@ -4,6 +4,10 @@ namespace cotsb
 {
     void MapTcpSerialiser::serialise(const Map &map, sf::Packet &output)
     {
-        output << map.name() << map.width() << map.height();
+        output << "map" << map.width() << map.height();
+        for (const auto &tile : map.data())
+        {
+            output << tile;
+        }
     }
 }

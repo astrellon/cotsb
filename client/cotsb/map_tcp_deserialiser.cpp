@@ -12,6 +12,15 @@ namespace cotsb
 
         logger % "Info" << "New map: " << name << ", " << width << ", " << height << endl;
         auto result = new Map(name, width, height);
+        for (auto y = 0u; y < height; y++)
+        {
+            for (auto x = 0u; x < width; x++)
+            {
+                std::string tile;
+                input >> tile;
+                result->tile(x, y, tile);
+            }
+        }
         return result;
     }
 }

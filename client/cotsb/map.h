@@ -43,7 +43,6 @@ namespace cotsb
 
             typedef std::map<std::string, std::unique_ptr<Map> > Maps;
             static const Maps &maps();
-            
             static Map *map(const std::string &name);
 
             enum Status
@@ -53,20 +52,14 @@ namespace cotsb
                 Error,
                 Loaded
             };
-            static Status status(const std::string &name);
 
             typedef std::map<std::string, Status> Statuses;
-            static Statuses &statusus();
-
-            typedef std::vector<std::string> MapNameList;
-            const MapNameList &maps_to_load();
-            void clear_maps_to_load();
+            static Status status(const std::string &name);
+            static const Statuses &statusus();
 
         private:
             static Maps s_maps;
             static Statuses s_statuses;
-            static MapNameList s_maps_to_load;
-
     };
     // }}}
 }

@@ -3,9 +3,12 @@
 #include <stdint.h>
 #include <vector>
 #include <string>
+#include <map>
+#include <memory>
 
 namespace cotsb
 {
+    // Map {{{
     class Map
     {
         public:
@@ -28,4 +31,21 @@ namespace cotsb
 
             TileList _data;
     };
+    // }}}
+
+    // MapManager {{{
+    class MapManager
+    {
+        public:
+            static void init();
+
+            typedef std::map<std::string, std::unique_ptr<Map> > Maps;
+            static const Maps &maps();
+            static Map *map(const std::string &name);
+            static void map(const std::string &name, Map *map);
+
+        private:
+            static Maps s_maps;
+    };
+    // }}}
 }
