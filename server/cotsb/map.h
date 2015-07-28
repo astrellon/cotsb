@@ -42,7 +42,7 @@ namespace cotsb
             typedef std::map<std::string, std::unique_ptr<Map> > Maps;
             static const Maps &maps();
             static Map *map(const std::string &name);
-            static void map(const std::string &name, Map *map);
+            static void map(Map *map);
 
         private:
             static Maps s_maps;

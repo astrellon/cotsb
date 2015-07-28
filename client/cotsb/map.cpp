@@ -89,7 +89,7 @@ namespace cotsb
         }
         return find->second;
     }
-    const MapManager::Statuses &MapManager::statusus()
+    const MapManager::Statuses &MapManager::statuses()
     {
         return s_statuses;
     }

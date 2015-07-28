@@ -9,8 +9,6 @@
 #include <thread>
 #include <mutex>
 
-#include "map.h"
-
 namespace cotsb
 {
     class Server
@@ -24,7 +22,7 @@ namespace cotsb
             void start_server();
             void check_network();
 
-            void broadcast(sf::Packet &data);
+            void broadcast(sf::Packet &data, sf::TcpSocket *skip_socket = nullptr);
 
             typedef std::pair<sf::TcpSocket *, std::unique_ptr<sf::Packet> > ClientDataPair;
             typedef std::vector<ClientDataPair> ClientDataList;
@@ -42,7 +40,5 @@ namespace cotsb
 
             std::unique_ptr<sf::TcpSocket> _pending_socket;
             std::unique_ptr<sf::Packet> _pending_packet;
-
-            Map _map1;
     };
 }

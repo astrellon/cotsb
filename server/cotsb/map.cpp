@@ -8,7 +8,7 @@ namespace cotsb
         _width(width),
         _height(height)
     {
-
+        _data.resize(width * height);
     }
 
     std::string Map::name() const
@@ -68,9 +68,9 @@ namespace cotsb
         }
         return find->second.get();
     }
-    void MapManager::map(const std::string &name, Map *map)
+    void MapManager::map(Map *map)
     {
-        s_maps[name] = std::unique_ptr<Map>(map);
+        s_maps[map->name()] = std::unique_ptr<Map>(map);
     }
     // }}}
 }

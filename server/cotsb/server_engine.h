@@ -2,6 +2,8 @@
 
 #include "server.h"
 
+#include <cotsb/commands.h>
+
 namespace cotsb
 {
     class ServerEngine
@@ -17,5 +19,7 @@ namespace cotsb
         private:
             static Server s_server;
             static bool s_running;
+
+            static void process_command(sf::TcpSocket *socket, Commands::Type command, sf::Packet &packet);
     };
 }

@@ -55,7 +55,7 @@ namespace cotsb
 
             typedef std::map<std::string, Status> Statuses;
             static Status status(const std::string &name);
-            static const Statuses &statusus();
+            static const Statuses &statuses();
 
         private:
             static Maps s_maps;
