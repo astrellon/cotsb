@@ -23,14 +23,12 @@ namespace cotsb
         {
             s_start_game = new Button("Start Game");
             s_start_game->setPosition(300, 200);
-            /*
             s_start_game->on_click([] (int32_t x, int32_t y, sf::Mouse::Button btn)
             {
-                State::state(State::SHIP_HANGER);
+                State::state(State::ServerConnect);
                 
                 return true;
             });
-            */
             s_helper.add_component(s_start_game);
 
             s_options = new Button("Options");

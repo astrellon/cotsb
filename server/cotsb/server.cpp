@@ -71,6 +71,12 @@ namespace cotsb
                 continue;
             }
         }
+
+        for (auto &iter : _to_send)
+        {
+            iter.first->send(*iter.second.get());
+        }
+        _to_send.clear();
     }
 
     const Server::ClientDataList &Server::new_data() const
@@ -92,5 +98,13 @@ namespace cotsb
             }
             iter->send(data);
         }
+    }
+            
+    sf::Packet &Server::send(sf::TcpSocket *socket, Commands::Type command)
+    {
+        auto new_packet = new sf::Packet();
+        *new_packet << static_cast<uint16_t>(command);
+        _to_send.push_back(SocketDataPair(socket, std::unique_ptr<sf::Packet>(new_packet)));
+        return *new_packet;
     }
 }

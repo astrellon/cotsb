@@ -7,7 +7,8 @@ namespace cotsb
     Client::Client() :
         _port(8888),
         _hostname("127.0.0.1"),
-        _state(Client::Idle)
+        _state(Client::Idle),
+        _has_connected(false)
     {
         _socket.setBlocking(false);
         _selector.add(_socket);
@@ -21,6 +22,15 @@ namespace cotsb
     uint16_t Client::port() const
     {
         return _port;
+    }
+
+    bool Client::has_connected() const
+    {
+        return _has_connected;
+    }
+    void Client::clear_has_connected()
+    {
+        _has_connected = false;
     }
 
     void Client::hostname(const std::string &value)
@@ -86,6 +96,7 @@ namespace cotsb
             auto connect_result = _socket.connect(_hostname, _port);
             if (connect_result == sf::Socket::Done)
             {
+                _has_connected = true;
                 _state = Connected;
             }
             else if (connect_result == sf::Socket::Error)

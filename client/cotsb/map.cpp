@@ -11,7 +11,12 @@ namespace cotsb
         _width(width),
         _height(height)
     {
-
+        auto total = width * height;
+        _data.resize(total);
+        for (auto i = 0u; i < total; i++ )
+        {
+            _data[i] = "unknown";
+        }
     }
 
     std::string Map::name() const

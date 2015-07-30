@@ -2,6 +2,7 @@
 
 #include <cotsb/logging.h>
 #include "map.h"
+#include "map_tcp_serialiser.h"
 
 namespace cotsb
 {
@@ -77,6 +78,18 @@ namespace cotsb
             packet >> map_name;
 
             logger % "Info" << "Request for map: " << map_name << endl;
+            auto &response = s_server.send(socket, Commands::NEW_MAP); 
+
+            auto found_map = MapManager::map(map_name);
+            if (found_map == nullptr)
+            {
+                response << false << "Failed to find map.";
+            }
+            else
+            {
+                response << true;
+                MapTcpSerialiser::serialise(*found_map, response);
+            }
         }
         else if (command == Commands::MESSAGE)
         {

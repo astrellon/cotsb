@@ -243,5 +243,17 @@ namespace cotsb
                 logger % "Error" << "Unknown command " << command_temp << endl;
             }
         }
+
+        if (s_client.has_connected())
+        {
+            s_client.clear_has_connected();
+            on_connected();
+        }
+    }
+
+    void ClientEngine::on_connected()
+    {
+        auto &data = s_client.send(Commands::LOAD_MAP);
+        data << "map1";
     }
 }

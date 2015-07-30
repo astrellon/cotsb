@@ -9,9 +9,10 @@ namespace cotsb
             public:
                 enum StateValue
                 {
-                    MAIN_MENU,
-                    IN_GAME,
-                    PAUSE_GAME,
+                    MainMenu,
+                    InGame,
+                    PauseGame,
+                    ServerConnect
                 };
 
                 static bool init();

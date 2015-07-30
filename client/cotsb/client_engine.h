@@ -64,5 +64,7 @@ namespace cotsb
             static void key_released(sf::Keyboard::Key key);
 
             static void process_networking();
+
+            static void on_connected();
     };
 }

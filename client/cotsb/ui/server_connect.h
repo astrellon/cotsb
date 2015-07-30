@@ -11,8 +11,9 @@ namespace cotsb
     namespace ui
     {
         class Button;
+        class TextInput; 
 
-        class MainMenu 
+        class ServerConnect 
         {
             public:
                 static bool init();
@@ -24,12 +25,10 @@ namespace cotsb
 
             private:
 
-                static Button *s_start_game;
-                static Button *s_options;
-                static Button *s_quit;
+                static TextInput *s_hostname;
+                static TextInput *s_port;
+                static Button *s_connect;
                 static MenuHelper s_helper;
-
-                static void set_pos(sf::Transformable *obj, float x);
         };
     }
 }

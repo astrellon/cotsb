@@ -16,6 +16,9 @@ namespace cotsb
             void port(uint16_t value);
             uint16_t port() const;
 
+            bool has_connected() const;
+            void clear_has_connected();
+
             void hostname(const std::string &name);
             std::string hostname() const;
 
@@ -45,6 +48,7 @@ namespace cotsb
             uint16_t _port;
             std::string _hostname;
             State _state;
+            bool _has_connected;
 
             PacketList _new_data;
             std::unique_ptr<sf::Packet> _pending_new_data;

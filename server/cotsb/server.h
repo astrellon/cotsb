@@ -9,6 +9,8 @@
 #include <thread>
 #include <mutex>
 
+#include <cotsb/commands.h>
+
 namespace cotsb
 {
     class Server
@@ -30,6 +32,8 @@ namespace cotsb
             const ClientDataList &new_data() const;
             void clear_new_data();
 
+            sf::Packet &send(sf::TcpSocket *socket, Commands::Type command);
+
         private:
             uint16_t _port;
 
@@ -40,5 +44,8 @@ namespace cotsb
 
             std::unique_ptr<sf::TcpSocket> _pending_socket;
             std::unique_ptr<sf::Packet> _pending_packet;
+            
+            typedef std::pair<sf::TcpSocket *, std::unique_ptr<sf::Packet> > SocketDataPair;
+            std::vector<SocketDataPair> _to_send;
     };
 }

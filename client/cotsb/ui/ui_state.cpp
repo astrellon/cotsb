@@ -1,16 +1,17 @@
 #include "ui_state.h"
 
 #include "main_menu.h"
+#include "server_connect.h"
 
 namespace cotsb
 {
     namespace ui
     {
-        State::StateValue State::s_state = State::MAIN_MENU;
+        State::StateValue State::s_state = State::MainMenu;
 
         bool State::init()
         {
-            state(MAIN_MENU);
+            state(MainMenu);
 
             return true; 
         }
@@ -27,14 +28,22 @@ namespace cotsb
 
         void State::change_state(StateValue prev_state, StateValue new_state)
         {
-            if (prev_state == MAIN_MENU || prev_state == PAUSE_GAME)
+            if (prev_state == MainMenu || prev_state == PauseGame)
             {
                 MainMenu::visible(false);
             }
+            if (prev_state == ServerConnect)
+            {
+                ServerConnect::visible(false); 
+            }
 
-            if (new_state == MAIN_MENU || new_state == PAUSE_GAME)
+            if (new_state == MainMenu || new_state == PauseGame)
             {
                 MainMenu::visible(true);
+            }
+            if (new_state == ServerConnect)
+            {
+                ServerConnect::visible(true);
             }
         }
     }

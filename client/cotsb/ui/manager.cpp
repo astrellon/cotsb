@@ -1,7 +1,9 @@
 #include "manager.h"
 
 #include <cotsb/client_engine.h>
+
 #include "main_menu.h"
+#include "server_connect.h"
 
 namespace cotsb
 {
@@ -14,6 +16,10 @@ namespace cotsb
         bool Manager::init()
         {
             if (!MainMenu::init())
+            {
+                return false;
+            }
+            if (!ServerConnect::init())
             {
                 return false;
             }
