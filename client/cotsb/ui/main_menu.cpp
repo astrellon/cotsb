@@ -1,14 +1,9 @@
 #include "main_menu.h"
 
 #include "button.h"
-#include "text_input.h"
-#include "manager.h"
 #include "ui_state.h"
 
-#include <cotsb/texture_manager.h>
-#include <cotsb/font_manager.h>
 #include <cotsb/client_engine.h>
-#include <utils/utils.h>
 
 namespace cotsb
 {

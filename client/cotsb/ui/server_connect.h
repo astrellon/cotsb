@@ -1,10 +1,7 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "screen.h"
 
-#include <stdint.h>
-
-/*
 namespace cotsb
 {
     namespace ui
@@ -12,23 +9,19 @@ namespace cotsb
         class Button;
         class TextInput; 
 
-        class ServerConnect 
+        class ServerConnect : public Screen
         {
             public:
-                static bool init();
-
-                static void visible(bool value);
-                static bool visible();
-
-                static void on_resize(uint32_t width, uint32_t height);
+                virtual bool init();
 
             private:
 
-                static TextInput *s_hostname;
-                static TextInput *s_port;
-                static Button *s_connect;
-                static MenuHelper s_helper;
+                TextInput *_hostname;
+                TextInput *_port;
+                Button *_connect;
+                Button *_back;
         };
+
+        extern ServerConnect server_connect;
     }
 }
-*/

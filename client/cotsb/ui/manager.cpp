@@ -21,8 +21,13 @@ namespace cotsb
             {
                 return false;
             }
+            if (!server_connect.init())
+            {
+                return false;
+            }
 
             s_screens.push_back(&main_menu);
+            s_screens.push_back(&server_connect);
             
             auto size = ClientEngine::window_size();
             for (auto screen : s_screens)
@@ -78,7 +83,6 @@ namespace cotsb
             {
                 if (!screen->visible())
                 {
-                    logger % "Info" << "Screen not visible" << endl;
                     continue;
                 }
 

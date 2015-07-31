@@ -8,11 +8,6 @@ namespace cotsb
     EndLog endl;
 
     // Logger {{{
-    Logger::Logger()
-    {
-        std::cout << "Creating logger\n";
-    }
-
     Logger &Logger::operator <<(bool data)
     {
         _buffers[std::this_thread::get_id()].buffer << (data ? "true" : "false");

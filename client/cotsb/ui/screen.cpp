@@ -1,5 +1,4 @@
 #include "screen.h"
-#include <iostream>
 
 #include "component.h"
 #include "button.h"
@@ -16,14 +15,11 @@ namespace cotsb
         Screen::Screen() :
             _visible(false)
         {
-            //logger % "Visible" << "Creating screen" << endl;
-            std::cout << "Creating screen\n";
         }
 
         void Screen::visible(bool value)
         {
             _visible = value;
-            logger % "Visible" << value << endl;
         }
         bool Screen::visible() const
         {
