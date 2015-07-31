@@ -22,6 +22,8 @@ namespace cotsb
     class Logger
     {
         public:
+            Logger();
+
             Logger& operator <<(bool               data);
             Logger& operator <<(int8_t             data);
             Logger& operator <<(uint8_t            data);
@@ -71,6 +73,6 @@ namespace cotsb
     };
     // }}}
 
-    static Logger logger;
-    static EndLog endl;
+    extern Logger logger;
+    extern EndLog endl;
 }

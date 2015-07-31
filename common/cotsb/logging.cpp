@@ -4,7 +4,15 @@
 
 namespace cotsb
 {
+    Logger logger;
+    EndLog endl;
+
     // Logger {{{
+    Logger::Logger()
+    {
+        std::cout << "Creating logger\n";
+    }
+
     Logger &Logger::operator <<(bool data)
     {
         _buffers[std::this_thread::get_id()].buffer << (data ? "true" : "false");
@@ -106,12 +114,14 @@ namespace cotsb
     std::vector<std::unique_ptr<ILogger> > LoggerManager::s_loggers;
     std::mutex LoggerManager::s_log_lock;
     std::map<std::string, std::string> LoggerManager::s_type_to_colours;
+
     void LoggerManager::init()
     {
         s_type_to_colours["Error"] = "\033[1;31m";
         s_type_to_colours["Info"] = "\033[1;32m";
         s_type_to_colours["Warning"] = "\033[1;33m";
     }
+
     void LoggerManager::log(const std::string &type, const std::string &message)
     {
         std::unique_lock<std::mutex> lock_guard(s_log_lock);

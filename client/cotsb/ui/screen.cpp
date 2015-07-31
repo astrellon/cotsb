@@ -1,9 +1,11 @@
 #include "screen.h"
+#include <iostream>
 
 #include "component.h"
 #include "button.h"
 
 #include <cotsb/client_engine.h>
+#include <cotsb/logging.h>
 
 #include <utils/utils.h>
 
@@ -14,12 +16,14 @@ namespace cotsb
         Screen::Screen() :
             _visible(false)
         {
-
+            //logger % "Visible" << "Creating screen" << endl;
+            std::cout << "Creating screen\n";
         }
 
         void Screen::visible(bool value)
         {
             _visible = value;
+            logger % "Visible" << value << endl;
         }
         bool Screen::visible() const
         {
@@ -72,6 +76,11 @@ namespace cotsb
         {
             auto size = ClientEngine::window_size();
             on_resize(size.x, size.y);
+        }
+
+        void Screen::set_pos(sf::Transformable *obj, float x)
+        {
+            obj->setPosition(x, obj->getPosition().y);
         }
     }
 }

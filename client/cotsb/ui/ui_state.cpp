@@ -30,20 +30,12 @@ namespace cotsb
         {
             if (prev_state == MainMenu || prev_state == PauseGame)
             {
-                MainMenu::visible(false);
-            }
-            if (prev_state == ServerConnect)
-            {
-                ServerConnect::visible(false); 
+                //main_menu.visible(false);
             }
 
             if (new_state == MainMenu || new_state == PauseGame)
             {
-                MainMenu::visible(true);
-            }
-            if (new_state == ServerConnect)
-            {
-                ServerConnect::visible(true);
+                main_menu.visible(true);
             }
         }
     }

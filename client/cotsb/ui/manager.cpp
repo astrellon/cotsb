@@ -1,7 +1,9 @@
 #include "manager.h"
 
 #include <cotsb/client_engine.h>
+#include <cotsb/logging.h>
 
+#include "screen.h"
 #include "main_menu.h"
 #include "server_connect.h"
 
@@ -9,25 +11,24 @@ namespace cotsb
 {
     namespace ui
     {
-        Manager::ComponentList Manager::s_components;
+        Manager::ScreenList Manager::s_screens;
         Component *Manager::s_has_focus = nullptr;
         Component *Manager::s_last_had_focus = nullptr;
 
         bool Manager::init()
         {
-            if (!MainMenu::init())
-            {
-                return false;
-            }
-            if (!ServerConnect::init())
+            if (!main_menu.init())
             {
                 return false;
             }
 
+            s_screens.push_back(&main_menu);
+            
             auto size = ClientEngine::window_size();
-            MainMenu::on_resize(size.x, size.y);
-
-            MainMenu::visible(false);
+            for (auto screen : s_screens)
+            {
+                screen->on_resize(size.x, size.y);
+            }
 
             return true;
         }
@@ -35,23 +36,6 @@ namespace cotsb
         {
             s_has_focus = nullptr;
             s_last_had_focus = nullptr;
-            s_components.clear();
-        }
-
-        void Manager::add_component(Component *component)
-        {
-            s_components.push_back(std::unique_ptr<Component>(component));
-        }
-        void Manager::remove_component(Component *component)
-        {
-            for (auto i = 0u; i < s_components.size(); i++)
-            {
-                if (s_components[i].get() == component)
-                {
-                    s_components.erase(s_components.begin() + i);
-                    break;
-                }
-            }
         }
 
         void Manager::focus(Component *component)
@@ -71,37 +55,46 @@ namespace cotsb
             return s_has_focus;
         }
 
-        const Manager::ComponentList *Manager::components()
-        {
-            return &s_components;
-        }
-
         void Manager::update(float dt)
         {
-            for (auto i = 0u; i < s_components.size(); i++)
+            for (auto screen : s_screens)
             {
-                auto comp = s_components[i].get();
-                comp->update(dt);
+                if (!screen->visible())
+                {
+                    continue;
+                }
+
+                for (auto &comp : screen->components())
+                {
+                    comp->update(dt);
+                }
             }
         }
+
         void Manager::draw(sf::RenderTarget &target, sf::RenderStates states)
         {
             target.setView(ClientEngine::hud_camera());
-
-            target.setView(ClientEngine::hud_camera());
-            for (auto i = 0u; i < s_components.size(); i++)
+            for (auto screen : s_screens)
             {
-                auto comp = s_components[i].get();
-                if (comp->enabled())
+                if (!screen->visible())
                 {
-                    if (comp->local_view() != nullptr)
+                    logger % "Info" << "Screen not visible" << endl;
+                    continue;
+                }
+
+                for (auto &comp : screen->components())
+                {
+                    if (comp->enabled())
                     {
-                        target.setView(*comp->local_view());
-                    }
-                    target.draw(*comp, states);
-                    if (comp->local_view() != nullptr)
-                    {
-                        target.setView(ClientEngine::hud_camera());
+                        if (comp->local_view() != nullptr)
+                        {
+                            target.setView(*comp->local_view());
+                        }
+                        target.draw(*comp, states);
+                        if (comp->local_view() != nullptr)
+                        {
+                            target.setView(ClientEngine::hud_camera());
+                        }
                     }
                 }
             }
@@ -169,12 +162,15 @@ namespace cotsb
                     {
                         if (s_last_had_focus == nullptr || !s_last_had_focus->enabled())
                         {
-                            for (auto i = 0u; i < s_components.size(); i++)
+                            for (auto screen : s_screens)
                             {
-                                if (s_components[i]->enabled())
+                                for (auto &comp : screen->components())
                                 {
-                                    change_focus(s_components[i].get());
-                                    break;
+                                    if (comp->enabled())
+                                    {
+                                        change_focus(comp.get());
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -187,7 +183,10 @@ namespace cotsb
             }
             else if (event.type == sf::Event::Resized)
             {
-                MainMenu::on_resize(event.size.width, event.size.height);
+                for (auto screen : s_screens) 
+                {
+                    screen->on_resize(event.size.width, event.size.height);
+                }
             }
         }
 
@@ -197,26 +196,38 @@ namespace cotsb
             const auto window = ClientEngine::window();
             auto global = window->mapPixelToCoords(sf::Vector2i(x, y));
             
-            for (auto iter = s_components.rbegin(); iter != s_components.rend(); ++iter)
+            for (auto screen : s_screens)
             {
-                auto comp = iter->get();
-                if (comp->enabled())
+                if (!screen->visible())
                 {
-                    if (comp->local_view() != nullptr)
+                    continue;
+                }
+
+                for (auto &comp : screen->components())
+                {
+                    if (comp->enabled())
                     {
-                        auto local = window->mapPixelToCoords(sf::Vector2i(x, y), *comp->local_view());
-                        if (!comp->check_hover(local.x, local.y))
+                        if (comp->local_view() != nullptr)
+                        {
+                            auto local = window->mapPixelToCoords(sf::Vector2i(x, y), *comp->local_view());
+                            if (!comp->check_hover(local.x, local.y))
+                            {
+                                continue;
+                            }
+                        }
+                        else if (!comp->check_hover(global.x, global.y))
                         {
                             continue;
                         }
-                    }
-                    else if (!comp->check_hover(global.x, global.y))
-                    {
-                        continue;
-                    }
 
-                    change_focus(comp);
-                    hovered = true;
+                        change_focus(comp.get());
+                        hovered = true;
+                        break;
+                    }
+                }
+
+                if (hovered)
+                {
                     break;
                 }
             }

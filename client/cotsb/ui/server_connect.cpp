@@ -1,5 +1,6 @@
 #include "server_connect.h"
 
+/*
 #include <iostream>
 
 #include "button.h"
@@ -70,3 +71,4 @@ namespace cotsb
         }
     }
 }
+*/

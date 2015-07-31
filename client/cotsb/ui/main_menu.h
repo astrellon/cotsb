@@ -1,10 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
-#include <stdint.h>
-
-#include "menu_helper.h"
+#include "screen.h"
 
 namespace cotsb
 {
@@ -12,24 +8,18 @@ namespace cotsb
     {
         class Button;
 
-        class MainMenu 
+        class MainMenu : public Screen
         {
             public:
-                static bool init();
-
-                static void visible(bool value);
-                static bool visible();
-
-                static void on_resize(uint32_t width, uint32_t height);
+                virtual bool init();
 
             private:
 
-                static Button *s_start_game;
-                static Button *s_options;
-                static Button *s_quit;
-                static MenuHelper s_helper;
-
-                static void set_pos(sf::Transformable *obj, float x);
+                Button *_start_game;
+                Button *_options;
+                Button *_quit;
         };
+
+        extern MainMenu main_menu;
     }
 }

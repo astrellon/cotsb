@@ -9,6 +9,8 @@ namespace cotsb
 {
     namespace ui
     {
+        class Screen;
+
         class Manager 
         {
         public:
@@ -21,16 +23,16 @@ namespace cotsb
             static void focus(Component *component);
             static Component *focus();
 
-            typedef std::vector<std::unique_ptr<Component> > ComponentList;
-            static const ComponentList *components();
-
             static void update(float dt);
             static void draw(sf::RenderTarget &target, sf::RenderStates states);
 
             static void process_event(const sf::Event &event);
 
+            typedef std::vector<Screen *> ScreenList;
+            static const ScreenList *screen();
+
         private:
-            static ComponentList s_components;
+            static ScreenList s_screens;
             static Component *s_has_focus;
             static Component *s_last_had_focus;
 
