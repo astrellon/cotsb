@@ -68,7 +68,7 @@ namespace cotsb
             return -1;
         }
 
-        s_client.start_client();
+        //s_client.start_client();
 
         return true;
     }
@@ -214,6 +214,18 @@ namespace cotsb
     Client &ClientEngine::client()
     {
         return s_client;
+    }
+
+    void ClientEngine::start_client()
+    {
+        s_client.start_client();
+    }
+    void ClientEngine::start_client(const std::string &hostname, uint16_t port)
+    {
+        s_client.hostname(hostname);
+        s_client.port(port);
+
+        start_client();
     }
 
     void ClientEngine::process_networking()

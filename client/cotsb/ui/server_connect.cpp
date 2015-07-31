@@ -27,14 +27,21 @@ namespace cotsb
             _connect->setPosition(300, 260);
             _connect->on_click([] (int32_t x, int32_t y, sf::Mouse::Button btn)
             {
+                auto hostname = server_connect._hostname->value();;
+                auto port = static_cast<uint16_t>(std::atoi(server_connect._port->value().c_str()));
+
+                ClientEngine::start_client(hostname, port);
+
                 return true;
             });
 
             _hostname = add_component<TextInput>("Host");
             _hostname->setPosition(300, 320);
+            _hostname->value("127.0.0.1");
 
             _port = add_component<TextInput>("Port");
             _port->setPosition(300, 380);
+            _port->value("8888");
 
             calc_nearby_components();
 

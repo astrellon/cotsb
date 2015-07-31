@@ -47,6 +47,9 @@ namespace cotsb
             
             static SoundManager &sound_manager();
             static Client &client();
+            
+            static void start_client();
+            static void start_client(const std::string &hostname, uint16_t port);
 
         private:
 
