@@ -74,7 +74,7 @@ SRCDIRS   = cotsb ../common ../common/cotsb
 
 # The executable file name.
 # If not specified, current directory name or `a.out' will be used.
-PROGRAM   = cotsb_server
+PROGRAM   = server
 MAIN_O= main.o
 ifdef NAME
 PROGRAM = $(NAME)

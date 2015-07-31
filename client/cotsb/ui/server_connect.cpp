@@ -30,7 +30,7 @@ namespace cotsb
                 return true;
             });
 
-            _hostname = add_component<TextInput>("Hostname");
+            _hostname = add_component<TextInput>("Host");
             _hostname->setPosition(300, 320);
 
             _port = add_component<TextInput>("Port");

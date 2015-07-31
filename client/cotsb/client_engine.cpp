@@ -85,8 +85,8 @@ namespace cotsb
             while (s_window->pollEvent(event))
             {
                 process_event(event);
+                ui::Manager::process_event(event);
             }
-            ui::Manager::process_event(event);
             // }}}
 
             // Game loop {{{
