@@ -5,13 +5,64 @@
 #include <stdint.h>
 #include <vector>
 #include <memory>
+#include <functional>
+
+#include <cotsb/commands.h>
 
 namespace cotsb
 {
     class Client
     {
         public:
+            
+            // Response {{{
+            class Response
+            {
+                public:
+                    Response(sf::Packet *data);
+
+                    sf::Packet &data();
+                    Commands::Type command() const;
+                    uint32_t id() const;
+                    bool success() const;
+                    const std::string &error_message() const;
+
+                private:
+                    std::unique_ptr<sf::Packet> _data;
+                    Commands::Type _command;
+                    uint32_t _id;
+                    bool _success;
+                    std::string _error_message;
+            };
+            
+            typedef std::function<void (Response &)> ResponseHandler;
+            // }}}
+
+            // Request {{{
+            class Request
+            {
+                public: 
+                    Request(Commands::Type command);
+                    Request(Commands::Type command, ResponseHandler handler);
+
+                    uint32_t id() const;
+                    Commands::Type command() const;
+                    ResponseHandler handler() const;
+                    sf::Packet &data();
+                
+                private:
+                    uint32_t _id;
+                    Commands::Type _command;
+                    ResponseHandler _handler;
+                    sf::Packet _data;
+
+                    static uint32_t s_id_counter;
+            };
+            // }}}
+
+            // Client {{{
             Client();
+            ~Client();
 
             void port(uint16_t value);
             uint16_t port() const;
@@ -24,10 +75,11 @@ namespace cotsb
 
             void start_client();
 
-            typedef std::vector<std::unique_ptr<sf::Packet> > PacketList;
-            PacketList &new_data();
+            typedef std::vector<std::unique_ptr<Response> > ResponseList;
+            ResponseList &new_data();
 
-            sf::Packet &send(uint16_t command);
+            Request &send(Commands::Type command);
+            Request &send(Commands::Type command, ResponseHandler handler);
 
             sf::TcpSocket &socket();
 
@@ -50,12 +102,13 @@ namespace cotsb
             State _state;
             bool _has_connected;
 
-            PacketList _new_data;
-            std::unique_ptr<sf::Packet> _pending_new_data;
+            ResponseList _new_data;
+            sf::Packet *_pending_new_data;
             sf::TcpSocket _socket;
-            sf::SocketSelector _selector;
-            std::vector<std::unique_ptr<sf::Packet> > _to_send;
+            std::vector<std::unique_ptr<Request> > _to_send;
+            std::map<uint32_t, std::unique_ptr<Request> > _awaiting_responses;
 
             void check_network();
+            // }}}
     };
 }

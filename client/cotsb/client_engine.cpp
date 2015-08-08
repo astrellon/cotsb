@@ -18,6 +18,7 @@ namespace cotsb
     sf::RenderWindow *ClientEngine::s_window = nullptr;
     Client ClientEngine::s_client;
     sf::View ClientEngine::s_hud_camera;
+    GameWorld *ClientEngine::s_game_world = nullptr;
     
     SoundManager ClientEngine::s_sound_manager;
 
@@ -105,7 +106,6 @@ namespace cotsb
             s_window->clear();
 
             sf::RenderStates states;
-            //vot::GameSystem::draw(window, states);
             draw(*s_window, states);
             ui::Manager::draw(*s_window, states);
 
@@ -232,27 +232,29 @@ namespace cotsb
     {
         for (auto &iter : s_client.new_data())
         {
-            auto data = *iter;
-            logger % "Info" << "Has " << data.getDataSize() << " bytes" << endl;
-            uint16_t command_temp;
-            data >> command_temp;
-            Commands::Type command = static_cast<Commands::Type>(command_temp);
-
-            if (command == Commands::NEW_MAP)
+            auto &response = *iter.get();
+            logger % "Info" << "Has " << response.data().getDataSize() << " bytes" << endl;
+            if (response.command() == Commands::NewMap)
             {
+                if (!response.success())
+                {
+                    logger % "Error" << "Failed to load map: " << response.error_message() << endl;
+                    continue;
+                }
+
                 logger % "Info" << "New map" << endl;
-                auto map = MapTcpDeserialiser::deserialise(data);
-                delete map;
+                auto map = MapTcpDeserialiser::deserialise(response.data());
+                MapManager::map_loaded(map);
             }
-            else if (command == Commands::MESSAGE)
+            else if (response.command() == Commands::Message)
             {
                 std::string message;
-                data >> message;
+                response.data() >> message;
                 logger % "Info" << "Message " << message << endl; 
             }
             else
             {
-                logger % "Error" << "Unknown command " << command_temp << endl;
+                logger % "Error" << "Unknown command " << response.command() << endl;
             }
         }
 
@@ -265,7 +267,12 @@ namespace cotsb
 
     void ClientEngine::on_connected()
     {
-        auto &data = s_client.send(Commands::LOAD_MAP);
-        data << "map1";
+        s_game_world = new GameWorld();
+
+        auto &request = s_client.send(Commands::LoadMap, [] (Client::Response &response)
+        {
+            logger % "Info" << "Got map1!" << endl;
+        });
+        request.data() << "map1";
     }
 }

@@ -4,15 +4,101 @@
 
 namespace cotsb
 {
+    // Response {{{
+    Client::Response::Response(sf::Packet *data) :  
+        _data(data),
+        _command(Commands::Unknown),
+        _id(0u),
+        _success(false)
+    {
+        auto &input = *data;
+        uint16_t command_temp;
+        input >> command_temp;
+        _command = static_cast<Commands::Type>(command_temp);
+
+        input >> _id;
+        input >> _success;
+
+        if (_success)
+        {
+            input >> _error_message;
+        }
+    }
+
+    sf::Packet &Client::Response::data()
+    {
+        return *_data;
+    }
+    Commands::Type Client::Response::command() const
+    {
+        return _command;
+    }
+    uint32_t Client::Response::id() const
+    {
+        return _id;
+    }
+    bool Client::Response::success() const
+    {
+        return _success;
+    }
+    const std::string &Client::Response::error_message() const
+    {
+        return _error_message;
+    }
+    // }}}
+    
+    // Request {{{
+    uint32_t Client::Request::s_id_counter = 0u;
+
+    Client::Request::Request(Commands::Type command) :
+        _id(0u),
+        _command(command)
+    {
+        _data << static_cast<uint16_t>(command) << _id; 
+    }
+    Client::Request::Request(Commands::Type command, Client::ResponseHandler handler) :
+        _id(0u),
+        _command(command),
+        _handler(handler)
+    {
+        _id = ++s_id_counter;
+        _data << static_cast<uint16_t>(command) << _id; 
+    }
+
+    uint32_t Client::Request::id() const
+    {
+        return _id;
+    }
+    Commands::Type Client::Request::command() const 
+    {
+        return _command;
+    }
+    Client::ResponseHandler Client::Request::handler() const
+    {
+        return _handler;
+    }
+    sf::Packet &Client::Request::data()
+    {
+        return _data;
+    }
+    // }}}
+    
+    // Client {{{
     Client::Client() :
         _port(8888),
-        _hostname("127.0.0.1"),
+        _hostname("localhost"),
         _state(Client::Idle),
         _has_connected(false)
     {
         _socket.setBlocking(false);
-        _selector.add(_socket);
-        _pending_new_data = std::unique_ptr<sf::Packet>(new sf::Packet());
+        _pending_new_data = new sf::Packet();
+    }
+    Client::~Client()
+    {
+        if (_pending_new_data != nullptr)
+        {
+            delete _pending_new_data;
+        }
     }
 
     void Client::port(uint16_t value)
@@ -55,26 +141,38 @@ namespace cotsb
         _new_data.clear();
         while (_socket.receive(*_pending_new_data) == sf::Socket::Done)
         {
-            _new_data.push_back(std::move(_pending_new_data));
-            _pending_new_data = std::unique_ptr<sf::Packet>(new sf::Packet());
+            auto response = new Response(_pending_new_data);
+            _new_data.push_back(std::unique_ptr<Response>(response));
+
+            _pending_new_data = new sf::Packet();
         }
 
         for (auto &iter : _to_send)
         {
-            _socket.send(*iter.get());
+            _socket.send(iter->data());
+            if (iter->handler() != nullptr)
+            {
+                _awaiting_responses[iter->id()] = std::move(iter);
+            }
         }
+
         _to_send.clear();
     }
 
-    sf::Packet &Client::send(uint16_t command)
+    Client::Request &Client::send(Commands::Type command)
     {
-        auto new_packet = new sf::Packet();
-        *new_packet << command;
-        _to_send.push_back(std::unique_ptr<sf::Packet>(new_packet));
-        return *new_packet;
+        auto new_request = new Request(command);
+        _to_send.push_back(std::unique_ptr<Request>(new_request));
+        return *new_request;
+    }
+    Client::Request &Client::send(Commands::Type command, Client::ResponseHandler handler)
+    {
+        auto new_request = new Request(command, handler);
+        _to_send.push_back(std::unique_ptr<Request>(new_request));
+        return *new_request;
     }
 
-    Client::PacketList &Client::new_data()
+    Client::ResponseList &Client::new_data()
     {
         return _new_data;
     }
@@ -114,4 +212,5 @@ namespace cotsb
     {
         return _state;
     }
+    // }}}
 }

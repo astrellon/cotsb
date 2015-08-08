@@ -1,6 +1,7 @@
 #pragma once
 
 #include "client.h"
+#include "game_world.h"
 #include "sound.h"
 
 #include <SFML/Graphics.hpp>
@@ -47,6 +48,7 @@ namespace cotsb
             
             static SoundManager &sound_manager();
             static Client &client();
+            static GameWorld *game_world();
             
             static void start_client();
             static void start_client(const std::string &hostname, uint16_t port);
@@ -55,6 +57,7 @@ namespace cotsb
 
             static sf::RenderWindow *s_window;
             static Client s_client;
+            static GameWorld *s_game_world;
             static sf::View s_hud_camera;
             static SoundManager s_sound_manager;
             

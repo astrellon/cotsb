@@ -77,8 +77,8 @@ namespace cotsb
             if (map_status == NotLoading)
             {
                 s_statuses[name] = Loading;
-                auto &data = ClientEngine::client().send(Commands::LOAD_MAP);
-                data << name;
+                auto &request = ClientEngine::client().send(Commands::LoadMap);
+                request.data() << name;
             }
             return nullptr;
         }
@@ -98,5 +98,12 @@ namespace cotsb
     {
         return s_statuses;
     }
+
+    void MapManager::map_loaded(Map *map)
+    {
+        s_maps[map->name()] = std::unique_ptr<Map>(map);
+        s_statuses[map->name()] = Loaded;
+    }
+        
     // }}}
 }

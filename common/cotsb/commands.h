@@ -1,6 +1,10 @@
 #pragma once
 
 #include <stdint.h>
+#include <map>
+#include <string>
+
+#include <cotsb/logging.h>
 
 namespace cotsb
 {
@@ -9,10 +13,18 @@ namespace cotsb
         public:
             enum Type : uint16_t
             {
-                UNKNOWN,
-                MESSAGE,
-                NEW_MAP,
-                LOAD_MAP
+                Unknown,
+                Message,
+                NewMap,
+                LoadMap
             };
+
+            static std::string get_name(Type type);
+
+        private:
+            typedef std::map<Type, std::string> TypeMap;
+            static TypeMap s_names;
     };
+
+    Logger &operator << (Logger &lhs, Commands::Type type);
 }

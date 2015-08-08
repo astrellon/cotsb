@@ -44,7 +44,7 @@ namespace cotsb
             _clients.push_back(std::move(_pending_socket));
 
             sf::Packet message;
-            message << static_cast<uint16_t>(Commands::MESSAGE) << "Welcome";
+            message << static_cast<uint16_t>(Commands::Message) << "Welcome";
             
             client->send(message);
 

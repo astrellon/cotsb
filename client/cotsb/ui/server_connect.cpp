@@ -37,7 +37,7 @@ namespace cotsb
 
             _hostname = add_component<TextInput>("Host");
             _hostname->setPosition(300, 320);
-            _hostname->value("127.0.0.1");
+            _hostname->value("localhost");
 
             _port = add_component<TextInput>("Port");
             _port->setPosition(300, 380);

@@ -57,6 +57,8 @@ namespace cotsb
             static Status status(const std::string &name);
             static const Statuses &statuses();
 
+            static void map_loaded(Map *map);
+
         private:
             static Maps s_maps;
             static Statuses s_statuses;
