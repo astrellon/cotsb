@@ -255,6 +255,31 @@ namespace cotsb
             else
             {
                 logger % "Error" << "Unknown command " << response.command() << endl;
+                continue;
+            }
+
+            if (response.id() > 0u)
+            {
+                auto request = s_client.awaiting_response(response.id());
+                if (request == nullptr)
+                {
+                    logger % "Error" << "Could not find request for awaiting response " << response.id() << endl;
+                }
+                else
+                {
+                    auto blah = request->command();
+                    logger % "Info" << "Handling response for " << static_cast<uint16_t>(blah) << endl;
+                    auto handler = request->handler();
+                    if (handler)
+                    {
+                        handler(&response);
+                    }
+                    else
+                    {
+                        logger % "Error" << "No handler for awaiting response " << response.id() << endl;
+                    }
+                    s_client.remove_awaiting_response(response.id());
+                }
             }
         }
 
@@ -269,7 +294,7 @@ namespace cotsb
     {
         s_game_world = new GameWorld();
 
-        auto &request = s_client.send(Commands::LoadMap, [] (Client::Response &response)
+        auto &request = s_client.send(Commands::LoadMap, [] (Client::Response *response)
         {
             logger % "Info" << "Got map1!" << endl;
         });

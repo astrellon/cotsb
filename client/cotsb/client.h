@@ -14,7 +14,7 @@ namespace cotsb
     class Client
     {
         public:
-            
+
             // Response {{{
             class Response
             {
@@ -35,7 +35,7 @@ namespace cotsb
                     std::string _error_message;
             };
             
-            typedef std::function<void (Response &)> ResponseHandler;
+            typedef std::function<void (Response *)> ResponseHandler;
             // }}}
 
             // Request {{{
@@ -81,6 +81,9 @@ namespace cotsb
             Request &send(Commands::Type command);
             Request &send(Commands::Type command, ResponseHandler handler);
 
+            Request *awaiting_response(uint32_t id) const;
+            void remove_awaiting_response(uint32_t id);
+
             sf::TcpSocket &socket();
 
             void game_tick();
@@ -105,8 +108,8 @@ namespace cotsb
             ResponseList _new_data;
             sf::Packet *_pending_new_data;
             sf::TcpSocket _socket;
-            std::vector<std::unique_ptr<Request> > _to_send;
-            std::map<uint32_t, std::unique_ptr<Request> > _awaiting_responses;
+            std::vector<Request*> _to_send;
+            std::map<uint32_t, Request* > _awaiting_responses;
 
             void check_network();
             // }}}

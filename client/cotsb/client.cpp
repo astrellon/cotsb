@@ -152,7 +152,7 @@ namespace cotsb
             _socket.send(iter->data());
             if (iter->handler() != nullptr)
             {
-                _awaiting_responses[iter->id()] = std::move(iter);
+                _awaiting_responses[iter->id()] = iter;
             }
         }
 
@@ -162,14 +162,32 @@ namespace cotsb
     Client::Request &Client::send(Commands::Type command)
     {
         auto new_request = new Request(command);
-        _to_send.push_back(std::unique_ptr<Request>(new_request));
+        _to_send.push_back(new_request);
         return *new_request;
     }
     Client::Request &Client::send(Commands::Type command, Client::ResponseHandler handler)
     {
         auto new_request = new Request(command, handler);
-        _to_send.push_back(std::unique_ptr<Request>(new_request));
+        _to_send.push_back(new_request);
         return *new_request;
+    }
+
+    Client::Request *Client::awaiting_response(uint32_t id) const
+    {
+        auto find = _awaiting_responses.find(id);
+        if (find == _awaiting_responses.cend())
+        {
+            return find->second;
+        }
+        return nullptr;
+    }
+    void Client::remove_awaiting_response(uint32_t id)
+    {
+        auto find = _awaiting_responses.find(id);
+        if (find != _awaiting_responses.end())
+        {
+            _awaiting_responses.erase(find);
+        }
     }
 
     Client::ResponseList &Client::new_data()
