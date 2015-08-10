@@ -19,7 +19,7 @@ namespace cotsb
         input >> _id;
         input >> _success;
 
-        if (_success)
+        if (!_success)
         {
             input >> _error_message;
         }
