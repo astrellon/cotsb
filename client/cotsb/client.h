@@ -81,8 +81,8 @@ namespace cotsb
             Request &send(Commands::Type command);
             Request &send(Commands::Type command, ResponseHandler handler);
 
-            Request *awaiting_response(uint32_t id) const;
-            void remove_awaiting_response(uint32_t id);
+            ResponseHandler response_handler(uint32_t id) const;
+            void remove_response_handler(uint32_t id);
 
             sf::TcpSocket &socket();
 
@@ -108,8 +108,8 @@ namespace cotsb
             ResponseList _new_data;
             sf::Packet *_pending_new_data;
             sf::TcpSocket _socket;
-            std::vector<Request*> _to_send;
-            std::map<uint32_t, Request* > _awaiting_responses;
+            std::vector<std::unique_ptr<Request> > _to_send;
+            std::map<uint32_t, ResponseHandler > _response_handlers;
 
             void check_network();
             // }}}

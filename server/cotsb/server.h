@@ -24,28 +24,29 @@ namespace cotsb
             void start_server();
             void check_network();
 
-            void broadcast(sf::Packet &data, sf::TcpSocket *skip_socket = nullptr);
+            typedef std::unique_ptr<sf::Packet> UniquePacket;
+            typedef std::unique_ptr<sf::TcpSocket> UniqueSocket;
+            typedef std::pair<sf::TcpSocket*, UniquePacket> SocketDataPair;
+            typedef std::vector<SocketDataPair> SocketDataList;
 
-            typedef std::pair<sf::TcpSocket *, std::unique_ptr<sf::Packet> > ClientDataPair;
-            typedef std::vector<ClientDataPair> ClientDataList;
-
-            const ClientDataList &new_data() const;
+            const SocketDataList &new_data() const;
             void clear_new_data();
 
-            sf::Packet &send(sf::TcpSocket *socket, Commands::Type command);
+            sf::Packet &send(Commands::Type command, sf::TcpSocket *socket);
+            sf::Packet &broadcast(Commands::Type command, sf::TcpSocket *skip_socket = nullptr);
 
         private:
             uint16_t _port;
 
-            std::vector<std::unique_ptr<sf::TcpSocket> > _clients;
+            std::vector< UniqueSocket > _clients;
             sf::SocketSelector _client_selector;
             sf::TcpListener _listener;
-            ClientDataList _new_data;
+            SocketDataList _new_data;
 
-            std::unique_ptr<sf::TcpSocket> _pending_socket;
-            std::unique_ptr<sf::Packet> _pending_packet;
+            UniqueSocket _pending_socket;
+            UniquePacket _pending_packet;
             
-            typedef std::pair<sf::TcpSocket *, std::unique_ptr<sf::Packet> > SocketDataPair;
-            std::vector<SocketDataPair> _to_send;
+            SocketDataList _to_send;
+            SocketDataList _to_broadcast;
     };
 }

@@ -26,8 +26,8 @@ namespace cotsb
         _client_selector.add(_listener);
         _listener.setBlocking(false);
 
-        _pending_socket = std::unique_ptr<sf::TcpSocket>(new sf::TcpSocket());
-        _pending_packet = std::unique_ptr<sf::Packet>(new sf::Packet());
+        _pending_socket = UniqueSocket(new sf::TcpSocket());
+        _pending_packet = UniquePacket(new sf::Packet());
     }
 
     void Server::check_network()
@@ -43,12 +43,10 @@ namespace cotsb
             // be notified when he sends something
             _clients.push_back(std::move(_pending_socket));
 
-            sf::Packet message;
-            message << static_cast<uint16_t>(Commands::Message) << "Welcome";
-            
-            client->send(message);
+            auto &message = send(Commands::Message, client);
+            message << 0u << true << "Welcome";
 
-            _pending_socket = std::unique_ptr<sf::TcpSocket>(new sf::TcpSocket());
+            _pending_socket = UniqueSocket(new sf::TcpSocket());
         }
         
         // The listener socket is not ready, test all other sockets (the clients)
@@ -60,8 +58,8 @@ namespace cotsb
             if (result == sf::Socket::Done)
             {
                 logger % "Info" << "Received data" << endl; 
-                _new_data.push_back(ClientDataPair(client, std::move(_pending_packet)));
-                _pending_packet = std::unique_ptr<sf::Packet>(new sf::Packet());
+                _new_data.push_back(SocketDataPair(client, std::move(_pending_packet)));
+                _pending_packet = UniquePacket(new sf::Packet());
             }
             else if (result == sf::Socket::Disconnected)
             {
@@ -72,14 +70,27 @@ namespace cotsb
             }
         }
 
-        for (auto &iter : _to_send)
+        for (auto &pair : _to_send)
         {
-            iter.first->send(*iter.second.get());
+            pair.first->send(*pair.second.get());
         }
         _to_send.clear();
+        
+        for (auto &pair : _to_broadcast)
+        {
+            for (auto &client : _clients)
+            {
+                if (client.get() == pair.first)
+                {
+                    continue;
+                }
+                client->send(*pair.second.get());
+            }
+        }
+        _to_broadcast.clear();
     }
 
-    const Server::ClientDataList &Server::new_data() const
+    const Server::SocketDataList &Server::new_data() const
     {
         return _new_data;
     }
@@ -88,23 +99,19 @@ namespace cotsb
         _new_data.clear();
     }
 
-    void Server::broadcast(sf::Packet &data, sf::TcpSocket *skip_socket)
-    {
-        for (auto &iter : _clients)
-        {
-            if (iter.get() == skip_socket)
-            {
-                continue;
-            }
-            iter->send(data);
-        }
-    }
-            
-    sf::Packet &Server::send(sf::TcpSocket *socket, Commands::Type command)
+    sf::Packet &Server::broadcast(Commands::Type command, sf::TcpSocket *skip_socket)
     {
         auto new_packet = new sf::Packet();
         *new_packet << static_cast<uint16_t>(command);
-        _to_send.push_back(SocketDataPair(socket, std::unique_ptr<sf::Packet>(new_packet)));
+        _to_broadcast.push_back(SocketDataPair(skip_socket, UniquePacket(new_packet)));
+        return *new_packet;
+    }
+            
+    sf::Packet &Server::send(Commands::Type command, sf::TcpSocket *socket)
+    {
+        auto new_packet = new sf::Packet();
+        *new_packet << static_cast<uint16_t>(command);
+        _to_send.push_back(SocketDataPair(socket, UniquePacket(new_packet)));
         return *new_packet;
     }
 }
