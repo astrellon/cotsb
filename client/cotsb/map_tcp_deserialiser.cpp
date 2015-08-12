@@ -6,6 +6,15 @@ namespace cotsb
 {
     Map *MapTcpDeserialiser::deserialise(sf::Packet &input)
     {
+        bool success;
+        input >> success;
+        if (!success)
+        {
+            std::string error_message;
+            input >> error_message;
+            logger % "Error" << "Failed to load map: " << error_message << endl;
+            return nullptr;
+        }
         std::string name;
 
         uint32_t width, height;

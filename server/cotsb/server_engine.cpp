@@ -72,16 +72,13 @@ namespace cotsb
 
     void ServerEngine::process_command(sf::TcpSocket *socket, Commands::Type command, sf::Packet &packet)
     {
-        uint32_t id;
-        packet >> id;
         if (command == Commands::LoadMap)
         {
             std::string map_name;
             packet >> map_name;
 
-            logger % "Info" << "Request for map: " << map_name << " id " << id << endl;
+            logger % "Info" << "Request for map: " << map_name << endl;
             auto &response = s_server.send(Commands::NewMap, socket); 
-            response << id;
 
             auto found_map = MapManager::map(map_name);
             if (found_map == nullptr)
@@ -98,14 +95,9 @@ namespace cotsb
         {
             std::string message;
             packet >> message;
-
-            /*
-            sf::Packet echo_message;
-            echo_message << 0u << true << static_cast<uint16_t>(command) << message;
-            s_server.broadcast(echo_message, socket);
-            */
+            
             auto &response = s_server.broadcast(command, socket);
-            response << static_cast<uint32_t>(0u) << true << message;
+            response << message;
         }
     }
 }

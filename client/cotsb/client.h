@@ -23,40 +23,10 @@ namespace cotsb
 
                     sf::Packet &data();
                     Commands::Type command() const;
-                    uint32_t id() const;
-                    bool success() const;
-                    const std::string &error_message() const;
 
                 private:
                     std::unique_ptr<sf::Packet> _data;
                     Commands::Type _command;
-                    uint32_t _id;
-                    bool _success;
-                    std::string _error_message;
-            };
-            
-            typedef std::function<void (Response *)> ResponseHandler;
-            // }}}
-
-            // Request {{{
-            class Request
-            {
-                public: 
-                    Request(Commands::Type command);
-                    Request(Commands::Type command, ResponseHandler handler);
-
-                    uint32_t id() const;
-                    Commands::Type command() const;
-                    ResponseHandler handler() const;
-                    sf::Packet &data();
-                
-                private:
-                    uint32_t _id;
-                    Commands::Type _command;
-                    ResponseHandler _handler;
-                    sf::Packet _data;
-
-                    static uint32_t s_id_counter;
             };
             // }}}
 
@@ -78,11 +48,7 @@ namespace cotsb
             typedef std::vector<std::unique_ptr<Response> > ResponseList;
             ResponseList &new_data();
 
-            Request &send(Commands::Type command);
-            Request &send(Commands::Type command, ResponseHandler handler);
-
-            ResponseHandler response_handler(uint32_t id) const;
-            void remove_response_handler(uint32_t id);
+            sf::Packet &send(Commands::Type command);
 
             sf::TcpSocket &socket();
 
@@ -108,8 +74,7 @@ namespace cotsb
             ResponseList _new_data;
             sf::Packet *_pending_new_data;
             sf::TcpSocket _socket;
-            std::vector<std::unique_ptr<Request> > _to_send;
-            std::map<uint32_t, ResponseHandler > _response_handlers;
+            std::vector<std::unique_ptr<sf::Packet> > _to_send;
 
             void check_network();
             // }}}

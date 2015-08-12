@@ -78,7 +78,7 @@ namespace cotsb
             {
                 s_statuses[name] = Loading;
                 auto &request = ClientEngine::client().send(Commands::LoadMap);
-                request.data() << name;
+                request << name;
             }
             return nullptr;
         }

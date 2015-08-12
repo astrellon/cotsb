@@ -236,12 +236,6 @@ namespace cotsb
             logger % "Info" << "Has " << response.data().getDataSize() << " bytes" << endl;
             if (response.command() == Commands::NewMap)
             {
-                if (!response.success())
-                {
-                    logger % "Error" << "Failed to load map: " << response.error_message() << endl;
-                    continue;
-                }
-
                 logger % "Info" << "New map" << endl;
                 auto map = MapTcpDeserialiser::deserialise(response.data());
                 MapManager::map_loaded(map);
@@ -257,20 +251,6 @@ namespace cotsb
                 logger % "Error" << "Unknown command " << response.command() << endl;
                 continue;
             }
-
-            if (response.id() > 0u)
-            {
-                auto handler = s_client.response_handler(response.id());
-                if (handler == nullptr)
-                {
-                    logger % "Error" << "Could not find request for awaiting response " << response.id() << endl;
-                }
-                else
-                {
-                    handler(&response);
-                    s_client.remove_response_handler(response.id());
-                }
-            }
         }
 
         if (s_client.has_connected())
@@ -284,10 +264,13 @@ namespace cotsb
     {
         s_game_world = new GameWorld();
 
+        /*
         auto &request = s_client.send(Commands::LoadMap, [] (Client::Response *response)
         {
             logger % "Info" << "Got map1!" << endl;
         });
-        request.data() << "map1";
+        */
+        auto &request = s_client.send(Commands::LoadMap);
+        request << "map1";
     }
 }

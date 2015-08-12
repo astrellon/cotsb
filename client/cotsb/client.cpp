@@ -7,22 +7,12 @@ namespace cotsb
     // Response {{{
     Client::Response::Response(sf::Packet *data) :  
         _data(data),
-        _command(Commands::Unknown),
-        _id(0u),
-        _success(false)
+        _command(Commands::Unknown)
     {
         auto &input = *data;
         uint16_t command_temp;
         input >> command_temp;
         _command = static_cast<Commands::Type>(command_temp);
-
-        input >> _id;
-        input >> _success;
-
-        if (!_success)
-        {
-            input >> _error_message;
-        }
     }
 
     sf::Packet &Client::Response::data()
@@ -32,54 +22,6 @@ namespace cotsb
     Commands::Type Client::Response::command() const
     {
         return _command;
-    }
-    uint32_t Client::Response::id() const
-    {
-        return _id;
-    }
-    bool Client::Response::success() const
-    {
-        return _success;
-    }
-    const std::string &Client::Response::error_message() const
-    {
-        return _error_message;
-    }
-    // }}}
-    
-    // Request {{{
-    uint32_t Client::Request::s_id_counter = 0u;
-
-    Client::Request::Request(Commands::Type command) :
-        _id(0u),
-        _command(command)
-    {
-        _data << static_cast<uint16_t>(command) << _id; 
-    }
-    Client::Request::Request(Commands::Type command, Client::ResponseHandler handler) :
-        _id(0u),
-        _command(command),
-        _handler(handler)
-    {
-        _id = ++s_id_counter;
-        _data << static_cast<uint16_t>(command) << _id; 
-    }
-
-    uint32_t Client::Request::id() const
-    {
-        return _id;
-    }
-    Commands::Type Client::Request::command() const 
-    {
-        return _command;
-    }
-    Client::ResponseHandler Client::Request::handler() const
-    {
-        return _handler;
-    }
-    sf::Packet &Client::Request::data()
-    {
-        return _data;
     }
     // }}}
     
@@ -149,45 +91,18 @@ namespace cotsb
 
         for (auto &iter : _to_send)
         {
-            _socket.send(iter->data());
-            if (iter->handler() != nullptr)
-            {
-                _response_handlers[iter->id()] = iter->handler();
-            }
+            _socket.send(*iter);
         }
 
         _to_send.clear();
     }
 
-    Client::Request &Client::send(Commands::Type command)
+    sf::Packet &Client::send(Commands::Type command)
     {
-        auto new_request = new Request(command);
-        _to_send.push_back(std::unique_ptr<Request>(new_request));
+        auto new_request = new sf::Packet();
+        (*new_request) << static_cast<uint16_t>(command);
+        _to_send.push_back(std::unique_ptr<sf::Packet>(new_request));
         return *new_request;
-    }
-    Client::Request &Client::send(Commands::Type command, Client::ResponseHandler handler)
-    {
-        auto new_request = new Request(command, handler);
-        _to_send.push_back(std::unique_ptr<Request>(new_request));
-        return *new_request;
-    }
-
-    Client::ResponseHandler Client::response_handler(uint32_t id) const
-    {
-        auto find = _response_handlers.find(id);
-        if (find != _response_handlers.cend())
-        {
-            return find->second;
-        }
-        return nullptr;
-    }
-    void Client::remove_response_handler(uint32_t id)
-    {
-        auto find = _response_handlers.find(id);
-        if (find != _response_handlers.end())
-        {
-            _response_handlers.erase(find);
-        }
     }
 
     Client::ResponseList &Client::new_data()

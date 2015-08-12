@@ -44,7 +44,7 @@ namespace cotsb
             _clients.push_back(std::move(_pending_socket));
 
             auto &message = send(Commands::Message, client);
-            message << 0u << true << "Welcome";
+            message << "Welcome";
 
             _pending_socket = UniqueSocket(new sf::TcpSocket());
         }
