@@ -59,9 +59,16 @@ namespace cotsb
 
             static void map_loaded(Map *map);
 
+            typedef std::function<void (Map *loadedMap)> MapLoadHandler;
+
+            static void on_map_load(const std::string &name, MapLoadHandler handler);
+
         private:
             static Maps s_maps;
             static Statuses s_statuses;
+
+            typedef std::map<std::string, MapLoadHandler> MapLoadHandlers;
+            static MapLoadHandlers s_map_load_handlers;
     };
     // }}}
 }

@@ -264,13 +264,12 @@ namespace cotsb
     {
         s_game_world = new GameWorld();
 
-        /*
-        auto &request = s_client.send(Commands::LoadMap, [] (Client::Response *response)
-        {
-            logger % "Info" << "Got map1!" << endl;
-        });
-        */
         auto &request = s_client.send(Commands::LoadMap);
         request << "map1";
+
+        MapManager::on_map_load("map1", [](Map *map)
+        {
+            logger % "Info" << "Got map1" << endl;
+        });
     }
 }

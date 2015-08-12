@@ -58,6 +58,7 @@ namespace cotsb
     // MapManager {{{
     MapManager::Maps MapManager::s_maps;
     MapManager::Statuses MapManager::s_statuses;
+    MapManager::MapLoadHandlers MapManager::s_map_load_handlers;
 
     void MapManager::init()
     {
@@ -103,6 +104,23 @@ namespace cotsb
     {
         s_maps[map->name()] = std::unique_ptr<Map>(map);
         s_statuses[map->name()] = Loaded;
+
+        auto find = s_map_load_handlers.find(map->name());
+        if (find != s_map_load_handlers.end())
+        {
+            find->second(map);
+            s_map_load_handlers.erase(find);
+        }
+    }
+
+    void MapManager::on_map_load(const std::string &name, MapManager::MapLoadHandler handler)
+    {
+        if (status(name) == Loaded)
+        {
+            handler(s_maps[name].get());
+            return;
+        }
+        s_map_load_handlers[name] = handler;
     }
         
     // }}}
