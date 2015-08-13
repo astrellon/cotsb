@@ -97,6 +97,7 @@ namespace cotsb
             s_client.game_tick();
             process_networking();
 
+            update(dt);
             utils::Utils::update(dt);
             ui::Manager::update(dt);
             // }}}
@@ -156,23 +157,19 @@ namespace cotsb
     void ClientEngine::update(float dt)
     {
         s_update_counter++;
-        /*
-        if (s_game.get() != nullptr)
+        if (s_game_world != nullptr)
         {
-            s_game->update(dt);
+            s_game_world->update(dt);
         }
-        */
         s_sound_manager.update(dt);
     }
 
     void ClientEngine::draw(sf::RenderTarget &target, sf::RenderStates states)
     {
-        /*
-        if (s_game.get() != nullptr)
+        if (s_game_world != nullptr)
         {
-            s_game->draw(target, states);
+            s_game_world->draw(target, states);
         }
-        */
     }
 
     void ClientEngine::close_game()
@@ -205,6 +202,11 @@ namespace cotsb
         auto fheight = static_cast<float>(height);
         s_hud_camera.setSize(fwidth, fheight);
         s_hud_camera.setCenter(fwidth * 0.5f, fheight * 0.5f);
+
+        if (s_game_world != nullptr)
+        {
+            s_game_world->on_resize(width, height);
+        }
     }
     
     SoundManager &ClientEngine::sound_manager()
@@ -262,14 +264,16 @@ namespace cotsb
 
     void ClientEngine::on_connected()
     {
-        s_game_world = new GameWorld();
-
         auto &request = s_client.send(Commands::LoadMap);
         request << "map1";
 
         MapManager::on_map_load("map1", [](Map *map)
         {
             logger % "Info" << "Got map1" << endl;
+            s_game_world = new GameWorld();
+            s_game_world->current_map(map);
+
+            ui::State::state(ui::State::InGame);
         });
     }
 }

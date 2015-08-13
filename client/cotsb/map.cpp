@@ -53,6 +53,11 @@ namespace cotsb
     {
         return _data;
     }
+
+    void Map::update(float dt)
+    {
+
+    }
     // }}}
     
     // MapManager {{{

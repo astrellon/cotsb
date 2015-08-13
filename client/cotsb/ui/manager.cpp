@@ -79,6 +79,7 @@ namespace cotsb
         void Manager::draw(sf::RenderTarget &target, sf::RenderStates states)
         {
             target.setView(ClientEngine::hud_camera());
+
             for (auto screen : s_screens)
             {
                 if (!screen->visible())

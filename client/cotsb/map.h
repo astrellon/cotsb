@@ -26,6 +26,8 @@ namespace cotsb
             typedef std::vector<std::string> TileList;
             const TileList &data() const;
 
+            void update(float dt);
+
         private:
             std::string _name;
             uint32_t _width;
@@ -34,7 +36,7 @@ namespace cotsb
             TileList _data;
     };
     // }}}
-
+    
     // MapManager {{{
     class MapManager
     {
