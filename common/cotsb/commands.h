@@ -13,10 +13,20 @@ namespace cotsb
         public:
             enum Type : uint16_t
             {
+                // Common
                 Unknown,
                 Message,
+
+                // Server -> client
+                ChangeMap,
                 NewMap,
-                LoadMap
+                NewPlayer,
+                PlayerLeft,
+                JoinedGame,
+
+                // Client -> server
+                LoadMap,
+                JoinGame,
             };
 
             static std::string get_name(Type type);

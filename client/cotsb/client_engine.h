@@ -53,6 +53,9 @@ namespace cotsb
             static void start_client();
             static void start_client(const std::string &hostname, uint16_t port);
 
+            static void player_name(const std::string &name);
+            static const std::string &player_name();
+
         private:
 
             static sf::RenderWindow *s_window;
@@ -60,6 +63,7 @@ namespace cotsb
             static GameWorld *s_game_world;
             static sf::View s_hud_camera;
             static SoundManager s_sound_manager;
+            static std::string s_player_name;
             
             static uint32_t s_update_counter;
             static uint32_t s_keys_pressed[sf::Keyboard::KeyCount];
@@ -72,5 +76,6 @@ namespace cotsb
             static void process_networking();
 
             static void on_connected();
+            static void on_joined_game(Client::Response &response);
     };
 }

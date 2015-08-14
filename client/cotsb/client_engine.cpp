@@ -19,6 +19,7 @@ namespace cotsb
     Client ClientEngine::s_client;
     sf::View ClientEngine::s_hud_camera;
     GameWorld *ClientEngine::s_game_world = nullptr;
+    std::string ClientEngine::s_player_name;
     
     SoundManager ClientEngine::s_sound_manager;
 
@@ -230,12 +231,23 @@ namespace cotsb
         start_client();
     }
 
+    void ClientEngine::player_name(const std::string &name)
+    {
+        s_player_name = name;
+    }
+    const std::string &ClientEngine::player_name()
+    {
+        return s_player_name;
+    }
+
     void ClientEngine::process_networking()
     {
         for (auto &iter : s_client.new_data())
         {
             auto &response = *iter.get();
-            logger % "Info" << "Has " << response.data().getDataSize() << " bytes" << endl;
+            logger % "Info" << "Has " << response.data().getDataSize() << " bytes for " 
+                << Commands::get_name(response.command()) << " commands" << endl;
+
             if (response.command() == Commands::NewMap)
             {
                 logger % "Info" << "New map" << endl;
@@ -247,6 +259,24 @@ namespace cotsb
                 std::string message;
                 response.data() >> message;
                 logger % "Info" << "Message " << message << endl; 
+            }
+            else if (response.command() == Commands::JoinedGame)
+            {
+                on_joined_game(response);
+            }
+            else if (response.command() == Commands::NewPlayer)
+            {
+                std::string player_name;
+                response.data() >> player_name;
+
+                logger % "Info" << "New player: " << player_name << endl;
+            }
+            else if (response.command() == Commands::PlayerLeft)
+            {
+                std::string player_name;
+                response.data() >> player_name;
+
+                logger % "Info" << "Player left: " << player_name << endl;
             }
             else
             {
@@ -264,6 +294,13 @@ namespace cotsb
 
     void ClientEngine::on_connected()
     {
+        auto &request = s_client.send(Commands::JoinGame);
+        request << s_player_name;
+    }
+
+    void ClientEngine::on_joined_game(Client::Response &response)
+    {
+        logger % "Info" << "Joined game!" << endl;
         auto &request = s_client.send(Commands::LoadMap);
         request << "map1";
 

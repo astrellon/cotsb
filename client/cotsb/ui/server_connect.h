@@ -18,6 +18,7 @@ namespace cotsb
 
                 TextInput *_hostname;
                 TextInput *_port;
+                TextInput *_player_name;
                 Button *_connect;
                 Button *_back;
         };

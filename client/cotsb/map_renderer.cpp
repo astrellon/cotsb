@@ -39,6 +39,10 @@ namespace cotsb
                 {
                     line.setFillColor(sf::Color::Green);
                 }
+                else if (tile == "water")
+                {
+                    line.setFillColor(sf::Color::Blue);
+                }
                 else if (tile == "wall")
                 {
                     line.setFillColor(sf::Color::Red);

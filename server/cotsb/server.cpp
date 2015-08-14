@@ -66,6 +66,8 @@ namespace cotsb
                 logger % "Info" << "Client disconnected" << endl; 
                 _clients.erase(_clients.begin() + i);
                 i--;
+                
+                //auto &response = broadcast(Commands::PlayerLeft);
                 continue;
             }
         }

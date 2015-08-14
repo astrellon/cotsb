@@ -5,7 +5,17 @@
 namespace cotsb
 {
     Commands::TypeMap Commands::s_names = {
-        { Commands::Unknown, "Unknown" }
+        { Commands::Unknown, "Unknown" },
+        { Commands::Message, "Message" },
+        
+        { Commands::ChangeMap, "ChangeMap" },
+        { Commands::NewMap, "NewMap" },
+        { Commands::NewPlayer, "NewPlayer" },
+        { Commands::PlayerLeft, "PlayerLeft" },
+        { Commands::JoinedGame, "JoinedGame" },
+        
+        { Commands::LoadMap, "LoadMap" },
+        { Commands::JoinGame, "JoinGame" },
     };
 
     std::string Commands::get_name(Commands::Type type)

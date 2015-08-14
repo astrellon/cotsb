@@ -8,6 +8,7 @@ namespace cotsb
 {
     Server ServerEngine::s_server;
     bool ServerEngine::s_running = false;
+    ServerEngine::PlayerMap ServerEngine::s_players;
 
     bool ServerEngine::init()
     {
@@ -121,6 +122,19 @@ namespace cotsb
             
             auto &response = s_server.broadcast(command, socket);
             response << message;
+        }
+        else if (command == Commands::JoinGame)
+        {
+            std::string player_name;
+            packet >> player_name;
+
+            logger % "Info" << "Player joined " << player_name << endl;
+
+            auto &response = s_server.send(Commands::JoinedGame, socket);
+            response << true;
+
+            auto &broadcast = s_server.broadcast(Commands::NewPlayer, socket);
+            broadcast << player_name;
         }
     }
 }

@@ -27,9 +27,12 @@ namespace cotsb
             _connect->setPosition(300, 260);
             _connect->on_click([] (int32_t x, int32_t y, sf::Mouse::Button btn)
             {
-                auto hostname = server_connect._hostname->value();;
+                auto hostname = server_connect._hostname->value();
                 auto port = static_cast<uint16_t>(std::atoi(server_connect._port->value().c_str()));
 
+                auto player_name = server_connect._player_name->value();
+
+                ClientEngine::player_name(player_name);
                 ClientEngine::start_client(hostname, port);
 
                 return true;
@@ -42,6 +45,10 @@ namespace cotsb
             _port = add_component<TextInput>("Port");
             _port->setPosition(300, 380);
             _port->value("8888");
+
+            _player_name = add_component<TextInput>("Name");
+            _player_name->setPosition(300, 440);
+            _player_name->value("Unnamed");
 
             calc_nearby_components();
 
