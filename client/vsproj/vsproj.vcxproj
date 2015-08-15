@@ -11,8 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{39DC2217-1C41-460D-947B-CBEFDFE78326}</ProjectGuid>
-    <RootNamespace>server</RootNamespace>
+    <ProjectGuid>{B4603D6C-7123-4EEF-81DE-0068238A69D6}</ProjectGuid>
+    <RootNamespace>vsproj</RootNamespace>
+    <ProjectName>client</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -33,32 +34,31 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../common/vsprops/SFMLDebug.props" />
+    <Import Project="..\..\common\vsprops\SFMLDebug.props" />
     <Import Project="..\..\common\vsprops\SFMLCommon.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../common/vsprops/SFMLRelease.props" />
+    <Import Project="..\..\common\vsprops\SFMLRelease.props" />
     <Import Project="..\..\common\vsprops\SFMLCommon.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>../../common;../;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>../../common;../;$(IncludePath)</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../common;../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST $(OutputPath)data (
+    mklink /J $(OutputPath)data $(ProjectDir)..\data
+)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -67,12 +67,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../common;../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST $(OutputPath)data (
+    mklink /J $(OutputPath)data $(ProjectDir)..\data
+)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\cotsb\commands.cpp" />
@@ -81,10 +87,23 @@
     <ClCompile Include="..\..\common\utils\colour.cpp" />
     <ClCompile Include="..\..\common\utils\ray.cpp" />
     <ClCompile Include="..\..\common\utils\utils.cpp" />
+    <ClCompile Include="..\cotsb\client.cpp" />
+    <ClCompile Include="..\cotsb\client_engine.cpp" />
+    <ClCompile Include="..\cotsb\font_manager.cpp" />
+    <ClCompile Include="..\cotsb\game_world.cpp" />
     <ClCompile Include="..\cotsb\map.cpp" />
-    <ClCompile Include="..\cotsb\map_tcp_serialiser.cpp" />
-    <ClCompile Include="..\cotsb\server.cpp" />
-    <ClCompile Include="..\cotsb\server_engine.cpp" />
+    <ClCompile Include="..\cotsb\map_renderer.cpp" />
+    <ClCompile Include="..\cotsb\map_tcp_deserialiser.cpp" />
+    <ClCompile Include="..\cotsb\sound.cpp" />
+    <ClCompile Include="..\cotsb\texture_manager.cpp" />
+    <ClCompile Include="..\cotsb\ui\button.cpp" />
+    <ClCompile Include="..\cotsb\ui\component.cpp" />
+    <ClCompile Include="..\cotsb\ui\main_menu.cpp" />
+    <ClCompile Include="..\cotsb\ui\manager.cpp" />
+    <ClCompile Include="..\cotsb\ui\screen.cpp" />
+    <ClCompile Include="..\cotsb\ui\server_connect.cpp" />
+    <ClCompile Include="..\cotsb\ui\text_input.cpp" />
+    <ClCompile Include="..\cotsb\ui\ui_state.cpp" />
     <ClCompile Include="..\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -94,11 +113,24 @@
     <ClInclude Include="..\..\common\utils\colour.h" />
     <ClInclude Include="..\..\common\utils\ray.h" />
     <ClInclude Include="..\..\common\utils\utils.h" />
+    <ClInclude Include="..\cotsb\client.h" />
+    <ClInclude Include="..\cotsb\client_engine.h" />
+    <ClInclude Include="..\cotsb\font_manager.h" />
+    <ClInclude Include="..\cotsb\game_world.h" />
     <ClInclude Include="..\cotsb\map.h" />
-    <ClInclude Include="..\cotsb\map_tcp_serialiser.h" />
-    <ClInclude Include="..\cotsb\player.h" />
-    <ClInclude Include="..\cotsb\server.h" />
-    <ClInclude Include="..\cotsb\server_engine.h" />
+    <ClInclude Include="..\cotsb\map_renderer.h" />
+    <ClInclude Include="..\cotsb\map_tcp_deserialiser.h" />
+    <ClInclude Include="..\cotsb\object_manager.h" />
+    <ClInclude Include="..\cotsb\sound.h" />
+    <ClInclude Include="..\cotsb\texture_manager.h" />
+    <ClInclude Include="..\cotsb\ui\button.h" />
+    <ClInclude Include="..\cotsb\ui\component.h" />
+    <ClInclude Include="..\cotsb\ui\main_menu.h" />
+    <ClInclude Include="..\cotsb\ui\manager.h" />
+    <ClInclude Include="..\cotsb\ui\screen.h" />
+    <ClInclude Include="..\cotsb\ui\server_connect.h" />
+    <ClInclude Include="..\cotsb\ui\text_input.h" />
+    <ClInclude Include="..\cotsb\ui\ui_state.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

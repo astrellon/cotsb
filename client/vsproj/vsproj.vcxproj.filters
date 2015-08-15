@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{1633483d-8bfa-4aba-8a2d-9073f9c3de0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="client">
+      <UniqueIdentifier>{7422fe40-ce85-41ab-ab61-f69517de3691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\cotsb">
+      <UniqueIdentifier>{e5d6042a-9a0f-42e4-8e4b-4265be9bad37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\utils">
+      <UniqueIdentifier>{1c4fb418-f951-4c96-8a8d-29386afadea5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="client\cotsb">
+      <UniqueIdentifier>{a3c175f4-7092-45ef-a379-f53f91909c75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="client\cotsb\ui">
+      <UniqueIdentifier>{476dd2a9-ec67-4140-aa75-b59e78932c2e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\common\utils\circle.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\colour.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\ray.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\utils.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\cotsb\commands.cpp">
+      <Filter>common\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\cotsb\logging.cpp">
+      <Filter>common\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\button.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\component.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\main_menu.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\manager.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\screen.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\server_connect.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\text_input.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\ui\ui_state.cpp">
+      <Filter>client\cotsb\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\client.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\client_engine.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\font_manager.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\game_world.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\map.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\map_renderer.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\map_tcp_deserialiser.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\sound.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\texture_manager.cpp">
+      <Filter>client\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\common\utils\circle.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\colour.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\ray.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\utils.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\cotsb\commands.h">
+      <Filter>common\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\cotsb\logging.h">
+      <Filter>common\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\button.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\component.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\main_menu.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\manager.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\screen.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\server_connect.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\text_input.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\ui\ui_state.h">
+      <Filter>client\cotsb\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\client.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\client_engine.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\font_manager.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\game_world.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\map.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\map_renderer.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\map_tcp_deserialiser.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\object_manager.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\sound.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\texture_manager.h">
+      <Filter>client\cotsb</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
