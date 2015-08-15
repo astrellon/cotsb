@@ -33,3 +33,10 @@
 *.swo
 .ctrlp
 .undodir
+
+# VS Proj
+*.opensdf
+*.sdf
+*.suo
+Debug/
+Release/

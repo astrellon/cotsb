@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="server">
+      <UniqueIdentifier>{f7111725-d654-44e0-9bbc-9db9c2ae956d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{4b523520-44fe-40a2-8211-3ec93f9b2c89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\cotsb">
+      <UniqueIdentifier>{7dba2e79-ad2a-4ee0-8060-270f96b9f0aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\utils">
+      <UniqueIdentifier>{48951ff6-014d-478b-94fd-b81ab81809df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server\cotsb">
+      <UniqueIdentifier>{3b1330d9-9ee0-4832-bc1f-402ad87709d8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\main.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\map.cpp">
+      <Filter>server\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\map_tcp_serialiser.cpp">
+      <Filter>server\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\server.cpp">
+      <Filter>server\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cotsb\server_engine.cpp">
+      <Filter>server\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\cotsb\commands.cpp">
+      <Filter>common\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\cotsb\logging.cpp">
+      <Filter>common\cotsb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\circle.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\colour.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\ray.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\utils\utils.cpp">
+      <Filter>common\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\cotsb\map.h">
+      <Filter>server\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\map_tcp_serialiser.h">
+      <Filter>server\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\server.h">
+      <Filter>server\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\server_engine.h">
+      <Filter>server\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\cotsb\commands.h">
+      <Filter>common\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\cotsb\logging.h">
+      <Filter>common\cotsb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\circle.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\colour.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\ray.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\utils\utils.h">
+      <Filter>common\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cotsb\player.h">
+      <Filter>server\cotsb</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
