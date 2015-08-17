@@ -36,7 +36,7 @@ namespace cotsb
         if (_listener.accept(*_pending_socket) == sf::Socket::Done)
         {
             auto client = _pending_socket.get();
-            logger % "Info" << "New client: " << client->getRemoteAddress().toString() << ":" << client->getRemotePort() << endl; 
+            logger % "Network" << "New client: " << client->getRemoteAddress().toString() << ":" << client->getRemotePort() << endl; 
             client->setBlocking(false);
             // Add the new client to the clients list
             // Add the new client to the selector so that we will
@@ -62,13 +62,13 @@ namespace cotsb
             auto result = client->receive(*_pending_packet); 
             if (result == sf::Socket::Done)
             {
-                logger % "Info" << "Received data" << endl; 
+                logger % "Network" << "Received data" << endl; 
                 _new_data.push_back(SocketDataPair(client, std::move(_pending_packet)));
                 _pending_packet = UniquePacket(new sf::Packet());
             }
             else if (result == sf::Socket::Disconnected)
             {
-                logger % "Info" << "Client disconnected" << endl; 
+                logger % "Network" << "Client disconnected" << endl; 
                 if (_on_disconnect)
                 {
                     _on_disconnect(client);

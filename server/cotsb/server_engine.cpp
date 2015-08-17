@@ -133,7 +133,7 @@ namespace cotsb
 
             auto player = PlayerManager::create_player(socket);
             player->player_name(player_name);
-            logger % "Info" << "Player joined " << player_name << endl;
+            logger % "Network" << "Player joined " << player_name << endl;
 
             auto &response = s_server.send(Commands::JoinedGame, socket);
             response << true;

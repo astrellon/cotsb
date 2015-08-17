@@ -114,6 +114,7 @@ namespace cotsb
     {
         s_type_to_colours["Error"] = "\033[1;31m";
         s_type_to_colours["Info"] = "\033[1;32m";
+        s_type_to_colours["Network"] = "\033[1;34m";
         s_type_to_colours["Warning"] = "\033[1;33m";
     }
 

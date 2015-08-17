@@ -245,7 +245,7 @@ namespace cotsb
         for (auto &iter : s_client.new_data())
         {
             auto &response = *iter.get();
-            logger % "Info" << "Has " << response.data().getDataSize() << " bytes for " 
+            logger % "Network" << "Has " << response.data().getDataSize() << " bytes for " 
                 << Commands::get_name(response.command()) << " commands" << endl;
 
             if (response.command() == Commands::NewMap)
