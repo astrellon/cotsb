@@ -6,9 +6,9 @@
 
 namespace cotsb
 {
-    Server ServerEngine::s_server;
     bool ServerEngine::s_running = false;
-    ServerEngine::PlayerMap ServerEngine::s_players;
+    Server ServerEngine::s_server;
+    PlayerManager ServerEngine::s_players;
 
     bool ServerEngine::init()
     {
@@ -61,6 +61,9 @@ namespace cotsb
         map1->tile(5, 4, "wall");
     
         logger % "Info" << "Started server" <<endl;
+
+        s_server.on_connect(on_connect);
+        s_server.on_disconnect(on_disconnect);
 
         return true;
     }
@@ -128,6 +131,8 @@ namespace cotsb
             std::string player_name;
             packet >> player_name;
 
+            auto player = PlayerManager::create_player(socket);
+            player->player_name(player_name);
             logger % "Info" << "Player joined " << player_name << endl;
 
             auto &response = s_server.send(Commands::JoinedGame, socket);
@@ -136,5 +141,22 @@ namespace cotsb
             auto &broadcast = s_server.broadcast(Commands::NewPlayer, socket);
             broadcast << player_name;
         }
+    }
+
+    void ServerEngine::on_connect(sf::TcpSocket *socket)
+    {
+        auto &welcome = s_server.send(Commands::Message, socket);
+        welcome << "Welcome friend";
+    }
+    void ServerEngine::on_disconnect(sf::TcpSocket *socket)
+    {
+        auto player = PlayerManager::player(socket);
+        if (player == nullptr)
+        {
+            // Player was disconnected before a player structure was created.
+            return;
+        }
+        auto &goodbye = s_server.broadcast(Commands::PlayerLeft);
+        goodbye << player->player_name();
     }
 }

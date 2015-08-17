@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SFML/Network.hpp>
+
 #include <string>
 #include <map>
 #include <memory>
@@ -8,6 +10,7 @@ namespace cotsb
 {
     class Map;
 
+    // Player {{{
     class Player
     {
         public:
@@ -23,17 +26,21 @@ namespace cotsb
             std::string _player_name;
             Map *_current_map;
     };
+    // }}}
 
+    // PlayerManager {{{
     class PlayerManager
     {
         public:
-            typedef std::map<std::string, std::unique_ptr<Player> > PlayerMap;
+            typedef std::map<const sf::TcpSocket *, std::unique_ptr<Player> > PlayerMap;
             static const PlayerMap &players();
 
-            static Player *player(const std::string &name);
+            static Player *create_player(const sf::TcpSocket *socket);
+            static Player *player(const sf::TcpSocket *socket);
 
         private:
             static PlayerMap s_players;
 
     };
+    // }}}
 }

@@ -8,6 +8,7 @@
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <functional>
 
 #include <cotsb/commands.h>
 
@@ -29,6 +30,10 @@ namespace cotsb
             typedef std::pair<sf::TcpSocket*, UniquePacket> SocketDataPair;
             typedef std::vector<SocketDataPair> SocketDataList;
 
+            typedef std::function<void (sf::TcpSocket *)> SocketHandler;
+            void on_connect(SocketHandler handler);
+            void on_disconnect(SocketHandler handler);
+
             const SocketDataList &new_data() const;
             void clear_new_data();
 
@@ -48,5 +53,8 @@ namespace cotsb
             
             SocketDataList _to_send;
             SocketDataList _to_broadcast;
+
+            SocketHandler _on_connect;
+            SocketHandler _on_disconnect;
     };
 }

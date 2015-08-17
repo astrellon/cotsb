@@ -43,8 +43,10 @@ namespace cotsb
             // be notified when he sends something
             _clients.push_back(std::move(_pending_socket));
 
-            auto &message = send(Commands::Message, client);
-            message << "Welcome";
+            if (_on_connect)
+            {
+                _on_connect(client);
+            }
 
             _pending_socket = UniqueSocket(new sf::TcpSocket());
         }
@@ -54,6 +56,9 @@ namespace cotsb
         {
             // The client has sent some data, we can receive it
             auto client = _clients[i].get();
+        
+            // TODO Check if we need to wrap this in a while loop checking for 
+            //      not ready status.
             auto result = client->receive(*_pending_packet); 
             if (result == sf::Socket::Done)
             {
@@ -64,10 +69,13 @@ namespace cotsb
             else if (result == sf::Socket::Disconnected)
             {
                 logger % "Info" << "Client disconnected" << endl; 
+                if (_on_disconnect)
+                {
+                    _on_disconnect(client);
+                }
                 _clients.erase(_clients.begin() + i);
                 i--;
                 
-                //auto &response = broadcast(Commands::PlayerLeft);
                 continue;
             }
         }
@@ -90,6 +98,15 @@ namespace cotsb
             }
         }
         _to_broadcast.clear();
+    }
+
+    void Server::on_connect(SocketHandler handler)
+    {
+        _on_connect = handler;
+    }
+    void Server::on_disconnect(SocketHandler handler)
+    {
+        _on_disconnect = handler;
     }
 
     const Server::SocketDataList &Server::new_data() const
