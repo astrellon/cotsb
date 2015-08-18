@@ -3,6 +3,7 @@
 #include <cotsb/logging.h>
 #include "map.h"
 #include "map_tcp_serialiser.h"
+#include "player_tcp_serialiser.h"
 
 namespace cotsb
 {
@@ -106,6 +107,7 @@ namespace cotsb
 
             logger % "Info" << "Request for map: " << map_name << endl;
             auto &response = s_server.send(Commands::NewMap, socket); 
+            response << map_name;
 
             auto found_map = MapManager::map(map_name);
             if (found_map == nullptr)
@@ -133,10 +135,13 @@ namespace cotsb
 
             auto player = PlayerManager::create_player(socket);
             player->player_name(player_name);
+            // Starter map
+            player->current_map(MapManager::map("map1"));
+
             logger % "Network" << "Player joined " << player_name << endl;
 
             auto &response = s_server.send(Commands::JoinedGame, socket);
-            response << true;
+            PlayerTcpSerialiser::serialise(*player, response);
 
             auto &broadcast = s_server.broadcast(Commands::NewPlayer, socket);
             broadcast << player_name;

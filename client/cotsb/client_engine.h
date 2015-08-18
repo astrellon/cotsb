@@ -3,6 +3,7 @@
 #include "client.h"
 #include "game_world.h"
 #include "sound.h"
+#include "player.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -49,12 +50,10 @@ namespace cotsb
             static SoundManager &sound_manager();
             static Client &client();
             static GameWorld *game_world();
+            static Player &player();
             
             static void start_client();
             static void start_client(const std::string &hostname, uint16_t port);
-
-            static void player_name(const std::string &name);
-            static const std::string &player_name();
 
         private:
 
@@ -64,6 +63,7 @@ namespace cotsb
             static sf::View s_hud_camera;
             static SoundManager s_sound_manager;
             static std::string s_player_name;
+            static Player s_player;
             
             static uint32_t s_update_counter;
             static uint32_t s_keys_pressed[sf::Keyboard::KeyCount];

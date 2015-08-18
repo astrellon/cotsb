@@ -11,6 +11,7 @@
 
 #include "map.h"
 #include "map_tcp_deserialiser.h"
+#include "player_tcp_deserialiser.h"
 #include <cotsb/commands.h>
 
 namespace cotsb
@@ -19,7 +20,7 @@ namespace cotsb
     Client ClientEngine::s_client;
     sf::View ClientEngine::s_hud_camera;
     GameWorld *ClientEngine::s_game_world = nullptr;
-    std::string ClientEngine::s_player_name;
+    Player ClientEngine::s_player;
     
     SoundManager ClientEngine::s_sound_manager;
 
@@ -218,6 +219,10 @@ namespace cotsb
     {
         return s_client;
     }
+    Player &ClientEngine::player()
+    {
+        return s_player;
+    }
 
     void ClientEngine::start_client()
     {
@@ -231,15 +236,6 @@ namespace cotsb
         start_client();
     }
 
-    void ClientEngine::player_name(const std::string &name)
-    {
-        s_player_name = name;
-    }
-    const std::string &ClientEngine::player_name()
-    {
-        return s_player_name;
-    }
-
     void ClientEngine::process_networking()
     {
         for (auto &iter : s_client.new_data())
@@ -250,8 +246,12 @@ namespace cotsb
 
             if (response.command() == Commands::NewMap)
             {
-                logger % "Info" << "New map" << endl;
-                auto map = MapTcpDeserialiser::deserialise(response.data());
+                std::string map_name;
+                response.data() >> map_name;
+                logger % "Info" << "New map: " << map_name << endl;
+                
+                auto map = MapManager::map(map_name, false);
+                MapTcpDeserialiser::deserialise(*map, response.data());
                 MapManager::map_loaded(map);
             }
             else if (response.command() == Commands::Message)
@@ -295,18 +295,17 @@ namespace cotsb
     void ClientEngine::on_connected()
     {
         auto &request = s_client.send(Commands::JoinGame);
-        request << s_player_name;
+        request << s_player.player_name();
     }
 
     void ClientEngine::on_joined_game(Client::Response &response)
     {
         logger % "Info" << "Joined game!" << endl;
-        auto &request = s_client.send(Commands::LoadMap);
-        request << "map1";
+        PlayerTcpDeserialiser::deserialise(s_player, response.data());
 
-        MapManager::on_map_load("map1", [](Map *map)
+        MapManager::on_map_load(s_player.current_map()->name(), [](Map *map)
         {
-            logger % "Info" << "Got map1" << endl;
+            logger % "Info" << "Got starting map: " << map->name() << endl;
             s_game_world = new GameWorld();
             s_game_world->current_map(map);
 

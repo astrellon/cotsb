@@ -32,7 +32,7 @@ namespace cotsb
 
                 auto player_name = server_connect._player_name->value();
 
-                ClientEngine::player_name(player_name);
+                ClientEngine::player().player_name(player_name);
                 ClientEngine::start_client(hostname, port);
 
                 return true;

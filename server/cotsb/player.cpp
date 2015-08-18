@@ -20,13 +20,31 @@ namespace cotsb
         return _player_name;
     }
 
-    void Player:: current_map(Map *map)
+    void Player::current_map(Map *map)
     {
         _current_map = map;
     }
     Map *Player::current_map() const
     {
         return _current_map;
+    }
+
+    void Player::location(sf::Vector2f location)
+    {
+        _location = location;
+    }
+    sf::Vector2f Player::location() const
+    {
+        return _location;
+    }
+
+    void Player::colour(sf::Color colour)
+    {
+        _colour = colour;
+    }
+    sf::Color Player::colour() const
+    {
+        return _colour;
     }
     // }}}
     

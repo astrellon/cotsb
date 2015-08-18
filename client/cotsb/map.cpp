@@ -3,25 +3,45 @@
 #include "client_engine.h"
 #include <cotsb/commands.h>
 
+#include <exception>
+
 namespace cotsb
 {
     // Map {{{
-    Map::Map(const std::string &name, uint32_t width, uint32_t height) :
+    Map::Map(const std::string &name) :
         _name(name),
-        _width(width),
-        _height(height)
+        _width(0u),
+        _height(0u),
+        _status(NotLoading)
     {
+
+    }
+
+    std::string Map::name() const
+    {
+        return _name;
+    }
+
+    void Map::set_size(uint32_t width, uint32_t height)
+    {
+        if (width == 0u || height == 0u)
+        {
+            throw std::runtime_error("Cannot resize a map to zero width or height");
+        }
+        if (_width != 0u && _height != 0u)
+        {
+            throw std::runtime_error("Cannot resize a map");
+        }
+
+        _width = width;
+        _height = height;
+        
         auto total = width * height;
         _data.resize(total);
         for (auto i = 0u; i < total; i++ )
         {
             _data[i] = "unknown";
         }
-    }
-
-    std::string Map::name() const
-    {
-        return _name;
     }
     uint32_t Map::width() const
     {
@@ -30,6 +50,15 @@ namespace cotsb
     uint32_t Map::height() const
     {
         return _height;
+    }
+
+    void Map::status(Map::Status value)
+    {
+        _status = value;
+    }
+    Map::Status Map::status() const
+    {
+        return _status;
     }
 
     void Map::tile(uint32_t x, uint32_t y, const std::string &tile)
@@ -62,7 +91,6 @@ namespace cotsb
     
     // MapManager {{{
     MapManager::Maps MapManager::s_maps;
-    MapManager::Statuses MapManager::s_statuses;
     MapManager::MapLoadHandlers MapManager::s_map_load_handlers;
 
     void MapManager::init()
@@ -74,42 +102,38 @@ namespace cotsb
     {
         return s_maps;
     }
-    Map *MapManager::map(const std::string &name)
+    Map *MapManager::map(const std::string &name, bool auto_request)
     {
         auto find = s_maps.find(name);
         if (find == s_maps.end())
         {
-            auto map_status = status(name);
-            if (map_status == NotLoading)
+            auto map = new Map(name);
+            s_maps[name] = std::unique_ptr<Map>(map);
+
+            if (auto_request)
             {
-                s_statuses[name] = Loading;
+                map->status(Map::Loading);
                 auto &request = ClientEngine::client().send(Commands::LoadMap);
                 request << name;
             }
-            return nullptr;
+
+            return map;
         }
         return find->second.get();
     }
 
-    MapManager::Status MapManager::status(const std::string &name)
+    Map::Status MapManager::status(const std::string &name)
     {
-        auto find = s_statuses.find(name);
-        if (find == s_statuses.end())
+        auto find = s_maps.find(name);
+        if (find == s_maps.cend())
         {
-            return NotLoading;
+            return Map::MapNotFound;
         }
-        return find->second;
-    }
-    const MapManager::Statuses &MapManager::statuses()
-    {
-        return s_statuses;
+        return find->second->status();
     }
 
     void MapManager::map_loaded(Map *map)
     {
-        s_maps[map->name()] = std::unique_ptr<Map>(map);
-        s_statuses[map->name()] = Loaded;
-
         auto find = s_map_load_handlers.find(map->name());
         if (find != s_map_load_handlers.end())
         {
@@ -120,7 +144,7 @@ namespace cotsb
 
     void MapManager::on_map_load(const std::string &name, MapManager::MapLoadHandler handler)
     {
-        if (status(name) == Loaded)
+        if (status(name) == Map::Loaded)
         {
             handler(s_maps[name].get());
             return;
