@@ -7,6 +7,8 @@
 #include <map>
 #include <memory>
 
+#include "game_object.h"
+
 namespace cotsb
 {
     class Map;
@@ -20,19 +22,11 @@ namespace cotsb
             void player_name(const std::string &name);
             const std::string &player_name() const;
 
-            void current_map(Map *map);
-            Map *current_map() const;
-
-            void location(sf::Vector2f location);
-            sf::Vector2f location() const;
-
             void colour(sf::Color colour);
             sf::Color colour() const;
 
         private:
             std::string _player_name;
-            Map *_current_map;
-            sf::Vector2f _location;
             sf::Color _colour;
     };
     // }}}

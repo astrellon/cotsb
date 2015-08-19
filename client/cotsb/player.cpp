@@ -4,8 +4,8 @@ namespace cotsb
 {
     // Player {{{
     Player::Player() :
+        GameObject(),
         _loaded(false),
-        _current_map(nullptr)
     {
 
     }
@@ -17,15 +17,6 @@ namespace cotsb
     const std::string &Player::player_name() const
     {
         return _player_name;
-    }
-
-    void Player:: current_map(Map *map)
-    {
-        _current_map = map;
-    }
-    Map *Player::current_map() const
-    {
-        return _current_map;
     }
 
     void Player::loaded(bool value)

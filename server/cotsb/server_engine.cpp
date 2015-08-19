@@ -1,5 +1,7 @@
 #include "server_engine.h"
 
+#include <SFML/Graphics.hpp>
+
 #include <cotsb/logging.h>
 #include "map.h"
 #include "map_tcp_serialiser.h"
@@ -135,6 +137,8 @@ namespace cotsb
 
             auto player = PlayerManager::create_player(socket);
             player->player_name(player_name);
+            player->location(sf::Vector2f(1.5, 2.5));
+            player->colour(sf::Color::Red);
             // Starter map
             player->current_map(MapManager::map("map1"));
 
