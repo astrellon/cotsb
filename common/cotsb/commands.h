@@ -23,6 +23,9 @@ namespace cotsb
                 NewPlayer,
                 PlayerLeft,
                 JoinedGame,
+                NewGameObject,
+                UpdateGameObject,
+                RemoveGameObject,
 
                 // Client -> server
                 LoadMap,

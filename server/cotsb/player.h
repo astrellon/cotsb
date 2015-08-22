@@ -25,9 +25,13 @@ namespace cotsb
             void colour(sf::Color colour);
             sf::Color colour() const;
 
+            void game_object(GameObject *obj);
+            GameObject *game_object() const;
+
         private:
             std::string _player_name;
             sf::Color _colour;
+            GameObject *_game_object;
     };
     // }}}
 

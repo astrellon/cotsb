@@ -137,10 +137,10 @@ namespace cotsb
 
             auto player = PlayerManager::create_player(socket);
             player->player_name(player_name);
-            player->location(sf::Vector2f(1.5, 2.5));
+            //player->location(sf::Vector2f(1.5, 2.5));
             player->colour(sf::Color::Red);
             // Starter map
-            player->current_map(MapManager::map("map1"));
+            //player->current_map(MapManager::map("map1"));
 
             logger % "Network" << "Player joined " << player_name << endl;
 

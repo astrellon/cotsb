@@ -1,4 +1,4 @@
-#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
 
 #include <cotsb/server_engine.h>
 #include <cotsb/logging.h>

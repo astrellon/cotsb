@@ -13,6 +13,9 @@ namespace cotsb
         { Commands::NewPlayer, "NewPlayer" },
         { Commands::PlayerLeft, "PlayerLeft" },
         { Commands::JoinedGame, "JoinedGame" },
+        { Commands::NewGameObject, "NewGameObject" },
+        { Commands::UpdateGameObject, "UpdateGameObject" },
+        { Commands::RemoveGameObject, "RemoveGameObject" },
         
         { Commands::LoadMap, "LoadMap" },
         { Commands::JoinGame, "JoinGame" },

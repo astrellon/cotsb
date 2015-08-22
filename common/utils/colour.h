@@ -51,19 +51,5 @@ namespace cotsb
 
                 bool _dirty;
         };
-
-        inline uint32_t colour_to_uint(const sf::Color &colour)
-        {
-            return colour.a << 24 | colour.r << 16 | colour.g << 8 | colour.b;
-        }
-        inline sf::Color uint_to_colour(uint32_t colour)
-        {
-            auto a = (colour >> 24) & 0xFF;
-            auto r = (colour >> 16) & 0xFF;
-            auto g = (colour >> 8) & 0xFF;
-            auto b = colour & 0xFF;
-
-            return sf::Color(r, g, b, a);
-        }
     }
 }

@@ -6,7 +6,7 @@ namespace cotsb
 {
     // Player {{{
     Player::Player() :
-        _current_map(nullptr)
+        _game_object(nullptr)
     {
 
     }
@@ -20,6 +20,7 @@ namespace cotsb
         return _player_name;
     }
 
+    /*
     void Player::current_map(Map *map)
     {
         _current_map = map;
@@ -37,6 +38,7 @@ namespace cotsb
     {
         return _location;
     }
+    */
 
     void Player::colour(sf::Color colour)
     {
@@ -45,6 +47,15 @@ namespace cotsb
     sf::Color Player::colour() const
     {
         return _colour;
+    }
+
+    void Player::game_object(GameObject *obj)
+    {
+        _game_object = obj;
+    }
+    GameObject *Player::game_object() const
+    {
+        return _game_object;
     }
     // }}}
     
