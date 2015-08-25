@@ -28,6 +28,7 @@ namespace cotsb
     {
         target.setView(_camera);
 
+        states.transform.scale(32, 32);
         _map_renderer.draw(target, states);
     }
     void GameWorld::update(float dt)

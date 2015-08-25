@@ -39,10 +39,9 @@ namespace cotsb
         states.transform *= getTransform();
 
         sf::RectangleShape shape;
-        shape.setSize(sf::Vector2f(32, 32));
+        shape.setSize(sf::Vector2f(1, 1));
         shape.setFillColor(_colour);
         shape.setOutlineColor(sf::Color::Black);
-        shape.setPosition(-16, -16);
         target.draw(shape, states);
     }
     // }}}

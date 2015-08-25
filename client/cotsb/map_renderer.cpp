@@ -27,7 +27,6 @@ namespace cotsb
             return;
         }
 
-        auto size = 32.0f;
         // Do draw
         for (auto y = 0u; y < _map->height(); y++)
         {
@@ -52,8 +51,8 @@ namespace cotsb
                 {
                     line.setFillColor(sf::Color::Magenta);
                 }
-                line.setSize(sf::Vector2f(size, size));
-                line.setPosition(x * size, y * size);
+                line.setSize(sf::Vector2f(1, 1));
+                line.setPosition(x, y);
                 target.draw(line, states);
             }
         }

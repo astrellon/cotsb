@@ -151,7 +151,7 @@ namespace cotsb
 
             auto player_game_object = GameObjectManager::create_game_object<GameObject>();
             player->game_object(player_game_object);
-            player_game_object->setPosition(1.5, 2.5);
+            player_game_object->setPosition(1.0, 2.0);
             // Starter map
             player_game_object->current_map(MapManager::map("map1"));
 
