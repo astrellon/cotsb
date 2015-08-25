@@ -4,10 +4,20 @@ namespace cotsb
 {
     // Player {{{
     Player::Player() :
-        GameObject(),
+        _id(0u),
         _loaded(false),
+        _game_object(nullptr)
     {
 
+    }
+
+    void Player::id(uint32_t value)
+    {
+        _id = value;
+    }
+    uint32_t Player::id() const
+    {
+        return _id;
     }
 
     void Player::player_name(const std::string &name)
@@ -26,6 +36,15 @@ namespace cotsb
     bool Player::loaded() const
     {
         return _loaded;
+    }
+
+    void Player::game_object(GameObject *value)
+    {
+        _game_object = value;
+    }
+    GameObject *Player::game_object() const
+    {
+        return _game_object;
     }
     // }}}
 }

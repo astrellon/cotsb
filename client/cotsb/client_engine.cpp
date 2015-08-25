@@ -12,6 +12,7 @@
 #include "map.h"
 #include "map_tcp_deserialiser.h"
 #include "player_tcp_deserialiser.h"
+#include "game_object_tcp_deserialiser.h"
 #include <cotsb/commands.h>
 
 namespace cotsb
@@ -278,6 +279,10 @@ namespace cotsb
 
                 logger % "Info" << "Player left: " << player_name << endl;
             }
+            else if (response.command() == Commands::NewGameObject)
+            {
+                GameObjectTcpDeserialiser::deserialise(response.data());
+            }
             else
             {
                 logger % "Error" << "Unknown command " << response.command() << endl;
@@ -303,7 +308,7 @@ namespace cotsb
         logger % "Info" << "Joined game!" << endl;
         PlayerTcpDeserialiser::deserialise(s_player, response.data());
 
-        MapManager::on_map_load(s_player.current_map()->name(), [](Map *map)
+        MapManager::on_map_load(s_player.game_object()->current_map()->name(), [](Map *map)
         {
             logger % "Info" << "Got starting map: " << map->name() << endl;
             s_game_world = new GameWorld();

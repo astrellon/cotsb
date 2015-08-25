@@ -80,24 +80,25 @@ namespace cotsb
             }
         }
 
-        for (auto &pair : _to_send)
+        for (auto &packet : _to_send)
         {
-            pair.first->send(*pair.second.get());
-        }
-        _to_send.clear();
-        
-        for (auto &pair : _to_broadcast)
-        {
-            for (auto &client : _clients)
+            if (packet.is_broadcast)
             {
-                if (client.get() == pair.first)
+                for (auto &client : _clients)
                 {
-                    continue;
+                    if (client.get() == packet.socket)
+                    {
+                        continue;
+                    }
+                    client->send(*packet.data.get());
                 }
-                client->send(*pair.second.get());
+            }
+            else
+            {
+                packet.socket->send(*packet.data.get());
             }
         }
-        _to_broadcast.clear();
+        _to_send.clear();
     }
 
     void Server::on_connect(SocketHandler handler)
@@ -120,17 +121,17 @@ namespace cotsb
 
     sf::Packet &Server::broadcast(Commands::Type command, sf::TcpSocket *skip_socket)
     {
-        auto new_packet = new sf::Packet();
-        *new_packet << static_cast<uint16_t>(command);
-        _to_broadcast.push_back(SocketDataPair(skip_socket, UniquePacket(new_packet)));
-        return *new_packet;
+        SendPacket new_packet(command, skip_socket, true);
+        auto packet_data = new_packet.data.get();
+        _to_send.push_back(std::move(new_packet));
+        return *packet_data;
     }
             
     sf::Packet &Server::send(Commands::Type command, sf::TcpSocket *socket)
     {
-        auto new_packet = new sf::Packet();
-        *new_packet << static_cast<uint16_t>(command);
-        _to_send.push_back(SocketDataPair(socket, UniquePacket(new_packet)));
-        return *new_packet;
+        SendPacket new_packet(command, socket, false);
+        auto packet_data = new_packet.data.get();
+        _to_send.push_back(std::move(new_packet));
+        return *packet_data;
     }
 }

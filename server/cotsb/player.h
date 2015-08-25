@@ -17,7 +17,9 @@ namespace cotsb
     class Player
     {
         public:
-            Player();
+            Player(uint32_t id);
+
+            uint32_t id() const;
 
             void player_name(const std::string &name);
             const std::string &player_name() const;
@@ -29,6 +31,7 @@ namespace cotsb
             GameObject *game_object() const;
 
         private:
+            uint32_t _id;
             std::string _player_name;
             sf::Color _colour;
             GameObject *_game_object;
@@ -40,13 +43,19 @@ namespace cotsb
     {
         public:
             typedef std::map<const sf::TcpSocket *, std::unique_ptr<Player> > PlayerMap;
+            typedef std::map<uint32_t, Player *> PlayerIdMap;
+
             static const PlayerMap &players();
+            static const PlayerIdMap &player_ids();
 
             static Player *create_player(const sf::TcpSocket *socket);
             static Player *player(const sf::TcpSocket *socket);
+            static Player *player(uint32_t id);
 
         private:
             static PlayerMap s_players;
+            static PlayerIdMap s_player_ids;
+            static uint32_t s_player_counter;
 
     };
     // }}}

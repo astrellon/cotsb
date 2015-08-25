@@ -43,6 +43,27 @@ namespace cotsb
         private:
             uint16_t _port;
 
+            class SendPacket 
+            {
+                public:
+                    Commands::Type command;
+                    sf::TcpSocket *socket;
+                    bool is_broadcast;
+                    UniquePacket data;
+
+                    inline SendPacket(Commands::Type command, sf::TcpSocket *socket, 
+                            bool is_broadcast) :
+                        command(command),
+                        socket(socket),
+                        is_broadcast(is_broadcast),
+                        data(UniquePacket(new sf::Packet()))
+                    {
+                        *data << static_cast<uint16_t>(command);
+                    }
+            };
+
+            typedef std::vector<SendPacket> PacketList;
+
             std::vector< UniqueSocket > _clients;
             sf::SocketSelector _client_selector;
             sf::TcpListener _listener;
@@ -51,8 +72,7 @@ namespace cotsb
             UniqueSocket _pending_socket;
             UniquePacket _pending_packet;
             
-            SocketDataList _to_send;
-            SocketDataList _to_broadcast;
+            PacketList _to_send;
 
             SocketHandler _on_connect;
             SocketHandler _on_disconnect;

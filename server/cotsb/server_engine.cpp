@@ -6,6 +6,8 @@
 #include "map.h"
 #include "map_tcp_serialiser.h"
 #include "player_tcp_serialiser.h"
+#include "game_object_tcp_serialiser.h"
+#include "game_object.h"
 
 namespace cotsb
 {
@@ -137,18 +139,27 @@ namespace cotsb
 
             auto player = PlayerManager::create_player(socket);
             player->player_name(player_name);
-            //player->location(sf::Vector2f(1.5, 2.5));
             player->colour(sf::Color::Red);
+
+            auto player_game_object = GameObjectManager::create_game_object<GameObject>();
+            player->game_object(player_game_object);
+            player_game_object->setPosition(1.5, 2.5);
             // Starter map
-            //player->current_map(MapManager::map("map1"));
+            player_game_object->current_map(MapManager::map("map1"));
 
             logger % "Network" << "Player joined " << player_name << endl;
-
+            
+            // Tell everyone except the original player about the new player
+            auto &broadcast_player = s_server.broadcast(Commands::NewPlayer, socket);
+            PlayerTcpSerialiser::serialise(*player, broadcast_player);
+            
+            // Tell everyone about the new game object for the player
+            auto &broadcast_game_obj = s_server.broadcast(Commands::NewGameObject);
+            GameObjectTcpSerialiser::serialise(player_game_object, broadcast_game_obj);
+            
+            // Respond directly to the player about the player info.
             auto &response = s_server.send(Commands::JoinedGame, socket);
             PlayerTcpSerialiser::serialise(*player, response);
-
-            auto &broadcast = s_server.broadcast(Commands::NewPlayer, socket);
-            broadcast << player_name;
         }
     }
 

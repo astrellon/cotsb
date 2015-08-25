@@ -20,6 +20,8 @@ namespace cotsb
             void current_map(Map *map);
             Map *current_map() const;
 
+            virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
         private:
             uint32_t _id;
             Map *_current_map;
@@ -34,6 +36,14 @@ namespace cotsb
 
             typedef std::map<uint32_t, std::unique_ptr<GameObject> > GameObjectMap;
             static const GameObjectMap &game_objects();
+            
+            template <class T>
+            static T *create_game_object(uint32_t id)
+            {
+                auto new_obj = new T(id);
+                s_game_objects[id] = std::unique_ptr<GameObject>(new_obj);
+                return new_obj;
+            }
 
         private:
             static GameObjectMap s_game_objects;

@@ -8,6 +8,7 @@ namespace cotsb
         { Commands::Unknown, "Unknown" },
         { Commands::Message, "Message" },
         
+        // Server -> client
         { Commands::ChangeMap, "ChangeMap" },
         { Commands::NewMap, "NewMap" },
         { Commands::NewPlayer, "NewPlayer" },
@@ -17,6 +18,7 @@ namespace cotsb
         { Commands::UpdateGameObject, "UpdateGameObject" },
         { Commands::RemoveGameObject, "RemoveGameObject" },
         
+        // Client -> server
         { Commands::LoadMap, "LoadMap" },
         { Commands::JoinGame, "JoinGame" },
     };

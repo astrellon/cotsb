@@ -7,18 +7,16 @@ namespace cotsb
     bool PlayerTcpDeserialiser::deserialise(Player &player, sf::Packet &input)
     {
         std::string player_name;
-        std::string map_name;
-        sf::Vector2f position;
         uint32_t colour_uint;
+        uint32_t game_object_id;
 
-        input >> player_name >> map_name >> position.x >> position.y >> colour_uint;
+        input >> player_name >> colour_uint >> game_object_id;
         player.player_name(player_name);
 
         logger % "Info" << "Player info: " << player_name << ", " << 
-            map_name << ", " << position.x << ", " << position.y << ", " << 
-            colour_uint << endl;
+            colour_uint << ", " << game_object_id << endl;
 
-        player.current_map(MapManager::map(map_name));
+        player.game_object(GameObjectManager::game_object(game_object_id));
 
         return true;
     }

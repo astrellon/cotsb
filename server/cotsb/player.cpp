@@ -5,10 +5,16 @@
 namespace cotsb
 {
     // Player {{{
-    Player::Player() :
+    Player::Player(uint32_t id) :
+        _id(id),
         _game_object(nullptr)
     {
 
+    }
+
+    uint32_t Player::id() const
+    {
+        return _id;
     }
 
     void Player::player_name(const std::string &name)
@@ -19,26 +25,6 @@ namespace cotsb
     {
         return _player_name;
     }
-
-    /*
-    void Player::current_map(Map *map)
-    {
-        _current_map = map;
-    }
-    Map *Player::current_map() const
-    {
-        return _current_map;
-    }
-
-    void Player::location(sf::Vector2f location)
-    {
-        _location = location;
-    }
-    sf::Vector2f Player::location() const
-    {
-        return _location;
-    }
-    */
 
     void Player::colour(sf::Color colour)
     {
@@ -61,6 +47,8 @@ namespace cotsb
     
     // PlayerManager {{{
     PlayerManager::PlayerMap PlayerManager::s_players; 
+    PlayerManager::PlayerIdMap PlayerManager::s_player_ids;
+    uint32_t PlayerManager::s_player_counter = 1u;
 
     const PlayerManager::PlayerMap &PlayerManager::players()
     {
@@ -72,8 +60,10 @@ namespace cotsb
         auto find = s_players.find(socket);
         if (find == s_players.end())
         {
-            auto player = new Player();
+            auto id = s_player_counter++;
+            auto player = new Player(id);
             s_players[socket] = std::unique_ptr<Player>(player);
+            s_player_ids[id] = player;
             return player;
         }
 
@@ -89,6 +79,15 @@ namespace cotsb
             return nullptr;
         }
         return find->second.get();
+    }
+    Player *PlayerManager::player(uint32_t id)
+    {
+        auto find = s_player_ids.find(id);
+        if (find == s_player_ids.end())
+        {
+            return nullptr;
+        }
+        return find->second;
     }
     // }}}
 }

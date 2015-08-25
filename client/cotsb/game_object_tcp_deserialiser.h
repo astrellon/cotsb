@@ -9,7 +9,6 @@ namespace cotsb
     class GameObjectTcpDeserialiser
     {
         public:
-            static bool deserialise(GameObject &obj, sf::Packet &input);
             static GameObject *deserialise(sf::Packet &input);
     };
 }

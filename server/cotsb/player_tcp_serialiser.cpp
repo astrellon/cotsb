@@ -11,7 +11,6 @@ namespace cotsb
     {
         output << player.player_name();
         output << utils::colour_to_uint(player.colour());
-
-        GameObjectTcpSerialiser::serialise(player.game_object(), output);
+        output << player.game_object()->id();
     }
 }

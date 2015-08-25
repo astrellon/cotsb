@@ -36,7 +36,7 @@ namespace cotsb
             static const GameObjectMap &game_objects();
 
             template <class T>
-            T *create_game_object()
+            static T *create_game_object()
             {
                 auto id = s_game_object_counter++;
                 auto new_obj = new T(id);
