@@ -5,6 +5,7 @@ namespace cotsb
     // GameObject {{{
     GameObject::GameObject(uint32_t id) :
         _id(id),
+        _colour(255u, 0, 0),
         _current_map(nullptr)
     {
 
@@ -24,13 +25,22 @@ namespace cotsb
         return _current_map;
     }
 
+    void GameObject::colour(const sf::Color &colour)
+    {
+        _colour = colour;
+    }
+    sf::Color GameObject::colour() const
+    {
+        return _colour;
+    }
+
     void GameObject::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         states.transform *= getTransform();
 
         sf::RectangleShape shape;
         shape.setSize(sf::Vector2f(32, 32));
-        shape.setFillColor(sf::Color::Red);
+        shape.setFillColor(_colour);
         shape.setOutlineColor(sf::Color::Black);
         shape.setPosition(-16, -16);
         target.draw(shape, states);

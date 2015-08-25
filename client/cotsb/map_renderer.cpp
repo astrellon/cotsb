@@ -1,6 +1,7 @@
 #include "map_renderer.h"
 
 #include "map.h"
+#include "game_object.h"
 
 namespace cotsb
 {
@@ -55,6 +56,12 @@ namespace cotsb
                 line.setPosition(x * size, y * size);
                 target.draw(line, states);
             }
+        }
+
+        const auto game_objects = _map->game_objects();
+        for (auto obj : game_objects)
+        {
+            target.draw(*obj, states);
         }
     }
 }

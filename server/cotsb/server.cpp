@@ -3,6 +3,8 @@
 #include <cotsb/logging.h>
 #include <cotsb/commands.h>
 
+#include <exception>
+
 namespace cotsb
 {
     Server::Server(uint16_t port) :
@@ -22,7 +24,12 @@ namespace cotsb
 
     void Server::start_server()
     {
-        _listener.listen(_port);
+        auto status = _listener.listen(_port);
+        if (status != sf::TcpSocket::Done)
+        {
+            logger % "Error" << "Bind error: " << status << endl;
+            throw std::runtime_error("Failed to bind to listener port");
+        }
         _client_selector.add(_listener);
         _listener.setBlocking(false);
 

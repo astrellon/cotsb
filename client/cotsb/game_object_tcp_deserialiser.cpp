@@ -17,7 +17,9 @@ namespace cotsb
         logger % "Info" << "New game object: " << id << ", in map " << map_name << endl;
 
         auto game_obj = GameObjectManager::create_game_object<GameObject>(id);
-        game_obj->current_map(MapManager::map(map_name));
+        auto map = MapManager::map(map_name);
+        map->add_game_object(game_obj);
+        game_obj->current_map(map);
         utils::deserialise_transformable(*game_obj, input);
 
         return game_obj;

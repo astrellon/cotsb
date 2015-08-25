@@ -11,6 +11,8 @@
 
 namespace cotsb
 {
+    class GameObject;
+
     // Map {{{
     class Map
     {
@@ -41,6 +43,12 @@ namespace cotsb
             const TileList &data() const;
             TileList &data();
 
+            typedef std::vector<GameObject *> GameObjectList;
+            const GameObjectList &game_objects() const;
+
+            void add_game_object(GameObject *obj);
+            void remove_game_object(GameObject *obj);
+
             void update(float dt);
 
         private:
@@ -50,6 +58,7 @@ namespace cotsb
             Status _status;
 
             TileList _data;
+            GameObjectList _game_objects;
     };
     // }}}
     

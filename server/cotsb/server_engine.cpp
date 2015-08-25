@@ -24,7 +24,15 @@ namespace cotsb
 
         s_running = true;
         s_server.port(8888);
-        s_server.start_server();
+
+        try
+        {
+            s_server.start_server();
+        }
+        catch (...)
+        {
+            return false;
+        }
 
         MapManager::init();
 
@@ -139,7 +147,7 @@ namespace cotsb
 
             auto player = PlayerManager::create_player(socket);
             player->player_name(player_name);
-            player->colour(sf::Color::Red);
+            player->colour(sf::Color::Cyan);
 
             auto player_game_object = GameObjectManager::create_game_object<GameObject>();
             player->game_object(player_game_object);

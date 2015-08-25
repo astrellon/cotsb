@@ -20,10 +20,14 @@ namespace cotsb
             void current_map(Map *map);
             Map *current_map() const;
 
+            void colour(const sf::Color &colour);
+            sf::Color colour() const;
+
             virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
         private:
             uint32_t _id;
+            sf::Color _colour;
             Map *_current_map;
     };
     // }}}

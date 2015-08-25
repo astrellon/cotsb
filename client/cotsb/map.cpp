@@ -1,6 +1,7 @@
 #include "map.h"
 
 #include "client_engine.h"
+#include "game_object.h"
 #include <cotsb/commands.h>
 
 #include <exception>
@@ -81,6 +82,26 @@ namespace cotsb
     const Map::TileList &Map::data() const
     {
         return _data;
+    }
+    const Map::GameObjectList &Map::game_objects() const
+    {
+        return _game_objects;
+    }
+
+    void Map::add_game_object(GameObject *obj)
+    {
+        _game_objects.push_back(obj);
+    }
+    void Map::remove_game_object(GameObject *obj)
+    {
+        for (auto iter = _game_objects.begin(); iter != _game_objects.end(); ++iter)
+        {
+            if (*iter == obj)
+            {
+                _game_objects.erase(iter);
+                break;
+            }
+        }
     }
 
     void Map::update(float dt)
