@@ -8,10 +8,11 @@
 
 namespace cotsb
 {
+    typedef uint8_t CommandType;
     class Commands
     {
         public:
-            enum Type : uint16_t
+            enum Type : CommandType
             {
                 // Common
                 Unknown,

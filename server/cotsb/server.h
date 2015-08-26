@@ -58,7 +58,7 @@ namespace cotsb
                         is_broadcast(is_broadcast),
                         data(UniquePacket(new sf::Packet()))
                     {
-                        *data << static_cast<uint16_t>(command);
+                        *data << static_cast<CommandType>(command);
                     }
             };
 

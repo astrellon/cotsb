@@ -29,7 +29,7 @@ namespace cotsb
         if (find == s_names.cend())
         {
             std::stringstream ss;
-            ss << static_cast<uint16_t>(type);
+            ss << static_cast<CommandType>(type);
             return ss.str();
         }
         return find->second;

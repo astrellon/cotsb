@@ -10,7 +10,7 @@ namespace cotsb
         _command(Commands::Unknown)
     {
         auto &input = *data;
-        uint16_t command_temp;
+        CommandType command_temp;
         input >> command_temp;
         _command = static_cast<Commands::Type>(command_temp);
     }
@@ -100,7 +100,7 @@ namespace cotsb
     sf::Packet &Client::send(Commands::Type command)
     {
         auto new_request = new sf::Packet();
-        (*new_request) << static_cast<uint16_t>(command);
+        (*new_request) << static_cast<CommandType>(command);
         _to_send.push_back(std::unique_ptr<sf::Packet>(new_request));
         return *new_request;
     }

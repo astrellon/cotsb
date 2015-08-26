@@ -99,7 +99,7 @@ namespace cotsb
             for (const auto &iter : s_server.new_data())
             {
                 auto &packet = *iter.second;
-                uint16_t command_temp;
+                CommandType command_temp;
                 packet >> command_temp;
 
                 process_command(iter.first, static_cast<Commands::Type>(command_temp), packet); 
