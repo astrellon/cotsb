@@ -90,7 +90,7 @@ namespace cotsb
 
     void ServerEngine::server_loop()
     {
-        sf::Time sleep_time = sf::milliseconds(1);
+        sf::Time sleep_time = sf::milliseconds(16);
         while (s_running)
         {
             s_server.check_network();
@@ -195,8 +195,8 @@ namespace cotsb
             // Player was disconnected before a player structure was created.
             return;
         }
-        auto &goodbye = s_server.broadcast(Commands::PlayerLeft);
-        goodbye << player->player_name();
+
+        PlayerManager::remove_player(socket);
     }
 
     void ServerEngine::update(float dt)

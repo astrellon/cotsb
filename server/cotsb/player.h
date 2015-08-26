@@ -51,6 +51,7 @@ namespace cotsb
             static Player *create_player(const sf::TcpSocket *socket);
             static Player *player(const sf::TcpSocket *socket);
             static Player *player(uint32_t id);
+            static void remove_player(const sf::TcpSocket *socket);
 
         private:
             static PlayerMap s_players;

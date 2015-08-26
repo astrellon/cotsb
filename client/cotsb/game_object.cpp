@@ -1,5 +1,7 @@
 #include "game_object.h"
 
+#include "map.h"
+
 namespace cotsb
 {
     // GameObject {{{
@@ -62,6 +64,19 @@ namespace cotsb
     const GameObjectManager::GameObjectMap &GameObjectManager::game_objects()
     {
         return s_game_objects;
+    }
+
+    void GameObjectManager::remove_game_object(GameObject *obj)
+    {
+        auto find = s_game_objects.find(obj->id());
+        if (find != s_game_objects.end())
+        {
+            if (obj->current_map() != nullptr)
+            {
+                obj->current_map()->remove_game_object(obj);
+            }
+            s_game_objects.erase(find);
+        }
     }
     // }}}
 }

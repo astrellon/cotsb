@@ -86,6 +86,22 @@ namespace cotsb
         return s_game_objects;
     }
 
+    void GameObjectManager::remove_game_object(GameObject *obj)
+    {
+        auto find = s_game_objects.find(obj->id());
+        if (find != s_game_objects.end())
+        {
+            if (obj->current_map() != nullptr)
+            {
+                obj->current_map()->remove_game_object(obj);
+            }
+            auto &packet = ServerEngine::broadcast(Commands::RemoveGameObject);
+            packet << obj->id();
+
+            s_game_objects.erase(find);
+        }
+    }
+
     void GameObjectManager::check_for_updates()
     {
         for (auto &pair : s_game_objects)

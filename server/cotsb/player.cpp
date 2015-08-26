@@ -1,5 +1,8 @@
 #include "player.h"
 
+#include "server_engine.h"
+#include <cotsb/commands.h>
+
 #include <exception>
 
 namespace cotsb
@@ -88,6 +91,19 @@ namespace cotsb
             return nullptr;
         }
         return find->second;
+    }
+
+    void PlayerManager::remove_player(const sf::TcpSocket *socket)
+    {
+        auto find = s_players.find(socket);
+        if (find != s_players.end())
+        {
+            auto &goodbye = ServerEngine::broadcast(Commands::PlayerLeft);
+            goodbye << find->second->player_name();
+
+            GameObjectManager::remove_game_object(find->second->game_object());
+            s_players.erase(find);
+        }
     }
     // }}}
 }

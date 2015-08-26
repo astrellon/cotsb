@@ -48,6 +48,7 @@ namespace cotsb
                 s_game_objects[id] = std::unique_ptr<GameObject>(new_obj);
                 return new_obj;
             }
+            static void remove_game_object(GameObject *obj);
 
         private:
             static GameObjectMap s_game_objects;
