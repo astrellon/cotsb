@@ -20,8 +20,19 @@ namespace cotsb
             void current_map(Map *map);
             Map *current_map() const;
 
+            void move(float x, float y);
+            void move(const sf::Vector2f &dir);
+            void setPosition(float x, float y);
+            void setPosition(const sf::Vector2f &location);
+
+            bool location_moved() const;
+            void clear_location_moved();
+
+            virtual void update(float dt);
+
         private:
             uint32_t _id;
+            bool _location_moved;
             Map *_current_map;
     };
     // }}}
@@ -43,6 +54,8 @@ namespace cotsb
                 s_game_objects[id] = std::unique_ptr<GameObject>(new_obj);
                 return new_obj;
             }
+
+            static void check_for_updates();
 
         private:
             static GameObjectMap s_game_objects;

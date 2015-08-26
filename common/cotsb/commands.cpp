@@ -17,6 +17,7 @@ namespace cotsb
         { Commands::NewGameObject, "NewGameObject" },
         { Commands::UpdateGameObject, "UpdateGameObject" },
         { Commands::RemoveGameObject, "RemoveGameObject" },
+        { Commands::MoveGameObject, "MoveGameObject" },
         
         // Client -> server
         { Commands::LoadMap, "LoadMap" },

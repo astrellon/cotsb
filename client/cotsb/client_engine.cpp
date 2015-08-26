@@ -283,6 +283,21 @@ namespace cotsb
             {
                 GameObjectTcpDeserialiser::deserialise(response.data());
             }
+            else if (response.command() == Commands::MoveGameObject)
+            {
+                uint32_t id;
+                sf::Vector2f pos;
+                response.data() >> id >> pos.x >> pos.y;
+
+                auto obj = GameObjectManager::game_object(id);
+                if (obj == nullptr)
+                {
+                    logger % "Error" << "Unable to move unknown game object " << id << endl;
+                    continue;
+                }
+
+                obj->setPosition(pos);
+            }
             else
             {
                 logger % "Error" << "Unknown command " << response.command() << endl;

@@ -13,7 +13,6 @@ namespace cotsb
 {
     bool ServerEngine::s_running = false;
     Server ServerEngine::s_server;
-    PlayerManager ServerEngine::s_players;
 
     bool ServerEngine::init()
     {
@@ -106,8 +105,18 @@ namespace cotsb
             }
             s_server.clear_new_data();
 
+            update(sleep_time.asSeconds());
             sf::sleep(sleep_time);
         }
+    }
+            
+    sf::Packet &ServerEngine::send(Commands::Type command, sf::TcpSocket *socket)
+    {
+        return s_server.send(command, socket);
+    }
+    sf::Packet &ServerEngine::broadcast(Commands::Type command, sf::TcpSocket *skip_socket)
+    {
+        return s_server.broadcast(command, skip_socket);
     }
 
     void ServerEngine::process_command(sf::TcpSocket *socket, Commands::Type command, sf::Packet &packet)
@@ -153,7 +162,9 @@ namespace cotsb
             player->game_object(player_game_object);
             player_game_object->setPosition(1.0, 2.0);
             // Starter map
-            player_game_object->current_map(MapManager::map("map1"));
+            auto map = MapManager::map("map1");
+            player_game_object->current_map(map);
+            map->add_game_object(player_game_object);
 
             logger % "Network" << "Player joined " << player_name << endl;
             
@@ -186,5 +197,11 @@ namespace cotsb
         }
         auto &goodbye = s_server.broadcast(Commands::PlayerLeft);
         goodbye << player->player_name();
+    }
+
+    void ServerEngine::update(float dt)
+    {
+        MapManager::update(dt);
+        GameObjectManager::check_for_updates();
     }
 }

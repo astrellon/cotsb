@@ -27,6 +27,7 @@ namespace cotsb
                 NewGameObject,
                 UpdateGameObject,
                 RemoveGameObject,
+                MoveGameObject,
 
                 // Client -> server
                 LoadMap,

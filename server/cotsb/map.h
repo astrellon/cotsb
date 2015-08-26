@@ -8,6 +8,8 @@
 
 namespace cotsb
 {
+    class GameObject;
+
     // Map {{{
     class Map
     {
@@ -24,12 +26,21 @@ namespace cotsb
             typedef std::vector<std::string> TileList;
             const TileList &data() const;
 
+            typedef std::vector<GameObject *> GameObjectList;
+            const GameObjectList &game_objects() const;
+
+            void add_game_object(GameObject *obj);
+            void remove_game_object(GameObject *obj);
+
+            void update(float dt);
+
         private:
             std::string _name;
             uint32_t _width;
             uint32_t _height;
 
             TileList _data;
+            GameObjectList _game_objects;
     };
     // }}}
 
@@ -43,6 +54,8 @@ namespace cotsb
             static const Maps &maps();
             static Map *map(const std::string &name);
             static void map(Map *map);
+
+            static void update(float dt);
 
         private:
             static Maps s_maps;

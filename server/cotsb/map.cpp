@@ -1,5 +1,7 @@
 #include "map.h"
 
+#include "game_object.h"
+
 namespace cotsb
 {
     // Map {{{
@@ -45,6 +47,30 @@ namespace cotsb
     {
         return _data;
     }
+
+    void Map::add_game_object(GameObject *obj)
+    {
+        _game_objects.push_back(obj);
+    }
+    void Map::remove_game_object(GameObject *obj)
+    {
+        for (auto iter = _game_objects.begin(); iter != _game_objects.end(); ++iter)
+        {
+            if (*iter == obj)
+            {
+                _game_objects.erase(iter);
+                break;
+            }
+        }
+    }
+
+    void Map::update(float dt)
+    {
+        for (auto &obj : _game_objects)
+        {
+            obj->update(dt);
+        }
+    }
     // }}}
     
     // MapManager {{{
@@ -71,6 +97,14 @@ namespace cotsb
     void MapManager::map(Map *map)
     {
         s_maps[map->name()] = std::unique_ptr<Map>(map);
+    }
+
+    void MapManager::update(float dt)
+    {
+        for (auto &map : s_maps)
+        {
+            map.second->update(dt);
+        }
     }
     // }}}
 }
