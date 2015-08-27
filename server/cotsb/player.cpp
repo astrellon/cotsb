@@ -8,8 +8,9 @@
 namespace cotsb
 {
     // Player {{{
-    Player::Player(uint32_t id) :
+    Player::Player(uint32_t id, sf::TcpSocket *socket) :
         _id(id),
+        _socket(socket),
         _game_object(nullptr)
     {
 
@@ -18,6 +19,10 @@ namespace cotsb
     uint32_t Player::id() const
     {
         return _id;
+    }
+    sf::TcpSocket *Player::socket() const
+    {
+        return _socket;
     }
 
     void Player::player_name(const std::string &name)
@@ -46,6 +51,15 @@ namespace cotsb
     {
         return _game_object;
     }
+
+    bool Player::has_seen_game_obj(uint32_t id) const
+    {
+        return _seen_game_objs.find(id) != _seen_game_objs.cend();
+    }
+    void Player::add_seen_game_obj(uint32_t id)
+    {
+        _seen_game_objs.insert(id);
+    }
     // }}}
     
     // PlayerManager {{{
@@ -58,13 +72,13 @@ namespace cotsb
         return s_players;
     }
 
-    Player *PlayerManager::create_player(const sf::TcpSocket *socket)
+    Player *PlayerManager::create_player(sf::TcpSocket *socket)
     {
         auto find = s_players.find(socket);
         if (find == s_players.end())
         {
             auto id = s_player_counter++;
-            auto player = new Player(id);
+            auto player = new Player(id, socket);
             s_players[socket] = std::unique_ptr<Player>(player);
             s_player_ids[id] = player;
             return player;
@@ -74,7 +88,7 @@ namespace cotsb
         throw std::runtime_error("Player already exists for socket");
     }
 
-    Player *PlayerManager::player(const sf::TcpSocket *socket)
+    Player *PlayerManager::player(sf::TcpSocket *socket)
     {
         auto find = s_players.find(socket);
         if (find == s_players.end())
@@ -93,7 +107,7 @@ namespace cotsb
         return find->second;
     }
 
-    void PlayerManager::remove_player(const sf::TcpSocket *socket)
+    void PlayerManager::remove_player(sf::TcpSocket *socket)
     {
         auto find = s_players.find(socket);
         if (find != s_players.end())

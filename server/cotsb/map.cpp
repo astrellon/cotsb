@@ -48,6 +48,11 @@ namespace cotsb
         return _data;
     }
 
+    const Map::GameObjectList &Map::game_objects() const
+    {
+        return _game_objects;
+    }
+
     void Map::add_game_object(GameObject *obj)
     {
         _game_objects.push_back(obj);

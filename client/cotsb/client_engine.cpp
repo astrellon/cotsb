@@ -242,8 +242,10 @@ namespace cotsb
         for (auto &iter : s_client.new_data())
         {
             auto &response = *iter.get();
+            /*
             logger % "Network" << "Has " << response.data().getDataSize() << " bytes for " 
                 << Commands::get_name(response.command()) << " commands" << endl;
+                */
 
             if (response.command() == Commands::NewMap)
             {
@@ -281,7 +283,8 @@ namespace cotsb
             }
             else if (response.command() == Commands::NewGameObject)
             {
-                GameObjectTcpDeserialiser::deserialise(response.data());
+                auto new_obj = GameObjectTcpDeserialiser::deserialise(response.data());
+                logger % "Info" << "New game object: " << new_obj->id() << endl;
             }
             else if (response.command() == Commands::MoveGameObject)
             {
@@ -297,6 +300,13 @@ namespace cotsb
                 }
 
                 obj->setPosition(pos);
+            }
+            else if (response.command() == Commands::RemoveGameObject)
+            {
+                uint32_t id;
+                response.data() >> id;
+
+                GameObjectManager::remove_game_object(id);
             }
             else
             {

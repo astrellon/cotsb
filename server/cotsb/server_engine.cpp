@@ -139,6 +139,12 @@ namespace cotsb
             {
                 response << true;
                 MapTcpSerialiser::serialise(*found_map, response);
+
+                auto player = PlayerManager::player(socket);
+                for (auto &obj : found_map->game_objects())
+                {
+                    send_game_obj(obj, player);
+                }
             }
         }
         else if (command == Commands::Message)
@@ -173,12 +179,32 @@ namespace cotsb
             PlayerTcpSerialiser::serialise(*player, broadcast_player);
             
             // Tell everyone about the new game object for the player
-            auto &broadcast_game_obj = s_server.broadcast(Commands::NewGameObject);
-            GameObjectTcpSerialiser::serialise(player_game_object, broadcast_game_obj);
+            //auto &broadcast_game_obj = s_server.broadcast(Commands::NewGameObject);
+            //GameObjectTcpSerialiser::serialise(player_game_object, broadcast_game_obj);
+            broadcast_game_obj(player_game_object);
             
             // Respond directly to the player about the player info.
             auto &response = s_server.send(Commands::JoinedGame, socket);
             PlayerTcpSerialiser::serialise(*player, response);
+        }
+    }
+
+    void ServerEngine::broadcast_game_obj(GameObject *obj)
+    {
+        for (auto &player : PlayerManager::players())
+        {
+            send_game_obj(obj, player.second.get());
+        }
+    }
+    void ServerEngine::send_game_obj(GameObject *obj, Player *player)
+    {
+        auto id = obj->id();
+        if (!player->has_seen_game_obj(id))
+        {
+            player->add_seen_game_obj(id);
+
+            auto &send_game_obj = s_server.send(Commands::NewGameObject, player->socket());
+            GameObjectTcpSerialiser::serialise(obj, send_game_obj);
         }
     }
 

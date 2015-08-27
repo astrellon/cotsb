@@ -5,6 +5,8 @@
 
 #include <cotsb/commands.h>
 
+#include <cmath>
+
 namespace cotsb
 {
     // GameObject {{{
@@ -12,7 +14,8 @@ namespace cotsb
         sf::Transformable(),
         _id(id),
         _location_moved(false),
-        _current_map(nullptr)
+        _current_map(nullptr),
+        _angle(0.0f)
     {
 
     }
@@ -63,7 +66,9 @@ namespace cotsb
 
     void GameObject::update(float dt)
     {
-        move(1.0 * dt, 0);
+        _angle += dt;
+        sf::Vector2f dir(cos(_angle) * dt, sin(_angle) * dt);
+        move(dir);
     }
     // }}}
     

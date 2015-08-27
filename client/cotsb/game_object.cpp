@@ -78,5 +78,13 @@ namespace cotsb
             s_game_objects.erase(find);
         }
     }
+    void GameObjectManager::remove_game_object(uint32_t id)
+    {
+        auto obj = game_object(id);
+        if (obj != nullptr)
+        {
+            remove_game_object(obj);
+        }
+    }
     // }}}
 }

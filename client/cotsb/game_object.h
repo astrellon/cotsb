@@ -49,6 +49,7 @@ namespace cotsb
                 return new_obj;
             }
             static void remove_game_object(GameObject *obj);
+            static void remove_game_object(uint32_t id);
 
         private:
             static GameObjectMap s_game_objects;

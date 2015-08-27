@@ -34,6 +34,7 @@ namespace cotsb
             uint32_t _id;
             bool _location_moved;
             Map *_current_map;
+            float _angle;
     };
     // }}}
     
