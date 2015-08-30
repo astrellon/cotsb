@@ -9,6 +9,7 @@
 namespace cotsb
 {
     class GameObject;
+    class Player;
 
     // Map {{{
     class Map
@@ -29,8 +30,14 @@ namespace cotsb
             typedef std::vector<GameObject *> GameObjectList;
             const GameObjectList &game_objects() const;
 
+            typedef std::vector<Player *> PlayerList;
+            const PlayerList &players() const;
+
             void add_game_object(GameObject *obj);
             void remove_game_object(GameObject *obj);
+
+            void add_player(Player *player);
+            void remove_player(Player *player);
 
             void update(float dt);
 
@@ -41,6 +48,7 @@ namespace cotsb
 
             TileList _data;
             GameObjectList _game_objects;
+            PlayerList _players;
     };
     // }}}
 

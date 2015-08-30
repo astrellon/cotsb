@@ -52,6 +52,10 @@ namespace cotsb
     {
         return _game_objects;
     }
+    const Map::PlayerList &Map::players() const
+    {
+        return _players;
+    }
 
     void Map::add_game_object(GameObject *obj)
     {
@@ -64,6 +68,22 @@ namespace cotsb
             if (*iter == obj)
             {
                 _game_objects.erase(iter);
+                break;
+            }
+        }
+    }
+
+    void Map::add_player(Player *value)
+    {
+        _players.push_back(value);
+    }
+    void Map::remove_player(Player *value)
+    {
+        for (auto iter = _players.begin(); iter != _players.end(); ++iter)
+        {
+            if (*iter == value)
+            {
+                _players.erase(iter);
                 break;
             }
         }

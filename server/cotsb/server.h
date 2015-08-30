@@ -12,6 +12,8 @@
 
 #include <cotsb/commands.h>
 
+#include "packet.h"
+
 namespace cotsb
 {
     class Server
@@ -39,30 +41,12 @@ namespace cotsb
 
             sf::Packet &send(Commands::Type command, sf::TcpSocket *socket);
             sf::Packet &broadcast(Commands::Type command, sf::TcpSocket *skip_socket = nullptr);
+            sf::Packet &send_callback(Commands::Type command, Packet::PacketSendCallback callback);
 
         private:
             uint16_t _port;
 
-            class SendPacket 
-            {
-                public:
-                    Commands::Type command;
-                    sf::TcpSocket *socket;
-                    bool is_broadcast;
-                    UniquePacket data;
-
-                    inline SendPacket(Commands::Type command, sf::TcpSocket *socket, 
-                            bool is_broadcast) :
-                        command(command),
-                        socket(socket),
-                        is_broadcast(is_broadcast),
-                        data(UniquePacket(new sf::Packet()))
-                    {
-                        *data << static_cast<CommandType>(command);
-                    }
-            };
-
-            typedef std::vector<SendPacket> PacketList;
+            typedef std::vector<Packet> PacketList;
 
             std::vector< UniqueSocket > _clients;
             sf::SocketSelector _client_selector;

@@ -89,20 +89,24 @@ namespace cotsb
 
         for (auto &packet : _to_send)
         {
-            if (packet.is_broadcast)
+            if (packet.type() == Packet::Broadcast)
             {
                 for (auto &client : _clients)
                 {
-                    if (client.get() == packet.socket)
+                    if (client.get() == packet.socket())
                     {
                         continue;
                     }
-                    client->send(*packet.data.get());
+                    client->send(*packet.data());
                 }
+            }
+            else if (packet.type() == Packet::Callback)
+            {
+                packet.callback()(packet);
             }
             else
             {
-                packet.socket->send(*packet.data.get());
+                packet.socket()->send(*packet.data());
             }
         }
         _to_send.clear();
@@ -128,17 +132,19 @@ namespace cotsb
 
     sf::Packet &Server::broadcast(Commands::Type command, sf::TcpSocket *skip_socket)
     {
-        SendPacket new_packet(command, skip_socket, true);
-        auto packet_data = new_packet.data.get();
-        _to_send.push_back(std::move(new_packet));
-        return *packet_data;
+        _to_send.push_back(Packet(command, skip_socket, Packet::Broadcast));
+        return *_to_send.back().data();
     }
             
     sf::Packet &Server::send(Commands::Type command, sf::TcpSocket *socket)
     {
-        SendPacket new_packet(command, socket, false);
-        auto packet_data = new_packet.data.get();
-        _to_send.push_back(std::move(new_packet));
-        return *packet_data;
+        _to_send.push_back(Packet(command, socket, Packet::Single));
+        return *_to_send.back().data();
+    }
+
+    sf::Packet &Server::send_callback(Commands::Type command, Packet::PacketSendCallback callback)
+    {
+        _to_send.push_back(Packet(command, callback));
+        return *_to_send.back().data();
     }
 }

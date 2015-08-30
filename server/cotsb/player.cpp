@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include "map.h"
+
 #include "server_engine.h"
 #include <cotsb/commands.h>
 
@@ -112,10 +114,14 @@ namespace cotsb
         auto find = s_players.find(socket);
         if (find != s_players.end())
         {
+            auto player = find->second.get();
             auto &goodbye = ServerEngine::broadcast(Commands::PlayerLeft);
-            goodbye << find->second->player_name();
+            goodbye << player->player_name();
 
-            GameObjectManager::remove_game_object(find->second->game_object());
+            auto map = player->game_object()->current_map();
+            map->remove_player(player);
+
+            GameObjectManager::remove_game_object(player->game_object());
             s_players.erase(find);
         }
     }

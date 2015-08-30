@@ -114,6 +114,10 @@ namespace cotsb
     {
         return s_server.send(command, socket);
     }
+    sf::Packet &ServerEngine::send_callback(Commands::Type command, Packet::PacketSendCallback callback)
+    {
+        return s_server.send_callback(command, callback);
+    }
     sf::Packet &ServerEngine::broadcast(Commands::Type command, sf::TcpSocket *skip_socket)
     {
         return s_server.broadcast(command, skip_socket);
@@ -171,6 +175,7 @@ namespace cotsb
             auto map = MapManager::map("map1");
             player_game_object->current_map(map);
             map->add_game_object(player_game_object);
+            map->add_player(player);
 
             logger % "Network" << "Player joined " << player_name << endl;
             

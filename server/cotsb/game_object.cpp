@@ -114,7 +114,16 @@ namespace cotsb
             auto obj = pair.second.get();
             if (obj->location_moved())
             {
-                auto &move_packet = ServerEngine::broadcast(Commands::MoveGameObject);
+                auto map = obj->current_map();
+                auto &move_packet = ServerEngine::send_callback(Commands::MoveGameObject,
+                    [map] (Packet &packet)
+                    {
+                        for (auto &player : map->players())
+                        {
+                            player->socket()->send(*packet.data());
+                        }
+                    });
+
                 auto &loc = obj->getPosition();
                 move_packet << obj->id() << loc.x << loc.y;
 

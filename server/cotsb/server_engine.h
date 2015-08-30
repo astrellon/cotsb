@@ -21,6 +21,7 @@ namespace cotsb
             static void server_loop();
 
             static sf::Packet &send(Commands::Type command, sf::TcpSocket *socket);
+            static sf::Packet &send_callback(Commands::Type command, Packet::PacketSendCallback callback);
             static sf::Packet &broadcast(Commands::Type command, sf::TcpSocket *skip_socket = nullptr);
 
             static void broadcast_game_obj(GameObject *obj);
