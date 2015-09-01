@@ -174,8 +174,10 @@ namespace cotsb
             // Starter map
             auto map = MapManager::map("map1");
             player_game_object->current_map(map);
+            // The player knows what map it's on, but it's added to that map until
+            // the client says that it's ready.
+            player->current_map(map);
             map->add_game_object(player_game_object);
-            map->add_player(player);
 
             logger % "Network" << "Player joined " << player_name << endl;
             
@@ -184,13 +186,22 @@ namespace cotsb
             PlayerTcpSerialiser::serialise(*player, broadcast_player);
             
             // Tell everyone about the new game object for the player
-            //auto &broadcast_game_obj = s_server.broadcast(Commands::NewGameObject);
-            //GameObjectTcpSerialiser::serialise(player_game_object, broadcast_game_obj);
             broadcast_game_obj(player_game_object);
             
             // Respond directly to the player about the player info.
             auto &response = s_server.send(Commands::JoinedGame, socket);
             PlayerTcpSerialiser::serialise(*player, response);
+        }
+        else if (command == Commands::LoadedMap)
+        {
+            auto player = PlayerManager::player(socket);
+            if (player->current_map() == nullptr)
+            {
+                logger % "Error" << "Cannot add player to null map!" << endl;
+                return;
+            }
+
+            player->current_map()->add_player(player);
         }
     }
 

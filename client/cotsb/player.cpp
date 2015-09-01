@@ -6,7 +6,8 @@ namespace cotsb
     Player::Player() :
         _id(0u),
         _loaded(false),
-        _game_object(nullptr)
+        _game_object(nullptr),
+        _current_map(nullptr)
     {
 
     }
@@ -46,5 +47,15 @@ namespace cotsb
     {
         return _game_object;
     }
+    
+    void Player::current_map(Map *map)
+    {
+        _current_map = map;
+    }
+    Map *Player::current_map() const
+    {
+        return _current_map;
+    }
+
     // }}}
 }

@@ -1,5 +1,7 @@
 #include "player_tcp_deserialiser.h"
 
+#include "map.h"
+
 #include <cotsb/logging.h>
 #include <utils/serialisers.h>
 
@@ -9,9 +11,10 @@ namespace cotsb
     {
         std::string player_name;
         uint32_t colour_uint;
+        std::string map_name;
         uint32_t game_object_id;
 
-        input >> player_name >> colour_uint >> game_object_id;
+        input >> player_name >> colour_uint >> map_name >> game_object_id;
         player.player_name(player_name);
 
         auto colour = utils::uint_to_colour(colour_uint);
@@ -22,6 +25,7 @@ namespace cotsb
         auto game_object = GameObjectManager::game_object(game_object_id);
         game_object->colour(colour);
         player.game_object(game_object);
+        player.current_map(MapManager::map(map_name));
 
         return true;
     }

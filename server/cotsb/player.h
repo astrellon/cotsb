@@ -32,6 +32,9 @@ namespace cotsb
             void game_object(GameObject *obj);
             GameObject *game_object() const;
 
+            void current_map(Map *map);
+            Map *current_map() const;
+
             typedef std::set<uint32_t> GameObjectIdSet;
             bool has_seen_game_obj(uint32_t id) const;
             void add_seen_game_obj(uint32_t id);
@@ -42,6 +45,7 @@ namespace cotsb
             std::string _player_name;
             sf::Color _colour;
             GameObject *_game_object;
+            Map *_current_map;
 
             GameObjectIdSet _seen_game_objs;
     };

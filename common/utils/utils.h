@@ -8,6 +8,7 @@
 #include <random>
 #include <math.h>
 #include <stdint.h>
+#include <vector>
 
 namespace cotsb
 {
@@ -171,6 +172,21 @@ namespace cotsb
                 {
                     return s_time_since_start;
                 }
+
         };
+                
+        template <class T>
+            static inline typename std::vector<T>::const_iterator find_vector(
+                    const std::vector<T> &vec, T obj)
+            {
+                for (auto iter = vec.begin(); iter != vec.end(); ++iter)
+                {
+                        if (*iter == obj)
+                        {
+                            return iter;
+                        }
+                    }
+                    return vec.end();
+                }
     }
 }

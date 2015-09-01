@@ -6,6 +6,8 @@
 
 namespace cotsb
 {
+    class Map;
+
     // Player {{{
     class Player
     {
@@ -23,12 +25,16 @@ namespace cotsb
 
             void game_object(GameObject *value);
             GameObject *game_object() const;
+            
+            void current_map(Map *map);
+            Map *current_map() const;
 
         private:
             uint32_t _id;
             bool _loaded;
             std::string _player_name;
             GameObject *_game_object;
+            Map *_current_map;
     };
     // }}}
 }

@@ -1,6 +1,7 @@
 #include "map.h"
 
 #include "game_object.h"
+#include <utils/utils.h>
 
 namespace cotsb
 {
@@ -59,33 +60,35 @@ namespace cotsb
 
     void Map::add_game_object(GameObject *obj)
     {
-        _game_objects.push_back(obj);
+        auto find = utils::find_vector(_game_objects, obj);
+        if (find == _game_objects.end())
+        {
+            _game_objects.push_back(obj);
+        }
     }
     void Map::remove_game_object(GameObject *obj)
     {
-        for (auto iter = _game_objects.begin(); iter != _game_objects.end(); ++iter)
+        auto find = utils::find_vector(_game_objects, obj);
+        if (find != _game_objects.end())
         {
-            if (*iter == obj)
-            {
-                _game_objects.erase(iter);
-                break;
-            }
+            _game_objects.erase(find);
         }
     }
 
     void Map::add_player(Player *value)
     {
-        _players.push_back(value);
+        auto find = utils::find_vector(_players, value);
+        if (find == _players.end())
+        {
+            _players.push_back(value);
+        }
     }
     void Map::remove_player(Player *value)
     {
-        for (auto iter = _players.begin(); iter != _players.end(); ++iter)
+        auto find = utils::find_vector(_players, value);
+        if (find != _players.end())
         {
-            if (*iter == value)
-            {
-                _players.erase(iter);
-                break;
-            }
+            _players.erase(find);
         }
     }
 

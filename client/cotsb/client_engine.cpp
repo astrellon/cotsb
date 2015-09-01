@@ -256,6 +256,11 @@ namespace cotsb
                 auto map = MapManager::map(map_name, false);
                 MapTcpDeserialiser::deserialise(*map, response.data());
                 MapManager::map_loaded(map);
+
+                if (map_name == s_player.current_map()->name())
+                {
+                    s_client.send(Commands::LoadedMap);
+                }
             }
             else if (response.command() == Commands::Message)
             {
@@ -295,7 +300,9 @@ namespace cotsb
                 auto obj = GameObjectManager::game_object(id);
                 if (obj == nullptr)
                 {
-                    logger % "Error" << "Unable to move unknown game object " << id << endl;
+                    // We won't consider this an error for now.
+                    //logger % "Error" << "Unable to move unknown game object " << id << endl;
+                    
                     continue;
                 }
 

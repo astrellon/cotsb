@@ -22,6 +22,7 @@ namespace cotsb
         // Client -> server
         { Commands::LoadMap, "LoadMap" },
         { Commands::JoinGame, "JoinGame" },
+        { Commands::LoadedMap, "LoadedMap" },
     };
 
     std::string Commands::get_name(Commands::Type type)

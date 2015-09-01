@@ -11,6 +11,7 @@ namespace cotsb
     {
         output << player.player_name();
         output << utils::colour_to_uint(player.colour());
+        output << player.current_map()->name();
         output << player.game_object()->id();
     }
 }

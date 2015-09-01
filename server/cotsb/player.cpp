@@ -13,7 +13,8 @@ namespace cotsb
     Player::Player(uint32_t id, sf::TcpSocket *socket) :
         _id(id),
         _socket(socket),
-        _game_object(nullptr)
+        _game_object(nullptr),
+        _current_map(nullptr)
     {
 
     }
@@ -52,6 +53,15 @@ namespace cotsb
     GameObject *Player::game_object() const
     {
         return _game_object;
+    }
+
+    void Player::current_map(Map *map)
+    {
+        _current_map = map;
+    }
+    Map *Player::current_map() const
+    {
+        return _current_map;
     }
 
     bool Player::has_seen_game_obj(uint32_t id) const
@@ -118,7 +128,7 @@ namespace cotsb
             auto &goodbye = ServerEngine::broadcast(Commands::PlayerLeft);
             goodbye << player->player_name();
 
-            auto map = player->game_object()->current_map();
+            auto map = player->current_map();
             map->remove_player(player);
 
             GameObjectManager::remove_game_object(player->game_object());
