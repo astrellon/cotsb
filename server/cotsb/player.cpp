@@ -12,6 +12,7 @@ namespace cotsb
     // Player {{{
     Player::Player(uint32_t id, sf::TcpSocket *socket) :
         _id(id),
+        _state(Lobby),
         _socket(socket),
         _game_object(nullptr),
         _current_map(nullptr)
@@ -26,6 +27,15 @@ namespace cotsb
     sf::TcpSocket *Player::socket() const
     {
         return _socket;
+    }
+
+    void Player::state(Player::State state)
+    {
+        _state = state;
+    }
+    Player::State Player::state() const
+    {
+        return _state;
     }
 
     void Player::player_name(const std::string &name)
@@ -64,6 +74,12 @@ namespace cotsb
         return _current_map;
     }
 
+    void Player::move(int8_t x, int8_t y)
+    {
+        _move_dir.x = x;
+        _move_dir.y = y;
+    }
+
     bool Player::has_seen_game_obj(uint32_t id) const
     {
         return _seen_game_objs.find(id) != _seen_game_objs.cend();
@@ -71,6 +87,13 @@ namespace cotsb
     void Player::add_seen_game_obj(uint32_t id)
     {
         _seen_game_objs.insert(id);
+    }
+
+    void Player::update(float dt)
+    {
+        sf::Vector2f move(_move_dir);
+        move *= dt;
+        _game_object->move(move);
     }
     // }}}
     
@@ -133,6 +156,18 @@ namespace cotsb
 
             GameObjectManager::remove_game_object(player->game_object());
             s_players.erase(find);
+        }
+    }
+
+    void PlayerManager::update(float dt)
+    {
+        for (auto &iter : s_players)
+        {
+            if (iter.second->state() != Player::Ready)
+            {
+                continue;
+            }
+            iter.second->update(dt);
         }
     }
     // }}}

@@ -46,7 +46,8 @@ namespace cotsb
 
             static bool is_key_pressed(sf::Keyboard::Key key);
             static bool is_key_released(sf::Keyboard::Key key);
-            
+            static bool is_key_changed(sf::Keyboard::Key key);
+
             static SoundManager &sound_manager();
             static Client &client();
             static GameWorld *game_world();

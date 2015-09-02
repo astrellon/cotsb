@@ -21,8 +21,12 @@ namespace cotsb
 
             void on_resize(uint32_t width, uint32_t height);
 
+            void world_scale(float value);
+            float world_scale() const;
+
         private:
             sf::View _camera;
+            float _world_scale;
 
             Map *_current_map;
             MapRenderer _map_renderer;

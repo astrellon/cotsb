@@ -129,6 +129,8 @@ namespace cotsb
         {
             std::string map_name;
             packet >> map_name;
+                
+            auto player = PlayerManager::player(socket);
 
             logger % "Info" << "Request for map: " << map_name << endl;
             auto &response = s_server.send(Commands::NewMap, socket); 
@@ -144,7 +146,11 @@ namespace cotsb
                 response << true;
                 MapTcpSerialiser::serialise(*found_map, response);
 
-                auto player = PlayerManager::player(socket);
+                if (player->current_map() == found_map)
+                {
+                    player->state(Player::LoadingMap);
+                }
+
                 for (auto &obj : found_map->game_objects())
                 {
                     send_game_obj(obj, player);
@@ -192,7 +198,7 @@ namespace cotsb
             auto &response = s_server.send(Commands::JoinedGame, socket);
             PlayerTcpSerialiser::serialise(*player, response);
         }
-        else if (command == Commands::LoadedMap)
+        else if (command == Commands::LoadedPlayerMap)
         {
             auto player = PlayerManager::player(socket);
             if (player->current_map() == nullptr)
@@ -201,7 +207,17 @@ namespace cotsb
                 return;
             }
 
+            player->state(Player::Ready);
             player->current_map()->add_player(player);
+        }
+        else if (command == Commands::MoveInDirection)
+        {
+            auto player = PlayerManager::player(socket);
+            int8_t x, y;
+            packet >> x >> y;
+            player->move(x, y);
+
+            logger % "Info" << "Move in direction: " << static_cast<int32_t>(x) << ", " << static_cast<int32_t>(y) << endl;
         }
     }
 
@@ -244,6 +260,7 @@ namespace cotsb
     void ServerEngine::update(float dt)
     {
         MapManager::update(dt);
+        PlayerManager::update(dt);
         GameObjectManager::check_for_updates();
     }
 }

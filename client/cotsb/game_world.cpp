@@ -6,12 +6,22 @@
 namespace cotsb
 {
     GameWorld::GameWorld() :
+        _world_scale(32.0f),
         _current_map(nullptr)
     {
         auto window_size = ClientEngine::window_size();
         _camera.setSize(static_cast<float>(window_size.x), static_cast<float>(window_size.y));
 
         logger % "Info" << "Camera size: " << window_size.x << ", " << window_size.y << endl;
+    }
+
+    void GameWorld::world_scale(float value)
+    {
+        _world_scale = value;
+    }
+    float GameWorld::world_scale() const
+    {
+        return _world_scale;
     }
 
     void GameWorld::current_map(Map *map)
@@ -28,16 +38,26 @@ namespace cotsb
     {
         target.setView(_camera);
 
-        states.transform.scale(32, 32);
+        states.transform.scale(_world_scale, _world_scale);
         _map_renderer.draw(target, states);
     }
     void GameWorld::update(float dt)
     {
         if (_current_map != nullptr)
         {
-            _camera.setCenter(sf::Vector2f());
             _camera.setRotation(0.0f);
+            auto game_obj = ClientEngine::player().game_object(); 
+            if (game_obj != nullptr)
+            {
+                _camera.setCenter(game_obj->getPosition() * _world_scale);
+            }
+            else
+            {
+                _camera.setCenter(sf::Vector2f());
+            }
             _current_map->update(dt);
+            
+            ClientEngine::player().update(dt);
         }
     }
 

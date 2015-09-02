@@ -66,9 +66,6 @@ namespace cotsb
 
     void GameObject::update(float dt)
     {
-        _angle += dt;
-        sf::Vector2f dir(cos(_angle) * dt, sin(_angle) * dt);
-        move(dir);
     }
     // }}}
     

@@ -29,12 +29,17 @@ namespace cotsb
             void current_map(Map *map);
             Map *current_map() const;
 
+            void update(float dt);
+
         private:
             uint32_t _id;
             bool _loaded;
             std::string _player_name;
             GameObject *_game_object;
             Map *_current_map;
+
+            sf::Vector2<int8_t> _move_dir;
+            sf::Vector2<int8_t> _move_dir_server;
     };
     // }}}
 }

@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include "client_engine.h"
+
 namespace cotsb
 {
     // Player {{{
@@ -57,5 +59,33 @@ namespace cotsb
         return _current_map;
     }
 
+    void Player::update(float dt)
+    {
+        _move_dir.x = _move_dir.y = 0;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            _move_dir.x -= 1;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            _move_dir.x += 1;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
+            _move_dir.y -= 1;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
+            _move_dir.y += 1;
+        }
+
+        if (_move_dir != _move_dir_server)
+        {
+            auto &packet = ClientEngine::client().send(Commands::MoveInDirection);
+            packet << _move_dir.x << _move_dir.y;
+
+            _move_dir_server = _move_dir;
+        }
+    }
     // }}}
 }

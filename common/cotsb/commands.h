@@ -32,7 +32,8 @@ namespace cotsb
                 // Client -> server
                 LoadMap,
                 JoinGame,
-                LoadedMap,
+                LoadedPlayerMap,
+                MoveInDirection
             };
 
             static std::string get_name(Type type);

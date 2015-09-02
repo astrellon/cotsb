@@ -196,6 +196,11 @@ namespace cotsb
     {
         return s_keys_released[key] == s_update_counter;
     }
+    bool ClientEngine::is_key_changed(sf::Keyboard::Key key)
+    {
+        return s_keys_pressed[key] == s_update_counter ||
+            s_keys_released[key] == s_update_counter;
+    }
 
     void ClientEngine::on_resize(uint32_t width, uint32_t height)
     {
@@ -242,11 +247,6 @@ namespace cotsb
         for (auto &iter : s_client.new_data())
         {
             auto &response = *iter.get();
-            /*
-            logger % "Network" << "Has " << response.data().getDataSize() << " bytes for " 
-                << Commands::get_name(response.command()) << " commands" << endl;
-                */
-
             if (response.command() == Commands::NewMap)
             {
                 std::string map_name;
@@ -259,7 +259,7 @@ namespace cotsb
 
                 if (map_name == s_player.current_map()->name())
                 {
-                    s_client.send(Commands::LoadedMap);
+                    s_client.send(Commands::LoadedPlayerMap);
                 }
             }
             else if (response.command() == Commands::Message)
