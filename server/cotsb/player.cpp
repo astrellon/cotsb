@@ -92,7 +92,7 @@ namespace cotsb
     void Player::update(float dt)
     {
         sf::Vector2f move(_move_dir);
-        move *= dt;
+        move *= dt * 4.0f;
         _game_object->move(move);
     }
     // }}}

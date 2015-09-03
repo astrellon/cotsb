@@ -229,7 +229,7 @@ namespace cotsb
     {
         return s_player;
     }
-
+    
     void ClientEngine::start_client()
     {
         s_client.start_client();
