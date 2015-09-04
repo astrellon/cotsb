@@ -74,6 +74,12 @@ namespace cotsb
             _game_objects.erase(find);
         }
     }
+    bool Map::can_move_to( cotsb::GameObject *obj, const sf::Vector2f &position ) const
+    {
+        sf::Vector2u topleft(position);
+        const auto &topleft_tile = tile(topleft.x, topleft.y);
+        return topleft_tile != "water" && topleft_tile != "wall";
+    }
 
     void Map::add_player(Player *value)
     {

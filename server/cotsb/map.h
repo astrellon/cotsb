@@ -6,6 +6,8 @@
 #include <map>
 #include <memory>
 
+#include <SFML/Graphics.hpp>
+
 namespace cotsb
 {
     class GameObject;
@@ -35,6 +37,7 @@ namespace cotsb
 
             void add_game_object(GameObject *obj);
             void remove_game_object(GameObject *obj);
+            bool can_move_to(GameObject *obj, const sf::Vector2f &position) const;
 
             void add_player(Player *player);
             void remove_player(Player *player);

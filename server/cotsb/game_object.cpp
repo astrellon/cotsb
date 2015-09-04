@@ -36,11 +36,25 @@ namespace cotsb
 
     void GameObject::move(float x, float y)
     {
+        auto new_pos = getPosition();
+        new_pos.x += x;
+        new_pos.y += y;
+
+        if (!_current_map->can_move_to(this, new_pos))
+        {
+            return;
+        }
         sf::Transformable::move(x, y);
         _location_moved = true;
     }
     void GameObject::move(const sf::Vector2f &dir)
     {
+        auto new_pos = getPosition() + dir;
+
+        if (!_current_map->can_move_to(this, new_pos))
+        {
+            return;
+        }
         sf::Transformable::move(dir);
         _location_moved = true;
     }
