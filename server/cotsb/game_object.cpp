@@ -15,7 +15,8 @@ namespace cotsb
         _id(id),
         _location_moved(false),
         _current_map(nullptr),
-        _angle(0.0f)
+        _angle(0.0f),
+        _size(0.75f)
     {
 
     }
@@ -36,27 +37,41 @@ namespace cotsb
 
     void GameObject::move(float x, float y)
     {
-        auto new_pos = getPosition();
-        new_pos.x += x;
-        new_pos.y += y;
-
-        if (!_current_map->can_move_to(this, new_pos))
-        {
-            return;
-        }
-        sf::Transformable::move(x, y);
-        _location_moved = true;
+        move(sf::Vector2f(x, y));
     }
     void GameObject::move(const sf::Vector2f &dir)
     {
-        auto new_pos = getPosition() + dir;
+        auto pos = getPosition();
+        auto new_pos = getPosition();
 
-        if (!_current_map->can_move_to(this, new_pos))
+        auto left = pos.x;
+        auto right = pos.x + _size;
+        auto top = pos.y;
+        auto bottom = pos.y + _size;
+
+        auto xcheck = dir.x > 0 ? right : left;
+        auto ycheck = dir.y > 0 ? bottom : top;
+
+        if (dir.x != 0)
         {
-            return;
+            if (_current_map->can_move_to(this, sf::Vector2f(xcheck + dir.x, top)) &&
+                _current_map->can_move_to(this, sf::Vector2f(xcheck + dir.x, bottom)))
+            {
+                new_pos.x += dir.x;
+                _location_moved = true;
+            }
         }
-        sf::Transformable::move(dir);
-        _location_moved = true;
+        if (dir.y != 0)
+        {
+            if (_current_map->can_move_to(this, sf::Vector2f(left, ycheck + dir.y)) &&
+                _current_map->can_move_to(this, sf::Vector2f(right, ycheck + dir.y)))
+            {
+                new_pos.y += dir.y;
+                _location_moved = true;
+            }
+        }
+
+        sf::Transformable::setPosition(new_pos);
     }
     void GameObject::setPosition(float x, float y)
     {
@@ -76,6 +91,15 @@ namespace cotsb
     void GameObject::clear_location_moved()
     {
         _location_moved = false;
+    }
+
+    void GameObject::size(float value)
+    {
+        _size = value;
+    }
+    float GameObject::size() const
+    {
+        return _size;
     }
 
     void GameObject::update(float dt)

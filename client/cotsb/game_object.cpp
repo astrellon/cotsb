@@ -36,12 +36,21 @@ namespace cotsb
         return _colour;
     }
 
+    void GameObject::size(float value)
+    {
+        _size = value;
+    }
+    float GameObject::size() const
+    {
+        return _size;
+    }
+
     void GameObject::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         states.transform *= getTransform();
 
         sf::RectangleShape shape;
-        shape.setSize(sf::Vector2f(1, 1));
+        shape.setSize(sf::Vector2f(_size, _size));
         shape.setFillColor(_colour);
         shape.setOutlineColor(sf::Color::Black);
         target.draw(shape, states);

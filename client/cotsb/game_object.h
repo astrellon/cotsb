@@ -23,12 +23,16 @@ namespace cotsb
             void colour(const sf::Color &colour);
             sf::Color colour() const;
 
+            void size(float value);
+            float size() const;
+
             virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
         private:
             uint32_t _id;
             sf::Color _colour;
             Map *_current_map;
+            float _size;
     };
     // }}}
 

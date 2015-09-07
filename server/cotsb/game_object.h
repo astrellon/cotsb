@@ -28,6 +28,9 @@ namespace cotsb
             bool location_moved() const;
             void clear_location_moved();
 
+            void size(float value);
+            float size() const;
+
             virtual void update(float dt);
 
         private:
@@ -35,6 +38,7 @@ namespace cotsb
             bool _location_moved;
             Map *_current_map;
             float _angle;
+            float _size;
     };
     // }}}
     
