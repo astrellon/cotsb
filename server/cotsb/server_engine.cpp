@@ -9,6 +9,9 @@
 #include "game_object_tcp_serialiser.h"
 #include "game_object.h"
 
+#include "map_lua_deserialiser.h"
+#include <utils/lua_serialiser.h>
+
 namespace cotsb
 {
     bool ServerEngine::s_running = false;
@@ -35,6 +38,17 @@ namespace cotsb
 
         MapManager::init();
 
+        //utils::UData map1Data(utils::LuaSerialiser::deserialise("data/maps/map1.lua"));
+        auto map1 = MapLuaDeserialiser::deserialise("data/maps/map1.lua");
+        if (map1 == nullptr)
+        {
+            logger % "Error" << "Failed to load map1!" << endl;
+        }
+        else
+        {
+            MapManager::map(map1);
+        }
+        /*
         auto map1 = new Map("map1", 6, 5);
         MapManager::map(map1);
         map1->tile(0, 0, "wall");
@@ -71,6 +85,7 @@ namespace cotsb
         map1->tile(3, 4, "water");
         map1->tile(4, 4, "water");
         map1->tile(5, 4, "wall");
+        */
     
         logger % "Info" << "Started server" <<endl;
 
