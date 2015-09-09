@@ -1,10 +1,10 @@
 data = {
     name = "map1",
     tiles = {
-        {"grass", "grass", "grass", "wall", "water"},
-        {"grass", "grass", "grass", "wall", "water"},
-        {"grass", "grass", "grass", "water", "water"},
-        {"grass", "grass", "grass", "water", "water"},
+        {"grass", "grass", "water", "wall", "water"},
+        {"grass", "grass", "water", "wall", "water"},
+        {"grass", "grass", "water", "water", "grass"},
+        {"grass", "grass", "grass", "grass", "grass"},
         {"grass", "grass", "grass", "water", "grass"}
     }
 }

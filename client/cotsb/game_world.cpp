@@ -49,7 +49,10 @@ namespace cotsb
             auto game_obj = ClientEngine::player().game_object(); 
             if (game_obj != nullptr)
             {
-                _camera.setCenter(game_obj->getPosition() * _world_scale);
+                auto center_pos = game_obj->getPosition();
+                center_pos.x += game_obj->size() * 0.5f;
+                center_pos.y += game_obj->size() * 0.5f;
+                _camera.setCenter(center_pos * _world_scale);
             }
             else
             {

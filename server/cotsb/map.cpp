@@ -76,6 +76,12 @@ namespace cotsb
     }
     bool Map::can_move_to( cotsb::GameObject *obj, const sf::Vector2f &position ) const
     {
+        if (position.x < 0.0f || position.x >= _width ||
+            position.y < 0.0f || position.y >= _height)
+        {
+            return false;
+        }
+
         sf::Vector2u topleft(position);
         const auto &topleft_tile = tile(topleft.x, topleft.y);
         return topleft_tile != "water" && topleft_tile != "wall";
