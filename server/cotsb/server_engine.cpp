@@ -8,6 +8,7 @@
 #include "player_tcp_serialiser.h"
 #include "game_object_tcp_serialiser.h"
 #include "game_object.h"
+#include "tile.h"
 
 #include "map_lua_deserialiser.h"
 #include <utils/lua_serialiser.h>
@@ -36,6 +37,7 @@ namespace cotsb
             return false;
         }
 
+        TileManager::init();
         MapManager::init();
 
         //utils::UData map1Data(utils::LuaSerialiser::deserialise("data/maps/map1.lua"));

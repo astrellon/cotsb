@@ -2,6 +2,8 @@
 
 #include "client_engine.h"
 #include "game_object.h"
+#include "tile.h"
+
 #include <cotsb/commands.h>
 
 #include <exception>
@@ -41,7 +43,7 @@ namespace cotsb
         _data.resize(total);
         for (auto i = 0u; i < total; i++ )
         {
-            _data[i] = "unknown";
+            _data[i] = TileManager::NullTile;
         }
     }
     uint32_t Map::width() const
@@ -62,18 +64,18 @@ namespace cotsb
         return _status;
     }
 
-    void Map::tile(uint32_t x, uint32_t y, const std::string &tile)
+    void Map::tile(uint32_t x, uint32_t y, Tile *tile)
     {
         if (x < _width && y < _height)
         {
             _data[y * _width + x] = tile;
         }
     }
-    std::string Map::tile(uint32_t x, uint32_t y) const
+    Tile *Map::tile(uint32_t x, uint32_t y) const
     {
         if (x >= _width || y >= _height)
         {
-            return std::string();
+            return TileManager::NullTile;
         }
 
         return _data[y * _width + x];

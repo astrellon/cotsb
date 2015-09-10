@@ -8,12 +8,13 @@
 
 #include <utils/utils.h>
 #include <cotsb/logging.h>
+#include <cotsb/commands.h>
 
 #include "map.h"
+#include "tile.h"
 #include "map_tcp_deserialiser.h"
 #include "player_tcp_deserialiser.h"
 #include "game_object_tcp_deserialiser.h"
-#include <cotsb/commands.h>
 
 namespace cotsb
 {
@@ -72,6 +73,7 @@ namespace cotsb
             return -1;
         }
 
+        TileManager::init();
         //s_client.start_client();
 
         return true;
@@ -249,6 +251,7 @@ namespace cotsb
             auto &response = *iter.get();
             if (response.command() == Commands::NewMap)
             {
+                logger  % "Info" << "Map size: " << response.data().getDataSize() << endl;
                 std::string map_name;
                 response.data() >> map_name;
                 logger % "Info" << "New map: " << map_name << endl;

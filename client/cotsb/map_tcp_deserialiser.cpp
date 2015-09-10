@@ -1,5 +1,7 @@
 #include "map_tcp_deserialiser.h"
 
+#include "tile.h"
+
 #include <cotsb/logging.h>
 
 namespace cotsb
@@ -26,8 +28,10 @@ namespace cotsb
         {
             for (auto x = 0u; x < width; x++)
             {
-                std::string tile;
-                input >> tile;
+                uint16_t tile_id;
+                input >> tile_id;
+
+                auto tile = TileManager::tile(tile_id);
                 map.tile(x, y, tile);
             }
         }

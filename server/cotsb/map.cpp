@@ -1,6 +1,8 @@
 #include "map.h"
 
 #include "game_object.h"
+#include "tile.h"
+
 #include <utils/utils.h>
 
 namespace cotsb
@@ -27,18 +29,18 @@ namespace cotsb
         return _height;
     }
 
-    void Map::tile(uint32_t x, uint32_t y, const std::string &tile)
+    void Map::tile(uint32_t x, uint32_t y, Tile *tile)
     {
         if (x < _width && y < _height)
         {
             _data[y * _width + x] = tile;
         }
     }
-    std::string Map::tile(uint32_t x, uint32_t y) const
+    Tile *Map::tile(uint32_t x, uint32_t y) const
     {
         if (x >= _width || y >= _height)
         {
-            return std::string();
+            return TileManager::NullTile;
         }
 
         return _data[y * _width + x];
@@ -83,8 +85,8 @@ namespace cotsb
         }
 
         sf::Vector2u topleft(position);
-        const auto &topleft_tile = tile(topleft.x, topleft.y);
-        return topleft_tile != "water" && topleft_tile != "wall";
+        const auto topleft_tile = tile(topleft.x, topleft.y);
+        return topleft_tile->passable();
     }
 
     void Map::add_player(Player *value)

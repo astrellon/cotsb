@@ -12,6 +12,7 @@
 namespace cotsb
 {
     class GameObject;
+    class Tile;
 
     // Map {{{
     class Map
@@ -25,8 +26,8 @@ namespace cotsb
             uint32_t width() const;
             uint32_t height() const;
 
-            void tile(uint32_t x, uint32_t y, const std::string &tile);
-            std::string tile(uint32_t x, uint32_t y) const;
+            void tile(uint32_t x, uint32_t y, Tile *tile);
+            Tile *tile(uint32_t x, uint32_t y) const;
             
             enum Status
             {
@@ -39,7 +40,7 @@ namespace cotsb
             void status(Status value);
             Status status() const;
             
-            typedef std::vector<std::string> TileList;
+            typedef std::vector<Tile *> TileList;
             const TileList &data() const;
             TileList &data();
 

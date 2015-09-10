@@ -2,6 +2,7 @@
 
 #include "map.h"
 #include "game_object.h"
+#include "tile.h"
 
 namespace cotsb
 {
@@ -27,30 +28,14 @@ namespace cotsb
             return;
         }
 
+        sf::RectangleShape line;
         // Do draw
         for (auto y = 0u; y < _map->height(); y++)
         {
             for (auto x = 0u; x < _map->width(); x++)
             {
-                sf::RectangleShape line;
-
-                const auto &tile = _map->tile(x, y);
-                if (tile == "grass")
-                {
-                    line.setFillColor(sf::Color::Green);
-                }
-                else if (tile == "water")
-                {
-                    line.setFillColor(sf::Color::Blue);
-                }
-                else if (tile == "wall")
-                {
-                    line.setFillColor(sf::Color::Red);
-                }
-                else
-                {
-                    line.setFillColor(sf::Color::Magenta);
-                }
+                const auto tile = _map->tile(x, y);
+                line.setFillColor(tile->colour());
                 line.setSize(sf::Vector2f(1, 1));
                 line.setPosition(x, y);
                 target.draw(line, states);

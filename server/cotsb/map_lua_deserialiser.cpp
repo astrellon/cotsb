@@ -4,6 +4,7 @@
 #include <cotsb/logging.h>
 
 #include "map.h"
+#include "tile.h"
 
 namespace cotsb
 {
@@ -42,7 +43,8 @@ logger % "Info" << "Tiles: " << tiles->type_name() << endl;
             auto tile_row = tiles->at(y);
             for (auto x = 0u; x < tile_row->size_array(); x++)
             {
-                auto tile = tile_row->at(x)->string();
+                auto tile_name = tile_row->at(x)->string();
+                auto tile = TileManager::tile(tile_name);
                 result->tile(x, y, tile);
             }
         }
