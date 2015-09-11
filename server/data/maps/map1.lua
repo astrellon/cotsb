@@ -1,15 +1,10 @@
-local g = "grass"
-local w = "water"
-local a = "wall"
-local d = "dirt"
-
-local set = {g, w, d}
+local set = {"grass", "water", "dirt"}
 
 local tiles = {}
-for y=0,49 do
+for y=0,19 do
     local row = {}
     tiles[y] = row
-    for x=0,49 do
+    for x=0,19 do
         row[x] = set[math.random(1, 3)]
     end
 end

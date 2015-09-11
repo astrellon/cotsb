@@ -19,5 +19,8 @@ namespace cotsb
 
         private:
             Map *_map;
+            sf::VertexArray _verticies;
+
+            void create_vertex_array();
     };
 }
