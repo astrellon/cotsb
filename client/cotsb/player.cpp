@@ -14,11 +14,11 @@ namespace cotsb
 
     }
 
-    void Player::id(uint32_t value)
+    void Player::id(uint16_t value)
     {
         _id = value;
     }
-    uint32_t Player::id() const
+    uint16_t Player::id() const
     {
         return _id;
     }

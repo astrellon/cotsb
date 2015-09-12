@@ -40,7 +40,6 @@ namespace cotsb
         TileManager::init();
         MapManager::init();
 
-        //utils::UData map1Data(utils::LuaSerialiser::deserialise("data/maps/map1.lua"));
         auto map1 = MapLuaDeserialiser::deserialise("data/maps/map1.lua");
         if (map1 == nullptr)
         {
@@ -50,44 +49,6 @@ namespace cotsb
         {
             MapManager::map(map1);
         }
-        /*
-        auto map1 = new Map("map1", 6, 5);
-        MapManager::map(map1);
-        map1->tile(0, 0, "wall");
-        map1->tile(1, 0, "wall");
-        map1->tile(2, 0, "wall");
-        map1->tile(3, 0, "wall");
-        map1->tile(4, 0, "wall");
-        map1->tile(5, 0, "wall");
-        
-        map1->tile(0, 1, "grass");
-        map1->tile(1, 1, "grass");
-        map1->tile(2, 1, "water");
-        map1->tile(3, 1, "water");
-        map1->tile(4, 1, "water");
-        map1->tile(5, 1, "wall");
-        
-        map1->tile(0, 2, "grass");
-        map1->tile(1, 2, "grass");
-        map1->tile(2, 2, "grass");
-        map1->tile(3, 2, "grass");
-        map1->tile(4, 2, "water");
-        map1->tile(5, 2, "wall");
-        
-        map1->tile(0, 3, "grass");
-        map1->tile(1, 3, "water");
-        map1->tile(2, 3, "water");
-        map1->tile(3, 3, "water");
-        map1->tile(4, 3, "water");
-        map1->tile(5, 3, "wall");
-        
-        map1->tile(0, 4, "grass");
-        map1->tile(1, 4, "grass");
-        map1->tile(2, 4, "water");
-        map1->tile(3, 4, "water");
-        map1->tile(4, 4, "water");
-        map1->tile(5, 4, "wall");
-        */
     
         logger % "Info" << "Started server" <<endl;
 

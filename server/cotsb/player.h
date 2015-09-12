@@ -26,9 +26,9 @@ namespace cotsb
                 Ready
             };
 
-            Player(uint32_t id, sf::TcpSocket *socket);
+            Player(uint16_t id, sf::TcpSocket *socket);
 
-            uint32_t id() const;
+            uint16_t id() const;
             sf::TcpSocket *socket() const;
 
             void state(State state);
@@ -55,7 +55,7 @@ namespace cotsb
             void update(float dt);
 
         private:
-            uint32_t _id;
+            uint16_t _id;
             State _state;
             sf::TcpSocket *_socket;
             std::string _player_name;
@@ -74,14 +74,14 @@ namespace cotsb
     {
         public:
             typedef std::map<sf::TcpSocket *, std::unique_ptr<Player> > PlayerMap;
-            typedef std::map<uint32_t, Player *> PlayerIdMap;
+            typedef std::map<uint16_t, Player *> PlayerIdMap;
 
             static const PlayerMap &players();
             static const PlayerIdMap &player_ids();
 
             static Player *create_player(sf::TcpSocket *socket);
             static Player *player(sf::TcpSocket *socket);
-            static Player *player(uint32_t id);
+            static Player *player(uint16_t id);
             static void remove_player(sf::TcpSocket *socket);
 
             static void update(float dt);
@@ -89,7 +89,7 @@ namespace cotsb
         private:
             static PlayerMap s_players;
             static PlayerIdMap s_player_ids;
-            static uint32_t s_player_counter;
+            static uint16_t s_player_counter;
 
     };
     // }}}

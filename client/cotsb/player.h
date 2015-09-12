@@ -14,8 +14,8 @@ namespace cotsb
         public:
             Player();
 
-            void id(uint32_t value);
-            uint32_t id() const;
+            void id(uint16_t value);
+            uint16_t id() const;
 
             void player_name(const std::string &name);
             const std::string &player_name() const;
@@ -32,7 +32,7 @@ namespace cotsb
             void update(float dt);
 
         private:
-            uint32_t _id;
+            uint16_t _id;
             bool _loaded;
             std::string _player_name;
             GameObject *_game_object;

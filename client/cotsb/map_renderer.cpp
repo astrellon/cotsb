@@ -56,22 +56,22 @@ namespace cotsb
             for (auto x = 0u; x < _map->width(); x++)
             {
                 const auto tile = _map->tile(x, y);
-                _verticies[i    ].position = sf::Vector2f(x, y);
-                _verticies[i    ].color = tile->colour();
-                _verticies[i + 1].position = sf::Vector2f(x + 1, y);
-                _verticies[i + 1].color = tile->colour();
-                _verticies[i + 2].position = sf::Vector2f(x, y + 1);
-                _verticies[i + 2].color = tile->colour();
-                
-                _verticies[i + 3].position = sf::Vector2f(x, y + 1);
-                _verticies[i + 3].color = tile->colour();
-                _verticies[i + 4].position = sf::Vector2f(x + 1, y);
-                _verticies[i + 4].color = tile->colour();
-                _verticies[i + 5].position = sf::Vector2f(x + 1, y + 1);
-                _verticies[i + 5].color = tile->colour();
-
-                i += 6u;
+                const auto c = tile->colour();
+                set_vertex(_verticies[i++], x, y, 0, 0, c);
+                set_vertex(_verticies[i++], x, y, 1, 0, c);
+                set_vertex(_verticies[i++], x, y, 0, 1, c);
+                set_vertex(_verticies[i++], x, y, 0, 1, c);
+                set_vertex(_verticies[i++], x, y, 1, 0, c);
+                set_vertex(_verticies[i++], x, y, 1, 1, c);
             }
         }
+    }
+
+    void MapRenderer::set_vertex(sf::Vertex &vert, float x, float y, 
+            float offsetX, float offsetY, sf::Color colour)
+    {
+        vert.position = sf::Vector2f(x + offsetX, y + offsetY);
+        vert.texCoords = sf::Vector2f(offsetX, offsetY);
+        vert.color = colour;
     }
 }

@@ -10,7 +10,7 @@
 namespace cotsb
 {
     // Player {{{
-    Player::Player(uint32_t id, sf::TcpSocket *socket) :
+    Player::Player(uint16_t id, sf::TcpSocket *socket) :
         _id(id),
         _state(Lobby),
         _socket(socket),
@@ -20,7 +20,7 @@ namespace cotsb
 
     }
 
-    uint32_t Player::id() const
+    uint16_t Player::id() const
     {
         return _id;
     }
@@ -100,7 +100,7 @@ namespace cotsb
     // PlayerManager {{{
     PlayerManager::PlayerMap PlayerManager::s_players; 
     PlayerManager::PlayerIdMap PlayerManager::s_player_ids;
-    uint32_t PlayerManager::s_player_counter = 1u;
+    uint16_t PlayerManager::s_player_counter = 1u;
 
     const PlayerManager::PlayerMap &PlayerManager::players()
     {
@@ -132,7 +132,7 @@ namespace cotsb
         }
         return find->second.get();
     }
-    Player *PlayerManager::player(uint32_t id)
+    Player *PlayerManager::player(uint16_t id)
     {
         auto find = s_player_ids.find(id);
         if (find == s_player_ids.end())

@@ -22,5 +22,7 @@ namespace cotsb
             sf::VertexArray _verticies;
 
             void create_vertex_array();
+            void set_vertex(sf::Vertex &vert, float x, float y, 
+                    float offsetX, float offsetY, sf::Color colour);
     };
 }
