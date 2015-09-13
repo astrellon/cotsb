@@ -40,6 +40,17 @@ namespace cotsb
             {
                 *_data << static_cast<CommandType>(command);
             }
+            inline Packet(Packet &&move) :
+                _command(move._command),
+                _type(move._type),
+                _socket(move._socket),
+                _callback(move._callback),
+                _data(std::move(move._data))
+            {
+
+            }
+            Packet(const Packet &copy) = delete;
+
 
             inline Commands::Type command() const
             {
