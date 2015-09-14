@@ -54,6 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,6 +68,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -77,28 +79,107 @@
   <ItemGroup>
     <ClCompile Include="..\..\common\cotsb\commands.cpp" />
     <ClCompile Include="..\..\common\cotsb\logging.cpp" />
+    <ClCompile Include="..\..\common\lua\src\lapi.c" />
+    <ClCompile Include="..\..\common\lua\src\lauxlib.c" />
+    <ClCompile Include="..\..\common\lua\src\lbaselib.c" />
+    <ClCompile Include="..\..\common\lua\src\lbitlib.c" />
+    <ClCompile Include="..\..\common\lua\src\lcode.c" />
+    <ClCompile Include="..\..\common\lua\src\lcorolib.c" />
+    <ClCompile Include="..\..\common\lua\src\lctype.c" />
+    <ClCompile Include="..\..\common\lua\src\ldblib.c" />
+    <ClCompile Include="..\..\common\lua\src\ldebug.c" />
+    <ClCompile Include="..\..\common\lua\src\ldo.c" />
+    <ClCompile Include="..\..\common\lua\src\ldump.c" />
+    <ClCompile Include="..\..\common\lua\src\lfunc.c" />
+    <ClCompile Include="..\..\common\lua\src\lgc.c" />
+    <ClCompile Include="..\..\common\lua\src\linit.c" />
+    <ClCompile Include="..\..\common\lua\src\liolib.c" />
+    <ClCompile Include="..\..\common\lua\src\llex.c" />
+    <ClCompile Include="..\..\common\lua\src\lmathlib.c" />
+    <ClCompile Include="..\..\common\lua\src\lmem.c" />
+    <ClCompile Include="..\..\common\lua\src\loadlib.c" />
+    <ClCompile Include="..\..\common\lua\src\lobject.c" />
+    <ClCompile Include="..\..\common\lua\src\lopcodes.c" />
+    <ClCompile Include="..\..\common\lua\src\loslib.c" />
+    <ClCompile Include="..\..\common\lua\src\lparser.c" />
+    <ClCompile Include="..\..\common\lua\src\lstate.c" />
+    <ClCompile Include="..\..\common\lua\src\lstring.c" />
+    <ClCompile Include="..\..\common\lua\src\lstrlib.c" />
+    <ClCompile Include="..\..\common\lua\src\ltable.c" />
+    <ClCompile Include="..\..\common\lua\src\ltablib.c" />
+    <ClCompile Include="..\..\common\lua\src\ltm.c" />
+    <ClCompile Include="..\..\common\lua\src\lundump.c" />
+    <ClCompile Include="..\..\common\lua\src\lvm.c" />
+    <ClCompile Include="..\..\common\lua\src\lzio.c" />
     <ClCompile Include="..\..\common\utils\circle.cpp" />
     <ClCompile Include="..\..\common\utils\colour.cpp" />
+    <ClCompile Include="..\..\common\utils\data.cpp" />
+    <ClCompile Include="..\..\common\utils\lua_serialiser.cpp" />
     <ClCompile Include="..\..\common\utils\ray.cpp" />
     <ClCompile Include="..\..\common\utils\utils.cpp" />
+    <ClCompile Include="..\cotsb\game_object.cpp" />
+    <ClCompile Include="..\cotsb\game_object_tcp_serialiser.cpp" />
     <ClCompile Include="..\cotsb\map.cpp" />
+    <ClCompile Include="..\cotsb\map_lua_deserialiser.cpp" />
     <ClCompile Include="..\cotsb\map_tcp_serialiser.cpp" />
+    <ClCompile Include="..\cotsb\player.cpp" />
+    <ClCompile Include="..\cotsb\player_tcp_serialiser.cpp" />
     <ClCompile Include="..\cotsb\server.cpp" />
     <ClCompile Include="..\cotsb\server_engine.cpp" />
+    <ClCompile Include="..\cotsb\tile.cpp" />
     <ClCompile Include="..\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\cotsb\commands.h" />
     <ClInclude Include="..\..\common\cotsb\logging.h" />
+    <ClInclude Include="..\..\common\lua\src\lapi.h" />
+    <ClInclude Include="..\..\common\lua\src\lauxlib.h" />
+    <ClInclude Include="..\..\common\lua\src\lcode.h" />
+    <ClInclude Include="..\..\common\lua\src\lctype.h" />
+    <ClInclude Include="..\..\common\lua\src\ldebug.h" />
+    <ClInclude Include="..\..\common\lua\src\ldo.h" />
+    <ClInclude Include="..\..\common\lua\src\lfunc.h" />
+    <ClInclude Include="..\..\common\lua\src\lgc.h" />
+    <ClInclude Include="..\..\common\lua\src\llex.h" />
+    <ClInclude Include="..\..\common\lua\src\llimits.h" />
+    <ClInclude Include="..\..\common\lua\src\lmem.h" />
+    <ClInclude Include="..\..\common\lua\src\lobject.h" />
+    <ClInclude Include="..\..\common\lua\src\lopcodes.h" />
+    <ClInclude Include="..\..\common\lua\src\lparser.h" />
+    <ClInclude Include="..\..\common\lua\src\lstate.h" />
+    <ClInclude Include="..\..\common\lua\src\lstring.h" />
+    <ClInclude Include="..\..\common\lua\src\ltable.h" />
+    <ClInclude Include="..\..\common\lua\src\ltm.h" />
+    <ClInclude Include="..\..\common\lua\src\lua.h" />
+    <ClInclude Include="..\..\common\lua\src\lua.hpp" />
+    <ClInclude Include="..\..\common\lua\src\luaconf.h" />
+    <ClInclude Include="..\..\common\lua\src\lualib.h" />
+    <ClInclude Include="..\..\common\lua\src\lundump.h" />
+    <ClInclude Include="..\..\common\lua\src\lvm.h" />
+    <ClInclude Include="..\..\common\lua\src\lzio.h" />
     <ClInclude Include="..\..\common\utils\circle.h" />
     <ClInclude Include="..\..\common\utils\colour.h" />
+    <ClInclude Include="..\..\common\utils\data.h" />
+    <ClInclude Include="..\..\common\utils\lua_serialiser.h" />
     <ClInclude Include="..\..\common\utils\ray.h" />
+    <ClInclude Include="..\..\common\utils\serialisers.h" />
     <ClInclude Include="..\..\common\utils\utils.h" />
+    <ClInclude Include="..\cotsb\game_object.h" />
+    <ClInclude Include="..\cotsb\game_object_tcp_serialiser.h" />
     <ClInclude Include="..\cotsb\map.h" />
+    <ClInclude Include="..\cotsb\map_lua_deserialiser.h" />
     <ClInclude Include="..\cotsb\map_tcp_serialiser.h" />
+    <ClInclude Include="..\cotsb\npc.h" />
+    <ClInclude Include="..\cotsb\packet.h" />
     <ClInclude Include="..\cotsb\player.h" />
+    <ClInclude Include="..\cotsb\player_tcp_serialiser.h" />
     <ClInclude Include="..\cotsb\server.h" />
     <ClInclude Include="..\cotsb\server_engine.h" />
+    <ClInclude Include="..\cotsb\tile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\common\lua\src\lua.c.old" />
+    <None Include="..\..\common\lua\src\Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

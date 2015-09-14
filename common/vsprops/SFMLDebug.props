@@ -14,7 +14,9 @@
       <AdditionalDependencies>sfml-system-d.lib;sfml-network-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-window-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(SFMLPath)\bin\sfml-*-d-2.dll $(OutputPath)</Command>
+        <Command>
+            echo "Copying debug SFML dlls" > test.out
+            copy $(SFMLPath)\bin\sfml-*-d-2.dll $(OutputPath)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

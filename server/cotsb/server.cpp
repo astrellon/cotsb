@@ -132,19 +132,19 @@ namespace cotsb
 
     sf::Packet &Server::broadcast(Commands::Type command, sf::TcpSocket *skip_socket)
     {
-        _to_send.push_back(Packet(command, skip_socket, Packet::Broadcast));
+        _to_send.emplace_back(command, skip_socket, Packet::Broadcast);
         return *_to_send.back().data();
     }
             
     sf::Packet &Server::send(Commands::Type command, sf::TcpSocket *socket)
     {
-        _to_send.push_back(Packet(command, socket, Packet::Single));
+        _to_send.emplace_back(command, socket, Packet::Single);
         return *_to_send.back().data();
     }
 
     sf::Packet &Server::send_callback(Commands::Type command, Packet::PacketSendCallback callback)
     {
-        _to_send.push_back(Packet(command, callback));
+        _to_send.emplace_back(command, callback);
         return *_to_send.back().data();
     }
 }
