@@ -1,8 +1,9 @@
 #include "player.h"
 
 #include "map.h"
-
+#include "profile.h"
 #include "server_engine.h"
+
 #include <cotsb/commands.h>
 
 #include <exception>
@@ -15,7 +16,8 @@ namespace cotsb
         _state(Lobby),
         _socket(socket),
         _game_object(nullptr),
-        _current_map(nullptr)
+        _current_map(nullptr),
+        _profile(nullptr)
     {
 
     }
@@ -94,6 +96,15 @@ namespace cotsb
         sf::Vector2f move(_move_dir);
         move *= dt * 4.0f;
         _game_object->move(move);
+    }
+
+    void Player::profile(Profile *profile)
+    {
+        _profile = profile;
+    }
+    Profile *Player::profile() const
+    {
+        return _profile;
     }
     // }}}
     

@@ -12,7 +12,8 @@ namespace cotsb
                     MainMenu,
                     InGame,
                     PauseGame,
-                    ServerConnect
+                    ServerConnect,
+                    CreateProfile
                 };
 
                 static bool init();

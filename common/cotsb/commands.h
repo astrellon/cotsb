@@ -28,12 +28,14 @@ namespace cotsb
                 UpdateGameObject,
                 RemoveGameObject,
                 MoveGameObject,
+                ProfileNotFound,
 
                 // Client -> server
                 LoadMap,
                 JoinGame,
                 LoadedPlayerMap,
-                MoveInDirection
+                MoveInDirection,
+                CreateProfile,
             };
 
             static std::string get_name(Type type);

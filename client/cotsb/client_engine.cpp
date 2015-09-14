@@ -5,6 +5,7 @@
 
 #include "ui/manager.h"
 #include "ui/ui_state.h"
+#include "ui/server_connect.h"
 
 #include <utils/utils.h>
 #include <cotsb/logging.h>
@@ -270,6 +271,15 @@ namespace cotsb
                 std::string message;
                 response.data() >> message;
                 logger % "Info" << "Message " << message << endl; 
+            }
+            else if (response.command() == Commands::ProfileNotFound)
+            {
+                logger % "Info" << "No profile found." << endl;
+                auto state = ui::State::state(); 
+                if (state == ui::State::ServerConnect)
+                {
+                    ui::server_connect.on_error("Profile not found.");
+                }
             }
             else if (response.command() == Commands::JoinedGame)
             {

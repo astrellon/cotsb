@@ -2,6 +2,7 @@
 
 #include "button.h"
 #include "text_input.h"
+#include "label.h"
 #include "ui_state.h"
 
 #include <cotsb/client_engine.h>
@@ -50,9 +51,18 @@ namespace cotsb
             _player_name->setPosition(300, 440);
             _player_name->value("Unnamed");
 
+            _error_message = add_component<Label>("");
+            _error_message->colour(sf::Color::Red);
+            _error_message->setPosition(300, 500);
+
             calc_nearby_components();
 
             return true;
+        }
+
+        void ServerConnect::on_error(const std::string &message)
+        {
+            _error_message->text(message);
         }
     }
 }

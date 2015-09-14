@@ -18,12 +18,14 @@ namespace cotsb
         { Commands::UpdateGameObject, "UpdateGameObject" },
         { Commands::RemoveGameObject, "RemoveGameObject" },
         { Commands::MoveGameObject, "MoveGameObject" },
+        { Commands::ProfileNotFound, "ProfileNotFound" },
         
         // Client -> server
         { Commands::LoadMap, "LoadMap" },
         { Commands::JoinGame, "JoinGame" },
         { Commands::LoadedPlayerMap, "LoadedPlayerMap" },
         { Commands::MoveInDirection, "MoveInDirection" },
+        { Commands::CreateProfile, "CreateProfile" },
     };
 
     std::string Commands::get_name(Commands::Type type)

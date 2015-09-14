@@ -13,6 +13,7 @@
 namespace cotsb
 {
     class Map;
+    class Profile;
 
     // Player {{{
     class Player
@@ -54,6 +55,9 @@ namespace cotsb
 
             void update(float dt);
 
+            void profile(Profile *profile);
+            Profile *profile() const;
+
         private:
             uint16_t _id;
             State _state;
@@ -66,6 +70,7 @@ namespace cotsb
             sf::Vector2<int8_t> _move_dir;
 
             GameObjectIdSet _seen_game_objs;
+            Profile *_profile;
     };
     // }}}
 

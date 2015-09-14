@@ -9,6 +9,7 @@
 #include "game_object_tcp_serialiser.h"
 #include "game_object.h"
 #include "tile.h"
+#include "profile.h"
 
 #include "map_lua_deserialiser.h"
 #include <utils/lua_serialiser.h>
@@ -145,11 +146,18 @@ namespace cotsb
         }
         else if (command == Commands::JoinGame)
         {
-            std::string player_name;
-            packet >> player_name;
+            std::string profile_name;
+            packet >> profile_name;
+
+            auto profile = ProfileManager::profile(profile_name);
+            //if (profile == nullptr)
+            {
+                send(Commands::ProfileNotFound, socket);
+                return;
+            }
 
             auto player = PlayerManager::create_player(socket);
-            player->player_name(player_name);
+            player->player_name(profile->display_name());
             player->colour(sf::Color::Cyan);
 
             auto player_game_object = GameObjectManager::create_game_object<GameObject>();
@@ -163,7 +171,7 @@ namespace cotsb
             player->current_map(map);
             map->add_game_object(player_game_object);
 
-            logger % "Network" << "Player joined " << player_name << endl;
+            logger % "Network" << "Player joined " << profile->display_name() << endl;
             
             // Tell everyone except the original player about the new player
             auto &broadcast_player = s_server.broadcast(Commands::NewPlayer, socket);
@@ -196,6 +204,12 @@ namespace cotsb
             player->move(x, y);
 
             logger % "Info" << "Move in direction: " << static_cast<int32_t>(x) << ", " << static_cast<int32_t>(y) << endl;
+        }
+        else if (command == Commands::CreateProfile)
+        {
+            std::string profile_name;
+            std::string display_name;
+            packet >> profile_name >> display_name;
         }
     }
 
