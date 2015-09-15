@@ -20,22 +20,17 @@ namespace cotsb
                 void colour(const sf::Color &colour);
                 sf::Color colour() const;
 
-                void width(float value);
-                float width() const;
-
-                void height(float value);
-                float height() const;
-
                 virtual void update(float dt);
                 virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+                
+                void size(const sf::Vector2f &size);
+                void size(float width, float height);
                 virtual sf::Vector2f size() const;
 
             private:
                 std::string _text;
                 sf::Text _text_graphic;
-
-                float _width;
-                float _height;
+                sf::Vector2f _size;
 
                 void update_label_position();
         };

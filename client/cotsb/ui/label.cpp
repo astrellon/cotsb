@@ -39,24 +39,6 @@ namespace cotsb
             return _text_graphic.getColor();
         }
 
-        void Label::width(float value)
-        {
-            _width = value;
-        }
-        float Label::width() const
-        {
-            return _width;
-        }
-
-        void Label::height(float value)
-        {
-            _height = value;
-        }
-        float Label::height() const
-        {
-            return _height;
-        }
-
         void Label::update(float dt)
         {
 
@@ -67,10 +49,19 @@ namespace cotsb
 
             target.draw(_text_graphic, states);
         }
+
+        void Label::size(const sf::Vector2f &size)
+        {
+            _size = size;
+        }
+        void Label::size(float width, float height)
+        {
+            _size.x = width;
+            _size.y = height;
+        }
         sf::Vector2f Label::size() const
         {
-            auto rect = _text_graphic.getLocalBounds(); 
-            return sf::Vector2f(rect.width, rect.height);
+            return _size;
         }
         
         void Label::update_label_position()
@@ -78,8 +69,8 @@ namespace cotsb
             sf::Vector2u texture_size;
             auto text_size = _text_graphic.getLocalBounds();
 
-            auto left = (_width - text_size.width) * 0.5f;
-            auto top = (_height - text_size.height) * 0.5f - text_size.top;
+            auto left = (_size.x - text_size.width) * 0.5f;
+            auto top = (_size.y - text_size.height) * 0.5f - text_size.top;
 
             _text_graphic.setPosition(utils::Utils::round(left), utils::Utils::round(top));
         }

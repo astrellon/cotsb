@@ -14,6 +14,7 @@ namespace cotsb
     {
         public:
             static bool init();
+            static void deinit();
 
             static void shutdown();
             static bool is_running();

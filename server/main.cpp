@@ -14,7 +14,9 @@ int main(int argc , char *argv[])
     }
     cotsb::ServerEngine::server_loop();
 
-    cotsb::logger % "Info" << "Done" << cotsb::endl;
+    cotsb::logger % "Info" << "Shutting down" << cotsb::endl;
+    cotsb::ServerEngine::deinit();
+
     return 0;
 }
  

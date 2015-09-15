@@ -53,6 +53,7 @@ namespace cotsb
 
             _error_message = add_component<Label>("");
             _error_message->colour(sf::Color::Red);
+            _error_message->size(256, 48);
             _error_message->setPosition(300, 500);
 
             calc_nearby_components();

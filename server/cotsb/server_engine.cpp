@@ -14,8 +14,16 @@
 #include "map_lua_deserialiser.h"
 #include <utils/lua_serialiser.h>
 
+#include <signal.h>
+#include <string.h>
+
 namespace cotsb
 {
+    void kill_sig_handler(int, siginfo_t*, void*)
+    {
+        ServerEngine::shutdown();
+    }
+
     bool ServerEngine::s_running = false;
     Server ServerEngine::s_server;
 
@@ -24,6 +32,21 @@ namespace cotsb
         if (s_running)
         {
             return true;
+        }
+        
+        struct sigaction act;
+
+        memset(&act, 0, sizeof(struct sigaction));
+        sigemptyset(&act.sa_mask);
+
+        act.sa_sigaction = kill_sig_handler;
+
+        act.sa_flags = SA_SIGINFO;
+
+        if (-1 == sigaction(SIGINT, &act, NULL))
+        {
+            logger % "Error" << "sigaction()" << endl;
+            return false;
         }
 
         s_running = true;
@@ -58,6 +81,11 @@ namespace cotsb
 
         return true;
     }
+    void ServerEngine::deinit()
+    {
+        ProfileManager::deinit();
+    }
+
     void ServerEngine::shutdown()
     {
         s_running = false;
@@ -150,10 +178,9 @@ namespace cotsb
             packet >> profile_name;
 
             auto profile = ProfileManager::profile(profile_name);
-            //if (profile == nullptr)
+            if (profile == nullptr)
             {
-                send(Commands::ProfileNotFound, socket);
-                return;
+                profile = ProfileManager::create_profile(profile_name);
             }
 
             auto player = PlayerManager::create_player(socket);
