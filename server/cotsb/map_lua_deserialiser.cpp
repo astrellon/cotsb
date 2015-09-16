@@ -13,13 +13,13 @@ namespace cotsb
         utils::UData map_lua(utils::LuaSerialiser::deserialise(filename));
         if (map_lua.get() != nullptr)
         {
-            return deserialise(*map_lua.get());
+            return deserialise(*map_lua);
         }
         logger % "Error" << "Failed to load lua" << endl;
         return nullptr;
     }
 
-    Map *MapLuaDeserialiser::deserialise(utils::Data &input)
+    Map *MapLuaDeserialiser::deserialise(const utils::Data &input)
     {
         auto name = input.at("name")->string();
         auto tiles = input.at("tiles");

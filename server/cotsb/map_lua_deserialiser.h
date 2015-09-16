@@ -11,6 +11,6 @@ namespace cotsb
     {
         public:
             static Map *deserialise(const std::string &filename);
-            static Map *deserialise(utils::Data &input);
+            static Map *deserialise(const utils::Data &input);
     };
 }

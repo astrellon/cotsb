@@ -181,6 +181,7 @@ namespace cotsb
             if (profile == nullptr)
             {
                 profile = ProfileManager::create_profile(profile_name);
+                ProfileManager::save_profile(profile);
             }
 
             auto player = PlayerManager::create_player(socket);

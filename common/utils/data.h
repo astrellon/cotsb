@@ -23,13 +23,13 @@ namespace utils
                 Nil
             };
 
-            Data(Type type);
-            Data(double value);
-            Data(uint32_t value);
-            Data(int32_t value);
-            Data(bool value);
-            Data(const std::string &value);
-            Data(const char *value);
+            explicit Data(Type type);
+            explicit Data(double value);
+            explicit Data(uint32_t value);
+            explicit Data(int32_t value);
+            explicit Data(bool value);
+            explicit Data(const std::string &value);
+            explicit Data(const char *value);
             ~Data();
 
             Type type() const;
