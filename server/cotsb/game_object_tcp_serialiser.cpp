@@ -9,6 +9,7 @@ namespace cotsb
     {
         output << obj->id();
         output << obj->current_map()->name();
+        output << utils::colour_to_uint(obj->colour());
         output << obj->size();
 
         utils::serialise_transformable(*obj, output);

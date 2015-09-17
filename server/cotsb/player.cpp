@@ -40,24 +40,6 @@ namespace cotsb
         return _state;
     }
 
-    void Player::player_name(const std::string &name)
-    {
-        _player_name = name;
-    }
-    const std::string &Player::player_name() const
-    {
-        return _player_name;
-    }
-
-    void Player::colour(sf::Color colour)
-    {
-        _colour = colour;
-    }
-    sf::Color Player::colour() const
-    {
-        return _colour;
-    }
-
     void Player::game_object(GameObject *obj)
     {
         _game_object = obj;
@@ -160,7 +142,7 @@ namespace cotsb
         {
             auto player = find->second.get();
             auto &goodbye = ServerEngine::broadcast(Commands::PlayerLeft);
-            goodbye << player->player_name();
+            goodbye << player->profile()->display_name();
 
             auto map = player->current_map();
             map->remove_player(player);

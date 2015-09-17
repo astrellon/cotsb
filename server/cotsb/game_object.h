@@ -31,6 +31,9 @@ namespace cotsb
             void size(float value);
             float size() const;
 
+            void colour(const sf::Color &colour);
+            sf::Color colour() const;
+
             virtual void update(float dt);
 
         private:
@@ -39,6 +42,7 @@ namespace cotsb
             Map *_current_map;
             float _angle;
             float _size;
+            sf::Color _colour;
     };
     // }}}
     

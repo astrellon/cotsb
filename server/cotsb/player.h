@@ -35,12 +35,6 @@ namespace cotsb
             void state(State state);
             State state() const;
 
-            void player_name(const std::string &name);
-            const std::string &player_name() const;
-
-            void colour(sf::Color colour);
-            sf::Color colour() const;
-
             void game_object(GameObject *obj);
             GameObject *game_object() const;
 
@@ -62,8 +56,6 @@ namespace cotsb
             uint16_t _id;
             State _state;
             sf::TcpSocket *_socket;
-            std::string _player_name;
-            sf::Color _colour;
             GameObject *_game_object;
             Map *_current_map;
 

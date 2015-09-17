@@ -105,6 +105,16 @@ namespace cotsb
     void GameObject::update(float dt)
     {
     }
+    
+    void GameObject::colour(const sf::Color &colour)
+    {
+        _colour = colour;
+    }
+    sf::Color GameObject::colour() const
+    {
+        return _colour;
+    }
+
     // }}}
     
     // GameObjectManager {{{

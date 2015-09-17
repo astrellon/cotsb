@@ -23,13 +23,27 @@ namespace cotsb
         auto profile_name = input.at("profile_name")->string();
         auto display_name = input.at("display_name")->string();
         auto map_name = input.at("map_name")->string();
-        auto loc_tuple = input.at("location");
-        sf::Vector2f location(loc_tuple->at(0)->number(), loc_tuple->at(1)->number());
 
         auto profile = ProfileManager::create_profile(profile_name);
         profile->display_name(display_name);
         profile->map_name(map_name);
-        profile->location(location);
+        
+        auto loc_data = input.at("location");
+        if (!loc_data->is_nil())
+        {
+            sf::Vector2f location(loc_data->at(0)->number(), loc_data->at(1)->number());
+            profile->location(location);
+        }
+        
+        auto colour_data = input.at("colour");
+        if (!colour_data->is_nil())
+        {
+            sf::Color colour(colour_data->at(0)->int32(),
+                    colour_data->at(1)->int32(),
+                    colour_data->at(2)->int32(),
+                    colour_data->at(3)->int32());
+            profile->colour(colour);
+        }
 
         return profile;
     }
@@ -46,6 +60,13 @@ namespace cotsb
         loc->push(profile->location().x);
         loc->push(profile->location().y);
         result->at("location", loc);
+
+        auto colour = new utils::Data(utils::Data::Array);
+        colour->push(profile->colour().r);
+        colour->push(profile->colour().g);
+        colour->push(profile->colour().b);
+        colour->push(profile->colour().a);
+        result->at("colour", colour);
 
         return result;
     }

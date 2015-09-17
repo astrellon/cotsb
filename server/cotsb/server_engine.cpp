@@ -188,8 +188,7 @@ namespace cotsb
             auto player = PlayerManager::create_player(socket);
             profile->player(player);
             player->profile(profile);
-            player->player_name(profile->display_name());
-            player->colour(sf::Color::Cyan);
+            profile->colour(profile->colour());
 
             auto player_game_object = GameObjectManager::create_game_object<GameObject>();
             player->game_object(player_game_object);
@@ -292,5 +291,6 @@ namespace cotsb
     {
         profile->map_name("map1");
         profile->location(sf::Vector2f(1, 1));
+        profile->colour(sf::Color::Cyan);
     }
 }

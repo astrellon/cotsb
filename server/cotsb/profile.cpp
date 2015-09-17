@@ -13,6 +13,7 @@ namespace cotsb
     // Profile {{{
     Profile::Profile(const std::string &name) :
         _profile_name(name),
+        _colour(sf::Color::Red),
         _player(nullptr)
     {
 
@@ -57,6 +58,15 @@ namespace cotsb
     Player *Profile::player() const
     {
         return _player;
+    }
+
+    void Profile::colour(const sf::Color &colour)
+    {
+        _colour = colour;
+    }
+    sf::Color Profile::colour() const
+    {
+        return _colour;
     }
 
     void Profile::update_from_player()

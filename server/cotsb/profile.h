@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
 #include <stdint.h>
@@ -31,6 +32,9 @@ namespace cotsb
             void player(Player *player);
             Player *player() const;
 
+            void colour(const sf::Color &colour);
+            sf::Color colour() const;
+
             void update_from_player();
 
         private:
@@ -38,6 +42,7 @@ namespace cotsb
             std::string _display_name;
             std::string _map_name;
             sf::Vector2f _location;
+            sf::Color _colour;
             Player *_player;
     };
     // }}}
