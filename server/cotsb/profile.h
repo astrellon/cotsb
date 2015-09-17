@@ -9,6 +9,8 @@
 
 namespace cotsb
 {
+    class Player;
+
     // Profile {{{
     class Profile
     {
@@ -26,11 +28,17 @@ namespace cotsb
             void location(const sf::Vector2f &loc);
             sf::Vector2f location() const;
 
+            void player(Player *player);
+            Player *player() const;
+
+            void update_from_player();
+
         private:
             std::string _profile_name;
             std::string _display_name;
             std::string _map_name;
             sf::Vector2f _location;
+            Player *_player;
     };
     // }}}
 

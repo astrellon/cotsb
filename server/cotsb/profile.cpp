@@ -5,11 +5,15 @@
 #include "profile_lua_serialiser.h"
 #include <utils/lua_serialiser.h>
 
+#include "player.h"
+#include "map.h"
+
 namespace cotsb
 {
     // Profile {{{
     Profile::Profile(const std::string &name) :
-        _profile_name(name)
+        _profile_name(name),
+        _player(nullptr)
     {
 
     }
@@ -44,6 +48,34 @@ namespace cotsb
     sf::Vector2f Profile::location() const
     {
         return _location;
+    }
+
+    void Profile::player(Player *player)
+    {
+        _player = player;
+    }
+    Player *Profile::player() const
+    {
+        return _player;
+    }
+
+    void Profile::update_from_player()
+    {
+        if (_player == nullptr)
+        {
+            return;
+        }
+        
+        if (_player->current_map() == nullptr)
+        {
+            _map_name = "null";
+        }
+        else
+        {
+            _map_name = _player->current_map()->name();
+        }
+
+        _location = _player->game_object()->getPosition();
     }
     // }}}
     
@@ -99,6 +131,7 @@ namespace cotsb
         }
 
         auto new_profile = new Profile(name);
+        new_profile->display_name(name);
         s_profiles[name] = std::unique_ptr<Profile>(new_profile);
         return new_profile;
     }
@@ -109,6 +142,7 @@ namespace cotsb
         path += profile->profile_name();
         path += ".lua";
 
+        profile->update_from_player();
         utils::UData serialised(ProfileLuaSerialiser::serialise(profile));
         utils::LuaSerialiser::serialise(serialised.get(), path);
     }

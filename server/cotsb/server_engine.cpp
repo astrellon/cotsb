@@ -177,22 +177,25 @@ namespace cotsb
             std::string profile_name;
             packet >> profile_name;
 
-            auto profile = ProfileManager::profile(profile_name);
+            auto profile = ProfileManager::find_load_profile(profile_name);
             if (profile == nullptr)
             {
                 profile = ProfileManager::create_profile(profile_name);
+                setup_profile(profile);
                 ProfileManager::save_profile(profile);
             }
 
             auto player = PlayerManager::create_player(socket);
+            profile->player(player);
+            player->profile(profile);
             player->player_name(profile->display_name());
             player->colour(sf::Color::Cyan);
 
             auto player_game_object = GameObjectManager::create_game_object<GameObject>();
             player->game_object(player_game_object);
-            player_game_object->setPosition(1.0, 2.0);
+            player_game_object->setPosition(profile->location());
             // Starter map
-            auto map = MapManager::map("map1");
+            auto map = MapManager::map(profile->map_name());
             player_game_object->current_map(map);
             // The player knows what map it's on, but it's added to that map until
             // the client says that it's ready.
@@ -273,6 +276,7 @@ namespace cotsb
             // Player was disconnected before a player structure was created.
             return;
         }
+        ProfileManager::save_profile(player->profile());
 
         PlayerManager::remove_player(socket);
     }
@@ -282,5 +286,11 @@ namespace cotsb
         MapManager::update(dt);
         PlayerManager::update(dt);
         GameObjectManager::check_for_updates();
+    }
+
+    void ServerEngine::setup_profile(Profile *profile)
+    {
+        profile->map_name("map1");
+        profile->location(sf::Vector2f(1, 1));
     }
 }

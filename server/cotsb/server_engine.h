@@ -10,6 +10,8 @@
 
 namespace cotsb
 {
+    class Profile;
+
     class ServerEngine
     {
         public:
@@ -38,5 +40,7 @@ namespace cotsb
             static void on_disconnect(sf::TcpSocket *socket);
 
             static void update(float dt);
+
+            static void setup_profile(Profile *profile);
     };
 }

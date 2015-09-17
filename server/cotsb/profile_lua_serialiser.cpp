@@ -24,7 +24,7 @@ namespace cotsb
         auto display_name = input.at("display_name")->string();
         auto map_name = input.at("map_name")->string();
         auto loc_tuple = input.at("location");
-        sf::Vector2f location(loc_tuple->at(1)->number(), loc_tuple->at(2)->number());
+        sf::Vector2f location(loc_tuple->at(0)->number(), loc_tuple->at(1)->number());
 
         auto profile = ProfileManager::create_profile(profile_name);
         profile->display_name(display_name);
