@@ -65,11 +65,15 @@ namespace utils
             auto i = 0u;
             for (auto iter = value->begin_array(); iter != value->end_array(); ++iter)
             {
-                output_tabs(depth, output);
+                if (iter == value->begin_array())
+                {
+                    output_tabs(depth, output);
+                }
+
                 do_serialise(iter->get(), output, depth);
                 if (i < value->size_array() - 1)
                 {
-                    output << ",\n";
+                    output << ", ";
                 }
                 ++i;
             }
