@@ -252,7 +252,7 @@ namespace cotsb
             auto &response = *iter.get();
             if (response.command() == Commands::NewMap)
             {
-                logger  % "Info" << "Map size: " << response.data().getDataSize() << endl;
+                logger % "Info" << "Map size: " << response.data().getDataSize() << endl;
                 std::string map_name;
                 response.data() >> map_name;
                 logger % "Info" << "New map: " << map_name << endl;

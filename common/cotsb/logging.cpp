@@ -47,8 +47,13 @@ namespace cotsb
     {
         _buffers[std::this_thread::get_id()].buffer << data;
         return *this;
-    }
+    }          
     Logger &Logger::operator <<(uint64_t data)
+    {
+        _buffers[std::this_thread::get_id()].buffer << data;
+        return *this;
+    }
+    Logger &Logger::operator <<(std::size_t data)
     {
         _buffers[std::this_thread::get_id()].buffer << data;
         return *this;

@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <memory>
+#include <string>
 
 namespace cotsb
 {

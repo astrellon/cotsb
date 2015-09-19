@@ -142,7 +142,7 @@ SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))
 HEADERS = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(HDREXTS))))
 SRC_CXX = $(filter-out %.c,$(SOURCES))
 OBJS= $(addsuffix .o, $(basename $(SOURCES)))
-DEPS= $(OBJS:.o=.d)
+DEPS= $(OBJS: .o = .d)
 
 ## Define some useful variables.
 DEP_OPT = $(shell if `$(CC) --version | grep "GCC" >/dev/null`; then \
@@ -165,64 +165,64 @@ all:	$(PROGRAM)
 # Rules for creating dependency files (.d).
 #------------------------------------------
 
-%.d:%.c
+%.d: %.c
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.C
+%.d: %.C
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.cc
+%.d: %.cc
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.cpp
+%.d: %.cpp
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.CPP
+%.d: %.CPP
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.c++
+%.d: %.c++
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.cp
+%.d: %.cp
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
-%.d:%.cxx
+%.d: %.cxx
 	@echo -n $(dir $<) > $@
 	@$(DEPEND.d) $< >> $@
 
 # Rules for generating object files (.o).
 #----------------------------------------
-objs:$(OBJS)
+objs: $(OBJS)
 
-%.o:%.c
+%.o: %.c
 	$(COMPILE.c) $< -o $@
 
-%.o:%.C
+%.o: %.C
 	$(COMPILE.cxx) $< -o $@
 
-%.o:%.cc
+%.o: %.cc
 	$(COMPILE.cxx) $< -o $@
 
-%.o:%.cpp
+%.o: %.cpp
 	$(COMPILE.cxx) $< -o $@
 
-%.o:%.CPP
+%.o: %.CPP
 	$(COMPILE.cxx) $< -o $@
 
-%.o:%.c++
+%.o: %.c++
 	$(COMPILE.cxx) $< -o $@
 
-%.o:%.cp
+%.o: %.cp
 	$(COMPILE.cxx) $< -o $@
 
-%.o:%.cxx
+%.o: %.cxx
 	$(COMPILE.cxx) $< -o $@
 
 # Rules for generating the tags.
@@ -236,7 +236,7 @@ ctags: $(HEADERS) $(SOURCES)
 
 # Rules for generating the executable.
 #-------------------------------------
-$(PROGRAM):$(OBJS) $(MAIN_O)
+$(PROGRAM): $(OBJS) $(MAIN_O)
 #ifeq ($(SRC_CXX),)          # C program
 #$(LINK.c)   $(OBJS) $(MAIN_O) $(MY_LIBS) -o $@
 #@echo Type ./$@ to execute the program.

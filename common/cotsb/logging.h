@@ -7,6 +7,7 @@
 #include <mutex>
 #include <map>
 #include <stdint.h>
+#include <cstdlib>
 
 namespace cotsb
 {
@@ -31,6 +32,7 @@ namespace cotsb
             Logger& operator <<(uint32_t           data);
             Logger& operator <<(int64_t            data);
             Logger& operator <<(uint64_t           data);
+            Logger& operator <<(std::size_t        data);
             Logger& operator <<(float              data);
             Logger& operator <<(double             data);
             Logger& operator <<(const char*        data);
