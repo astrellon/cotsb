@@ -188,11 +188,11 @@ namespace cotsb
             auto player = PlayerManager::create_player(socket);
             profile->player(player);
             player->profile(profile);
-            profile->colour(profile->colour());
 
             auto player_game_object = GameObjectManager::create_game_object<GameObject>();
             player->game_object(player_game_object);
             player_game_object->setPosition(profile->location());
+            player_game_object->colour(profile->colour());
             // Starter map
             auto map = MapManager::map(profile->map_name());
             player_game_object->current_map(map);
