@@ -1,6 +1,7 @@
 #include "client.h"
 
 #include <cotsb/logging.h>
+#include <functional>
 
 namespace cotsb
 {
@@ -32,11 +33,12 @@ namespace cotsb
         _state(Client::Idle),
         _has_connected(false)
     {
-        _socket.setBlocking(false);
+        //_socket.setBlocking(false);
         _pending_new_data = new sf::Packet();
     }
     Client::~Client()
     {
+        logger % "Info" << "Client over" << endl;
         if (_pending_new_data != nullptr)
         {
             delete _pending_new_data;
@@ -120,20 +122,9 @@ namespace cotsb
         {
             logger % "Info" << "Connecting to server " << _hostname << ":" << _port << endl;
             _state = Connecting;
-        }
 
-        if (_state == Connecting)
-        {
-            auto connect_result = _socket.connect(_hostname, _port);
-            if (connect_result == sf::Socket::Done)
-            {
-                _has_connected = true;
-                _state = Connected;
-            }
-            else if (connect_result == sf::Socket::Error)
-            {
-                _state = Error;
-            }
+            _connection_thread = new std::thread(&Client::connecting_thread, this);
+            _connection_thread->detach();
         }
         else if (_state == Connected)
         {
@@ -145,5 +136,24 @@ namespace cotsb
     {
         return _state;
     }
+    
+    void Client::connecting_thread()
+    {
+        logger % "Network" << "Attemtping to connect to: " << _hostname << ":" << _port << endl;
+        auto connect_result = _socket.connect(_hostname, _port);
+        if (connect_result == sf::Socket::Done)
+        {
+            logger % "Network" << "Connected" << endl;
+            _has_connected = true;
+            _state = Client::Connected;
+            _socket.setBlocking(false);
+        }
+        else if (connect_result == sf::Socket::Error)
+        {
+            logger % "Error" << "Error connecting" << endl;
+            _state = Error;
+        }
+    }
+
     // }}}
 }

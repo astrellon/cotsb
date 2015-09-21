@@ -50,6 +50,10 @@ namespace cotsb
             // be notified when he sends something
             _clients.push_back(std::move(_pending_socket));
 
+            sf::Packet response;
+            response << static_cast<uint8_t>(Commands::Message) << "Hi";
+            client->send(response);
+
             if (_on_connect)
             {
                 _on_connect(client);

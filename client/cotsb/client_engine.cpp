@@ -250,6 +250,7 @@ namespace cotsb
         for (auto &iter : s_client.new_data())
         {
             auto &response = *iter.get();
+logger % "Network" << "New data: " << response.command() << ", " << response.data().getDataSize() << " bytes" << endl;
             if (response.command() == Commands::NewMap)
             {
                 logger % "Info" << "Map size: " << response.data().getDataSize() << endl;

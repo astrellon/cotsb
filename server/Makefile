@@ -245,11 +245,11 @@ $(PROGRAM): $(OBJS) $(MAIN_O)
 	@echo Type ./$@ to execute the program.
 #endif
 
-ifndef NODEP
-ifneq ($(DEPS),)
-  sinclude $(DEPS)
-endif
-endif
+#ifndef NODEP
+#ifneq ($(DEPS),)
+#  sinclude $(DEPS)
+#endif
+#endif
 
 clean:
 	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).exe
