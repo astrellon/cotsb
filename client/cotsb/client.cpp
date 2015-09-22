@@ -123,8 +123,23 @@ namespace cotsb
             logger % "Info" << "Connecting to server " << _hostname << ":" << _port << endl;
             _state = Connecting;
 
-            _connection_thread = new std::thread(&Client::connecting_thread, this);
-            _connection_thread->detach();
+        }
+        else if (_state == Connecting)
+        {
+            logger % "Network" << "Attemtping to connect to: " << _hostname << ":" << _port << endl;
+            auto connect_result = _socket.connect(_hostname, _port);
+            if (connect_result == sf::Socket::Done)
+            {
+                logger % "Network" << "Connected" << endl;
+                _has_connected = true;
+                _state = Client::Connected;
+                _socket.setBlocking(false);
+            }
+            else if (connect_result == sf::Socket::Error)
+            {
+                logger % "Error" << "Error connecting" << endl;
+                _state = Error;
+            }
         }
         else if (_state == Connected)
         {
@@ -136,24 +151,5 @@ namespace cotsb
     {
         return _state;
     }
-    
-    void Client::connecting_thread()
-    {
-        logger % "Network" << "Attemtping to connect to: " << _hostname << ":" << _port << endl;
-        auto connect_result = _socket.connect(_hostname, _port);
-        if (connect_result == sf::Socket::Done)
-        {
-            logger % "Network" << "Connected" << endl;
-            _has_connected = true;
-            _state = Client::Connected;
-            _socket.setBlocking(false);
-        }
-        else if (connect_result == sf::Socket::Error)
-        {
-            logger % "Error" << "Error connecting" << endl;
-            _state = Error;
-        }
-    }
-
     // }}}
 }

@@ -77,11 +77,7 @@ namespace cotsb
             sf::TcpSocket _socket;
             std::vector<std::unique_ptr<sf::Packet> > _to_send;
 
-            std::thread *_connection_thread;
-
             void check_network();
-
-            void connecting_thread();
             // }}}
     };
 }
