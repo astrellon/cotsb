@@ -7,6 +7,7 @@
 #include <memory>
 #include <functional>
 #include <thread>
+#include <atomic>
 
 #include <cotsb/commands.h>
 
@@ -69,7 +70,7 @@ namespace cotsb
         private:
             uint16_t _port;
             std::string _hostname;
-            State _state;
+            std::atomic<State> _state;
             bool _has_connected;
 
             ResponseList _new_data;

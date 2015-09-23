@@ -30,6 +30,7 @@
 
 import os
 import ycm_core
+from sys import platform as _platform
 
 # These are the compilation flags that will be used in case there's no
 # compilation database set (by default, one is not set).
@@ -56,8 +57,12 @@ flags = [
 '-x',
 'c++',
 '-I./',
-'-I../common/',
+'-I../common/'
 ]
+
+# Xcode for std stuff on OS X
+if _platform == "darwin":
+    flags.append('-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/c++/v1')
 
 
 # Set this to the absolute path to the folder (NOT the file!) containing the

@@ -16,6 +16,7 @@
 #include "map_tcp_deserialiser.h"
 #include "player_tcp_deserialiser.h"
 #include "game_object_tcp_deserialiser.h"
+#include "message.h"
 
 namespace cotsb
 {
@@ -269,9 +270,30 @@ logger % "Network" << "New data: " << response.command() << ", " << response.dat
             }
             else if (response.command() == Commands::Message)
             {
+                uint8_t type;
                 std::string message;
-                response.data() >> message;
-                logger % "Info" << "Message " << message << endl; 
+                response.data() >> type;
+
+                auto message_type = static_cast<Message::Type>(type);
+                if (message_type == Message::Say)
+                {
+                    uint32_t game_obj_id;
+                    response.data() >> game_obj_id >> message;
+                    
+                    logger % "Say" << game_obj_id << ": " << message << endl; 
+                }
+                else if (message_type == Message::Whisper)
+                {
+                    uint32_t game_obj_id;
+                    response.data() >> game_obj_id >> message;
+                    
+                    logger % "Whisper" << game_obj_id << ": " << message << endl; 
+                }
+                else
+                {
+                    response.data() >> message;
+                    logger % "Server" << message << endl; 
+                }
             }
             else if (response.command() == Commands::ProfileNotFound)
             {

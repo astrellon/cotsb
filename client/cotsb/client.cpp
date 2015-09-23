@@ -38,7 +38,6 @@ namespace cotsb
     }
     Client::~Client()
     {
-        logger % "Info" << "Client over" << endl;
         if (_pending_new_data != nullptr)
         {
             delete _pending_new_data;
@@ -122,7 +121,6 @@ namespace cotsb
         {
             logger % "Info" << "Connecting to server " << _hostname << ":" << _port << endl;
             _state = Connecting;
-
         }
         else if (_state == Connecting)
         {

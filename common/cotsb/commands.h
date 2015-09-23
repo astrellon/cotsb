@@ -9,6 +9,7 @@
 namespace cotsb
 {
     typedef uint8_t CommandType;
+
     class Commands
     {
         public:

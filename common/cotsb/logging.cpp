@@ -121,6 +121,9 @@ namespace cotsb
         s_type_to_colours["Info"] = "\033[1;32m";
         s_type_to_colours["Network"] = "\033[1;34m";
         s_type_to_colours["Warning"] = "\033[1;33m";
+        s_type_to_colours["Whisper"] = "\033[1;35m";
+        s_type_to_colours["Server"] = "\033[1;35m";
+        s_type_to_colours["Say"] = "\033[0;37m";
     }
 
     void LoggerManager::log(const std::string &type, const std::string &message)
