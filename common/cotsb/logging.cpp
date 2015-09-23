@@ -53,11 +53,13 @@ namespace cotsb
         _buffers[std::this_thread::get_id()].buffer << data;
         return *this;
     }
+#if defined(__APPLE__) || defined(MACOSX)
     Logger &Logger::operator <<(std::size_t data)
     {
         _buffers[std::this_thread::get_id()].buffer << data;
         return *this;
     }
+#endif
     Logger &Logger::operator <<(float data)
     {
         _buffers[std::this_thread::get_id()].buffer << data;
