@@ -270,30 +270,7 @@ logger % "Network" << "New data: " << response.command() << ", " << response.dat
             }
             else if (response.command() == Commands::Message)
             {
-                uint8_t type;
-                std::string message;
-                response.data() >> type;
-
-                auto message_type = static_cast<Message::Type>(type);
-                if (message_type == Message::Say)
-                {
-                    uint32_t game_obj_id;
-                    response.data() >> game_obj_id >> message;
-                    
-                    logger % "Say" << game_obj_id << ": " << message << endl; 
-                }
-                else if (message_type == Message::Whisper)
-                {
-                    uint32_t game_obj_id;
-                    response.data() >> game_obj_id >> message;
-                    
-                    logger % "Whisper" << game_obj_id << ": " << message << endl; 
-                }
-                else
-                {
-                    response.data() >> message;
-                    logger % "Server" << message << endl; 
-                }
+                MessageManager::process_packet(response.data());
             }
             else if (response.command() == Commands::ProfileNotFound)
             {

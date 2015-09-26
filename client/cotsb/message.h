@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SFML/Network.hpp>
+
 #include <map>
 #include <vector>
 #include <stdint.h>
@@ -14,11 +16,12 @@ namespace cotsb
     class Message
     {
         public:
-            enum Type
+            enum Type : uint8_t
             {
                 Server = 1,
-                Say = 2,
-                Whisper = 3
+                ServerWhisper = 2,
+                Say = 3,
+                Whisper = 4
             };
             Message(const std::string &message, Type type, GameObject *game_object);
 
@@ -43,6 +46,8 @@ namespace cotsb
             static const ManagedMessageList &messages();
             static const MessageList &new_messages();
             static void clear_new_messages();
+
+            static void process_packet(sf::Packet &packet);
 
         private:
             static ManagedMessageList s_messages;

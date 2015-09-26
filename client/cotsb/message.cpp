@@ -1,10 +1,13 @@
 #include "message.h"
 
+#include <cotsb/logging.h>
+
 namespace cotsb
 {
     // Message {{{
-    Message::Message(const std::string &message, GameObject *game_object) :
+    Message::Message(const std::string &message, Type type, GameObject *game_object) :
         _message(message),
+        _type(type),
         _game_object(game_object)
     {
 
@@ -36,6 +39,39 @@ namespace cotsb
     void MessageManager::clear_new_messages()
     {
         s_new_messages.clear();
+    }
+
+    void MessageManager::process_packet(sf::Packet &packet)
+    {
+        uint8_t type;
+        std::string message;
+        packet >> type;
+
+        auto message_type = static_cast<Message::Type>(type);
+        if (message_type == Message::Say)
+        {
+            uint32_t game_obj_id;
+            packet >> game_obj_id >> message;
+
+            logger % "Say" << game_obj_id << ": " << message << endl; 
+        }
+        else if (message_type == Message::Whisper)
+        {
+            uint32_t game_obj_id;
+            packet >> game_obj_id >> message;
+
+            logger % "Whisper" << game_obj_id << ": " << message << endl; 
+        }
+        else if (message_type == Message::ServerWhisper)
+        {
+            packet >> message;
+            logger % "Server" << message << endl;
+        }
+        else if (message_type == Message::Server)
+        {
+            packet >> message;
+            logger % "Server" << message << endl; 
+        }
     }
     // }}}
 }

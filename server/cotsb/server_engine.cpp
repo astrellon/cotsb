@@ -10,6 +10,7 @@
 #include "game_object.h"
 #include "tile.h"
 #include "profile.h"
+#include "message.h"
 
 #include "map_lua_deserialiser.h"
 #include <utils/lua_serialiser.h>
@@ -166,11 +167,7 @@ namespace cotsb
         }
         else if (command == Commands::Message)
         {
-            std::string message;
-            packet >> message;
-            
-            auto &response = s_server.broadcast(command, socket);
-            response << message;
+            MessageManager::process_packet(packet);
         }
         else if (command == Commands::JoinGame)
         {
@@ -201,7 +198,10 @@ namespace cotsb
             player->current_map(map);
             map->add_game_object(player_game_object);
 
-            logger % "Network" << "Player joined " << profile->display_name() << endl;
+            std::string msg("Player joind ");
+            msg += profile->display_name();
+            logger % "Network" << "Player joined " << msg << endl;
+            MessageManager::server(msg);
             
             // Tell everyone except the original player about the new player
             auto &broadcast_player = s_server.broadcast(Commands::NewPlayer, socket);
@@ -264,8 +264,7 @@ namespace cotsb
 
     void ServerEngine::on_connect(sf::TcpSocket *socket)
     {
-        auto &welcome = s_server.send(Commands::Message, socket);
-        welcome << "Welcome friend";
+        MessageManager::server_whisper("Welcome", socket);
     }
     void ServerEngine::on_disconnect(sf::TcpSocket *socket)
     {
