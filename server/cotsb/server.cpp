@@ -43,7 +43,7 @@ namespace cotsb
         if (_listener.accept(*_pending_socket) == sf::Socket::Done)
         {
             auto client = _pending_socket.get();
-            logger % "Network" << "New client: " << client->getRemoteAddress().toString() << ":" << client->getRemotePort() << endl; 
+            //logger % "Network" << "New client: " << client->getRemoteAddress().toString() << ":" << client->getRemotePort() << endl; 
             client->setBlocking(false);
             // Add the new client to the clients list
             // Add the new client to the selector so that we will
