@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(cotsb_server)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -g -O0 -I../ -I../../common/")
+set(CMAKE_CXX_FLAGS "-std=c++11 -g -O0 -I./ -I../common/")
 
 file(GLOB_RECURSE cotsb_headers "cotsb/*.h")
 file(GLOB_RECURSE cotsb_sources "cotsb/*.cpp")
