@@ -11,7 +11,7 @@ namespace cotsb
         public:
             ComponentTransform(uint32_t id);
 
-            static const Component::Type component_type;
+            static const Component::Type component_type = Component::Transform;
         private:
     };
 }

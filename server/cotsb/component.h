@@ -19,11 +19,15 @@ namespace cotsb
 
             Component(uint32_t id, Type type);
             Component(const Component &copy) = delete;
+            virtual ~Component();
 
             uint32_t id() const;
             Type type() const;
 
-            static uint32_t next_id();
+            inline static uint32_t next_id()
+            {
+                return ++s_id;
+            }
 
         private:
             uint32_t _id;

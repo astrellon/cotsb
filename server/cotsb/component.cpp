@@ -3,9 +3,15 @@
 namespace cotsb
 {
     // Component {{{
+    uint32_t Component::s_id = 0u;
+
     Component::Component(uint32_t id, Type type) :
         _id(id),
         _type(type)
+    {
+
+    }
+    Component::~Component()
     {
 
     }

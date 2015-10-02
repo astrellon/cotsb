@@ -18,6 +18,9 @@
 #include <signal.h>
 #include <string.h>
 
+#include "game_object2.h"
+#include "component_transform.h"
+
 namespace cotsb
 {
     void kill_sig_handler(int, siginfo_t*, void*)
@@ -79,6 +82,10 @@ namespace cotsb
 
         s_server.on_connect(on_connect);
         s_server.on_disconnect(on_disconnect);
+
+
+        GameObject2 test(0);
+        test.add_component<ComponentTransform>();
 
         return true;
     }
