@@ -50,9 +50,7 @@ namespace cotsb
             // be notified when he sends something
             _clients.push_back(std::move(_pending_socket));
 
-            sf::Packet response;
-            response << static_cast<uint8_t>(Commands::Message) << "Hi";
-            client->send(response);
+            logger % "Network" << "New connection" << endl;
 
             if (_on_connect)
             {
@@ -73,7 +71,7 @@ namespace cotsb
             auto result = client->receive(*_pending_packet); 
             if (result == sf::Socket::Done)
             {
-                logger % "Network" << "Received data" << endl; 
+                logger % "Network" << "Received data " << _pending_packet->getDataSize() << endl; 
                 _new_data.push_back(SocketDataPair(client, std::move(_pending_packet)));
                 _pending_packet = UniquePacket(new sf::Packet());
             }

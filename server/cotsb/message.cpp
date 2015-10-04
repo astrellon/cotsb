@@ -60,6 +60,11 @@ namespace cotsb
             packet >> message;
             MessageManager::server(message);
         }
+        else if (message_type == ServerWhisper)
+        {
+            packet >> message;
+            logger % "Server" << "Whisper to server: " << message << endl;
+        }
         else if (message_type == Whisper)
         {
             packet >> id >> message;

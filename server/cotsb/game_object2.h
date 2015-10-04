@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
 #include <stdint.h>
 #include <vector>
 #include <memory>
@@ -8,7 +9,9 @@
 
 namespace cotsb
 {
-    class GameObject2
+    class Map;
+
+    class GameObject2 : public sf::Transformable
     {
         public:
             GameObject2(uint32_t id);
@@ -17,6 +20,9 @@ namespace cotsb
             {
                 return _id;
             }
+            
+            void map(Map *map);
+            Map *map() const;
 
             typedef std::vector<std::unique_ptr<Component> > ComponentList;
             const ComponentList &components() const;
@@ -75,6 +81,7 @@ namespace cotsb
 
         private:
             uint32_t _id;
+            Map *_map;
             ComponentList _components;
 
     };
